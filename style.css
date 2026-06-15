@@ -273,7 +273,7 @@ h1, h2, h3 {
     backdrop-filter: blur(10px);
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    height: 400px;
+    height: 480px;
     display: flex;
     flex-direction: column;
 }
@@ -314,7 +314,7 @@ h1, h2, h3 {
     font-size: 0.85rem;
     color: var(--text-secondary);
     flex: 1;
-    overflow-y: auto;
+    overflow-y: hidden;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -535,5 +535,5 @@ footer {
         justify-content: center;
     }
     .nav-links { display: none; }
-    .terminal { height: 300px; margin-top: 2rem; }
+    .terminal { height: 480px; margin-top: 2rem; }
 }
