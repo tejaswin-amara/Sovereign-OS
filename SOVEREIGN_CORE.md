@@ -1,5 +1,5 @@
 # SOVEREIGN CORE (V13.2.0-CloudNative)
-> Skills: 1 | Version: 13.2.0-CloudNative | Generated: 2026-06-15T13:17:32.1474834+05:30
+> Skills: 0 | Version: 13.2.0-CloudNative | Generated: 2026-06-15T13:42:18.6491396+05:30
 
 ## 1. Executive Directives
 - Zero-intervention autonomy. Never ask permission for reads, writes, or tool use.
@@ -15,7 +15,7 @@
 - Next.js: App Router patterns, 100% i18n coverage.
 
 ## 3. Skills Library
-- Cloud-Native: Sovereign operates with ZERO permanent local skills. (Currently active in cache: 1)
+- Cloud-Native: Sovereign operates with ZERO permanent local skills. (Currently active in cache: 0)
 - Discovery: If you need a framework or tool, pull it from GitHub dynamically.
 - JIT Loading: Run `pwsh D:/Skills/agent-bootstrap/scripts/Fetch-CloudSkill.ps1 -Repo "org/repo"`.
 - Mounting: Skills are temporarily mounted in `D:/Skills/.cloud-cache/`.

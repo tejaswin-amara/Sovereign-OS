@@ -35,7 +35,7 @@
   },
   "governance": {
     "module_cap": 32,
-    "skills_count": 1,
+    "skills_count": 0,
     "_skills_count_note": "DYNAMIC - overwritten by sovereign.ps1 at runtime. Never edit manually.",
     "lock_timeout_seconds": 30,
     "lock_lease_timeout_seconds": 600,
