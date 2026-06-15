@@ -2,14 +2,24 @@
 document.addEventListener('DOMContentLoaded', () => {
     const cursorGlow = document.getElementById('cursor-glow');
     let isMouseMoving = false;
+    let mouseX = 0;
+    let mouseY = 0;
 
     // Follow cursor
     document.addEventListener('mousemove', (e) => {
-        cursorGlow.style.opacity = '1';
-        cursorGlow.style.left = e.clientX + 'px';
-        cursorGlow.style.top = e.clientY + 'px';
+        mouseX = e.clientX;
+        mouseY = e.clientY;
         isMouseMoving = true;
     });
+
+    function updateCursor() {
+        if (isMouseMoving) {
+            cursorGlow.style.opacity = '1';
+            cursorGlow.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%)) translateZ(0)`;
+        }
+        requestAnimationFrame(updateCursor);
+    }
+    requestAnimationFrame(updateCursor);
 
     // Fade out when mouse stops
     setInterval(() => {
@@ -93,6 +103,11 @@ async function startTerminalBoot() {
         termBody.appendChild(p);
         termBody.scrollTop = termBody.scrollHeight; // Auto-scroll
     }
+
+    // Add blinking cursor at the end
+    const cursor = document.createElement('span');
+    cursor.className = 'blinking-cursor';
+    termBody.lastElementChild.appendChild(cursor);
 }
 
 function sleep(ms) {

@@ -1,7 +1,9 @@
 :root {
     --bg-base: #050505;
     --bg-surface: rgba(15, 15, 20, 0.4);
+    --bg-surface: rgba(15, 15, 20, 0.4);
     --bg-glass: rgba(255, 255, 255, 0.02);
+    --bg-glass-strong: rgba(255, 255, 255, 0.05);
     --border-glass: rgba(255, 255, 255, 0.06);
     --border-glow: rgba(0, 240, 255, 0.15);
     
@@ -21,6 +23,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 4px;
 }
 
 body {
@@ -44,7 +51,7 @@ body {
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) translateZ(0);
     transition: opacity 0.5s;
     opacity: 0;
 }
@@ -61,6 +68,7 @@ body {
         radial-gradient(at 100% 100%, rgba(0, 240, 255, 0.05) 0px, transparent 50%);
     z-index: -1;
     pointer-events: none;
+    transform: translateZ(0);
 }
 
 /* Typography & Layout */
@@ -71,11 +79,12 @@ h1, h2, h3 {
 }
 
 .section {
-    padding: 8rem 2rem;
+    padding: clamp(4rem, 10vw, 8rem) 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
     z-index: 10;
+    scroll-margin-top: 100px;
 }
 
 .section-heading {
@@ -171,6 +180,9 @@ h1, h2, h3 {
     gap: 8px;
     cursor: pointer;
 }
+.btn:active, .copy-btn:active {
+    transform: scale(0.95);
+}
 
 .btn-primary {
     background: var(--text-primary);
@@ -194,7 +206,7 @@ h1, h2, h3 {
 }
 
 .btn-github {
-    background: rgba(255,255,255,0.05);
+    background: var(--bg-glass-strong);
     border: 1px solid var(--border-glass);
     color: var(--text-primary) !important;
     padding: 0.6rem 1.2rem;
@@ -338,6 +350,20 @@ h1, h2, h3 {
 
 @keyframes type {
     to { opacity: 1; transform: translateY(0); }
+}
+
+.blinking-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background-color: var(--accent-cyan);
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
 /* Bento Box Grid Layout */
@@ -536,4 +562,28 @@ footer {
     }
     .nav-links { display: none; }
     .terminal { height: 480px; margin-top: 2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        background-attachment: initial !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+    }
+    
+    .fade-up {
+        opacity: 1;
+        transform: translateY(0);
+        transition: none;
+    }
+    
+    .term-line {
+        opacity: 1;
+        transform: translateY(0);
+        animation: none;
+    }
 }
