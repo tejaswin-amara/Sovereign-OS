@@ -66,8 +66,33 @@
             <div class="bento-card col-span-2 row-span-2 glass fade-up hover-glow">
                 <div class="card-icon">🔒</div>
                 <h3>Atomic Mutex Locking</h3>
-                <p>Sovereign operates on an atomic scale. It acquires an OS-level lock using strict lease-time file streams. If another process attempts to mutate the state while the master controller is running, they are instantly rejected, absolutely preventing race conditions.</p>
-                <div class="code-snippet">
+                <p style="margin-bottom: 1.5rem;">Sovereign operates on an atomic scale. By acquiring an exclusive OS-level file stream lock, the master controller physically blocks any concurrent agent logic from mutating the environment.</p>
+                
+                <div class="feature-breakdown" style="display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 2rem;">
+                    <div class="breakdown-item" style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <span style="background: rgba(0, 240, 255, 0.1); padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-glass);">⚡</span>
+                        <div>
+                            <h4 style="color: var(--accent-cyan); font-size: 0.95rem; margin-bottom: 0.2rem;">Race-Condition Immunity</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">Prevents multiple subagents from simultaneously overwriting core rule sets or triggering conflicting cloud-fetches.</p>
+                        </div>
+                    </div>
+                    <div class="breakdown-item" style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <span style="background: rgba(157, 78, 221, 0.1); padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-glass);">⏱️</span>
+                        <div>
+                            <h4 style="color: var(--accent-purple); font-size: 0.95rem; margin-bottom: 0.2rem;">Lease-Time Streams</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">The lock is tied to the active PowerShell PID. If an agent crashes or hangs, the OS automatically releases the handle.</p>
+                        </div>
+                    </div>
+                    <div class="breakdown-item" style="display: flex; gap: 1rem; align-items: flex-start;">
+                        <span style="background: rgba(16, 185, 129, 0.1); padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-glass);">🛡️</span>
+                        <div>
+                            <h4 style="color: var(--accent-emerald); font-size: 0.95rem; margin-bottom: 0.2rem;">Zero-Drift Guarantee</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">State drift is mathematically impossible because the file-system actively rejects standard IO requests until the Mutex yields.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-snippet" style="margin-top: auto;">
                     <pre><code>[System.IO.File]::Open("mutex.lock", 'Open', 'Write', 'None')</code></pre>
                 </div>
             </div>
