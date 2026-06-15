@@ -1,25 +1,48 @@
-// Intersection Observer for scroll animations
+// Dynamic Cursor Tracking
 document.addEventListener('DOMContentLoaded', () => {
+    const cursorGlow = document.getElementById('cursor-glow');
+    let isMouseMoving = false;
+
+    // Follow cursor
+    document.addEventListener('mousemove', (e) => {
+        cursorGlow.style.opacity = '1';
+        cursorGlow.style.left = e.clientX + 'px';
+        cursorGlow.style.top = e.clientY + 'px';
+        isMouseMoving = true;
+    });
+
+    // Fade out when mouse stops
+    setInterval(() => {
+        if (!isMouseMoving) {
+            cursorGlow.style.opacity = '0';
+        }
+        isMouseMoving = false;
+    }, 1000);
+
+    // Advanced Scroll Reveal (Intersection Observer)
     const observerOptions = {
         root: null,
         rootMargin: '0px',
-        threshold: 0.1
+        threshold: 0.15
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                observer.unobserve(entry.target); // Only animate once
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    const fadeElements = document.querySelectorAll('.fade-in');
+    const fadeElements = document.querySelectorAll('.fade-up');
     fadeElements.forEach(el => observer.observe(el));
+
+    // Terminal Boot Simulator
+    startTerminalBoot();
 });
 
-// Copy code functionality
+// Copy Code Functionality
 function copyCode(button) {
     const pre = button.parentElement.nextElementSibling;
     const code = pre.querySelector('code').innerText;
@@ -27,43 +50,51 @@ function copyCode(button) {
     navigator.clipboard.writeText(code).then(() => {
         const originalText = button.innerText;
         button.innerText = 'Copied!';
-        button.style.color = 'var(--success)';
-        button.style.borderColor = 'var(--success)';
+        button.style.color = 'var(--accent-emerald)';
         
         setTimeout(() => {
             button.innerText = originalText;
             button.style.color = '';
-            button.style.borderColor = '';
         }, 2000);
     });
 }
 
-// Accordion functionality
-document.addEventListener('DOMContentLoaded', () => {
-    const accordions = document.querySelectorAll('.accordion-header');
-    
-    accordions.forEach(acc => {
-        acc.addEventListener('click', function() {
-            // Toggle active class on accordion container
-            const accordionItem = this.parentElement;
-            
-            // Close other open accordions if you want exclusive open (optional)
-            // document.querySelectorAll('.accordion.active').forEach(openAcc => {
-            //     if (openAcc !== accordionItem) {
-            //         openAcc.classList.remove('active');
-            //         openAcc.querySelector('.accordion-content').style.maxHeight = null;
-            //     }
-            // });
+// Terminal Simulator Logic
+const terminalLines = [
+    { text: 'pwsh -ExecutionPolicy Bypass -File "./sovereign.ps1"', class: 'term-prompt' },
+    { text: '[SYSTEM] Initializing Master Controller...', class: 'term-sys', delay: 800 },
+    { text: '[MUTEX] OS-Level Lock Acquired.', class: 'term-success', delay: 500 },
+    { text: '[INTEGRITY] SHA256 validation passed.', class: 'term-success', delay: 400 },
+    { text: '[EVOLUTION] Auto-fetching skill: browser-use', class: 'term-sys', delay: 1000 },
+    { text: 'Mounting to .cloud-cache/browser-use...', class: 'term-secondary', delay: 400 },
+    { text: '[SECURITY] AST Sweep: 0 vulnerabilities found.', class: 'term-success', delay: 800 },
+    { text: '[SUCCESS] Sovereign v13.2.0 ONLINE', class: 'term-success', delay: 600 }
+];
 
-            accordionItem.classList.toggle('active');
-            
-            const content = this.nextElementSibling;
-            if (accordionItem.classList.contains('active')) {
-                // Add an arbitrary large max-height or exact scrollHeight
-                content.style.maxHeight = content.scrollHeight + 100 + "px";
-            } else {
-                content.style.maxHeight = null;
-            }
-        });
-    });
-});
+async function startTerminalBoot() {
+    const termBody = document.getElementById('typewriter');
+    if (!termBody) return;
+
+    for (let i = 0; i < terminalLines.length; i++) {
+        const line = terminalLines[i];
+        
+        // Wait before showing the next line to simulate processing
+        if (line.delay) await sleep(line.delay);
+
+        const p = document.createElement('p');
+        p.className = `term-line ${line.class}`;
+        
+        if (line.class === 'term-prompt') {
+            p.innerHTML = `<span style="color:var(--text-secondary)">PS D:\\Skills></span> ${line.text}`;
+        } else {
+            p.innerText = line.text;
+        }
+
+        termBody.appendChild(p);
+        termBody.scrollTop = termBody.scrollHeight; // Auto-scroll
+    }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

@@ -3,220 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sovereign OS | The Ultimate Agent Environment</title>
-    <meta name="description" content="Sovereign OS: A deeply governed, zero-drift, cloud-native agent operating system.">
+    <title>Sovereign OS | Zero-Drift Cloud-Native Agent Framework</title>
+    <meta name="description" content="Sovereign OS: The ultimate, atomic, zero-drift agent operating system built on PowerShell and JIT Cloud Fetching.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+    <div id="cursor-glow"></div>
+    <div class="mesh-bg"></div>
 
-    <nav class="navbar">
+    <nav class="navbar floating-nav">
         <div class="nav-content">
-            <div class="logo">🔱 Sovereign<span class="highlight">OS</span></div>
+            <div class="logo"><span class="trident">🔱</span> Sovereign<span class="highlight">OS</span></div>
             <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#architecture">Architecture</a>
+                <a href="#features">Architecture</a>
                 <a href="#contributing">Contributing</a>
-                <a href="#quickstart">Quick Start</a>
-                <a href="https://github.com/tejaswin-amara/Sovereign-OS" class="btn btn-outline" target="_blank">GitHub</a>
+                <a href="https://github.com/tejaswin-amara/Sovereign-OS" class="btn btn-github" target="_blank">
+                    <svg height="24" width="24" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+                    GitHub
+                </a>
             </div>
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="hero-content fade-in">
-            <div class="badge">v13.2.0-CloudNative is LIVE</div>
-            <h1 class="glitch-text" data-text="The Ultimate Agent OS">The Ultimate Agent OS</h1>
-            <p class="subtitle">A radically decoupled, zero-drift governance framework. Sovereign transforms any standard directory into a perfectly synchronized intelligence hub using JIT Cloud Fetching and Atomic Mutex Locks.</p>
-            <div class="hero-buttons">
-                <a href="#quickstart" class="btn btn-primary">Initialize Core</a>
-                <a href="#architecture" class="btn btn-secondary">Deep Dive</a>
+    <header class="hero section">
+        <div class="hero-grid">
+            <div class="hero-text fade-up">
+                <div class="version-pill">
+                    <span class="live-dot"></span> v13.2.0-CloudNative is LIVE
+                </div>
+                <h1 class="hero-title">The Ultimate<br><span class="gradient-text">Agent OS.</span></h1>
+                <p class="hero-subtitle">A radically decoupled, zero-drift governance framework. Sovereign transforms any standard directory into a perfectly synchronized intelligence hub using JIT Cloud Fetching and Atomic Mutex Locks.</p>
+                <div class="hero-actions">
+                    <a href="#quickstart" class="btn btn-primary">Deploy Now <span class="arrow">→</span></a>
+                    <a href="#features" class="btn btn-secondary">System Architecture</a>
+                </div>
             </div>
-        </div>
-        <div class="hero-terminal fade-in delay-1">
-            <div class="terminal-header">
-                <span class="dot red"></span>
-                <span class="dot yellow"></span>
-                <span class="dot green"></span>
-                <span class="term-title">sovereign.ps1</span>
-            </div>
-            <div class="terminal-body">
-                <p><span class="prompt">PS D:\Skills></span> pwsh -ExecutionPolicy Bypass -File "./sovereign.ps1"</p>
-                <p class="log">[13:42:18] <span class="highlight">MUTEX</span>    OS-Level Lock Acquired.</p>
-                <p class="log">[13:42:18] <span class="highlight">INTEGRIT</span> Checksum sealed successfully.</p>
-                <p class="log">[13:42:22] <span class="highlight">EVOLUTIO</span> Auto-fetching missing skill: facebook/react</p>
-                <p class="log success">[SUCCESS]  Skill 'react' is ready at .cloud-cache\react</p>
-                <p class="log">[13:43:50] <span class="highlight">SECURITY</span> Audit PASSED. 0 vulnerabilities found.</p>
-                <p class="log success">[13:45:00] COMPLETE ALL PHASES PASSED</p>
+            <div class="hero-visual fade-up delay-1">
+                <div class="terminal bento-card">
+                    <div class="terminal-header">
+                        <div class="dots"><span></span><span></span><span></span></div>
+                        <div class="title">sovereign.ps1 — Master Controller</div>
+                    </div>
+                    <div class="terminal-body" id="typewriter">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <section id="features" class="features section">
-        <div class="section-header fade-in">
-            <h2>The 6-Phase Master Pipeline</h2>
-            <p>Every operation is rigorously governed by the Sovereign Master Controller to prevent logic degradation.</p>
+    <section id="features" class="bento-section section">
+        <div class="section-heading fade-up">
+            <h2>The <span class="highlight">6-Phase</span> Pipeline</h2>
+            <p>Mathematical execution guarantees. No drift. No vulnerabilities.</p>
         </div>
         
-        <div class="grid">
-            <div class="card glass fade-in">
-                <div class="icon">🔒</div>
-                <h3>1. OS-Level Mutex</h3>
-                <p>Acquires strict lease-time file streams to secure the environment for atomic writes, absolutely preventing race conditions.</p>
+        <div class="bento-grid">
+            <!-- Large Card -->
+            <div class="bento-card col-span-2 row-span-2 glass fade-up hover-glow">
+                <div class="card-icon">🔒</div>
+                <h3>Atomic Mutex Locking</h3>
+                <p>Sovereign operates on an atomic scale. It acquires an OS-level lock using strict lease-time file streams. If another process attempts to mutate the state while the master controller is running, they are instantly rejected, absolutely preventing race conditions.</p>
+                <div class="code-snippet">
+                    <pre><code>[System.IO.File]::Open("mutex.lock", 'Open', 'Write', 'None')</code></pre>
+                </div>
             </div>
-            <div class="card glass fade-in delay-1">
-                <div class="icon">🛡️</div>
-                <h3>2. Configuration Integrity</h3>
-                <p>Cryptographically validates core files against SHA256 checksums to guarantee the Single Source of Truth remains untouched.</p>
+
+            <!-- Standard Cards -->
+            <div class="bento-card glass fade-up delay-1 hover-glow">
+                <div class="card-icon">⚡</div>
+                <h3>JIT Cloud Fetching</h3>
+                <p>Holds zero monolithic skills locally. Mounts open-source tools (React, Mem0) dynamically into an ephemeral cache via <code>Fetch-CloudSkill.ps1</code>.</p>
             </div>
-            <div class="card glass fade-in delay-2">
-                <div class="icon">⚡</div>
-                <h3>3. JIT Cloud Fetching</h3>
-                <p>Holds zero monolithic skills locally. Mounts advanced open-source tools (React, Mem0, CrewAI) directly from GitHub into an ephemeral cache.</p>
+
+            <div class="bento-card glass fade-up delay-2 hover-glow">
+                <div class="card-icon">🔍</div>
+                <h3>AST Security Sweep</h3>
+                <p>Scans all active scripts before execution to mathematically guarantee 0 vulnerabilities, missing error-action flags, or suppressed catches.</p>
             </div>
-            <div class="card glass fade-in">
-                <div class="icon">🧬</div>
-                <h3>4. Self-Evolution Engine</h3>
-                <p>Analyzes agent drift, absorbs session learnings, and intelligently auto-fetches missing tools based on project requirements.</p>
+
+            <div class="bento-card glass fade-up delay-1 hover-glow">
+                <div class="card-icon">🛡️</div>
+                <h3>Checksum Integrity</h3>
+                <p>Cryptographically validates core system files against SHA256 checksums to ensure the Single Source of Truth remains entirely untouched.</p>
             </div>
-            <div class="card glass fade-in delay-1">
-                <div class="icon">🔍</div>
-                <h3>5. AST Security Sweep</h3>
-                <p>Scans all active scripts to guarantee 0 vulnerabilities (unsafe invokes, suppressed catches) before operations execute.</p>
-            </div>
-            <div class="card glass fade-in delay-2">
-                <div class="icon">🧹</div>
-                <h3>6. Ephemeral GC</h3>
-                <p>Prunes the unpinned cloud-cache and purges memory leaks, restoring the environment to a pristine baseline state.</p>
+
+            <div class="bento-card glass fade-up delay-2 hover-glow">
+                <div class="card-icon">🧬</div>
+                <h3>Self-Evolution</h3>
+                <p>Analyzes agent drift over time, absorbs session learnings, and intelligently adapts the workspace.</p>
             </div>
         </div>
     </section>
 
-    <!-- NEW ARCHITECTURE SECTION -->
-    <section id="architecture" class="architecture section alternate">
-        <div class="section-header fade-in">
-            <h2>Technical Architecture</h2>
-            <p>Sovereign OS doesn't just run scripts; it fundamentally alters how agents perceive and modify their environment.</p>
-        </div>
-
-        <div class="accordion-container fade-in">
-            <!-- Accordion 1 -->
-            <div class="accordion glass">
-                <button class="accordion-header">
-                    <span>Atomic Mutex Locking (Zero-Drift)</span>
-                    <span class="icon-plus">+</span>
-                </button>
-                <div class="accordion-content">
-                    <p>Sovereign operates on an atomic scale. It acquires an OS-level lock using strict lease-time file streams. If another agent or process attempts to mutate the state while the master controller is running, they are queued or rejected, absolutely preventing race conditions and corrupted rule sets.</p>
-                    <div class="alert alert-warning">
-                        <strong>Security Enforcement:</strong> Bypassing the Mutex lock will result in immediate termination of the agent's session to preserve system integrity.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Accordion 2 -->
-            <div class="accordion glass">
-                <button class="accordion-header">
-                    <span>Cloud-Native JIT Fetching</span>
-                    <span class="icon-plus">+</span>
-                </button>
-                <div class="accordion-content">
-                    <p>Instead of bloating the core OS with monolithic tools, Sovereign uses Just-In-Time (JIT) fetching. Tools are instantly pulled from remote GitHub repositories directly into an ephemeral <code>.cloud-cache</code>. This ensures agents always interact with the most up-to-date versions of tools.</p>
-                    <div class="code-container glass">
-                        <div class="code-header">
-                            <span>PowerShell</span>
-                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                        </div>
-                        <pre><code># Dynamic Tool Mounting Example
-pwsh agent-bootstrap/scripts/Fetch-CloudSkill.ps1 -Repo "browser-use/browser-use"</code></pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Accordion 3 -->
-            <div class="accordion glass">
-                <button class="accordion-header">
-                    <span>AST Security Sweep</span>
-                    <span class="icon-plus">+</span>
-                </button>
-                <div class="accordion-content">
-                    <p>Before any workflow is executed, <code>security-sweep.ps1</code> runs a full Abstract Syntax Tree (AST) scan of the workspace. It mathematically verifies that the environment is secure by checking for:</p>
-                    <ul class="feature-list small-list">
-                        <li>Missing <code>-ErrorAction</code> flags.</li>
-                        <li>Suppressed <code>catch</code> blocks.</li>
-                        <li>Execution Policy vulnerabilities.</li>
-                        <li>Unsafe <code>Invoke-Expression</code> use.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Accordion 4 -->
-            <div class="accordion glass">
-                <button class="accordion-header">
-                    <span>Agent-Reach Protocol</span>
-                    <span class="icon-plus">+</span>
-                </button>
-                <div class="accordion-content">
-                    <p>To grant agents universal, non-brittle access to the internet, Sovereign OS uses the Agent-Reach protocol. It acts as an upstream CLI router, bypassing slow local scraping scripts in favor of native binaries like <code>gh</code> (GitHub), <code>yt-dlp</code> (YouTube), and <code>r.jina.ai</code> (Web text streaming).</p>
-                    <div class="alert alert-info">
-                        <strong>Channel Health:</strong> Agents can run <code>agent-reach doctor</code> at any time to verify internet connectivity.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW CONTRIBUTING SECTION -->
-    <section id="contributing" class="contributing section">
-        <div class="section-header fade-in">
-            <h2>Community & Contributing</h2>
-            <p>We welcome contributions from the Open-Source Intelligence Community to expand Sovereign's capabilities.</p>
+    <section id="contributing" class="contributing section alternate">
+        <div class="section-heading fade-up">
+            <h2>Community <span class="highlight">Standards</span></h2>
+            <p>Contribute to the Open-Source Intelligence Community.</p>
         </div>
         
-        <div class="glass padding-large fade-in">
-            <h3 class="highlight">Adding New Cloud-Native Skills</h3>
-            <p>Sovereign operates on a JIT architecture. Do <strong>not</strong> submit Pull Requests containing massive third-party library wrappers. To add a new capability:</p>
-            <ul class="numbered-list">
-                <li>Ensure the capability can be fetched dynamically via <code>Fetch-CloudSkill.ps1</code>.</li>
-                <li>Add the tool to the recommended ultimate stack in the README.</li>
-                <li>Provide an open-source GitHub repository URL that represents the tool.</li>
-            </ul>
-
-            <h3 class="highlight margin-top">The Pester Testing Mandate</h3>
-            <p>Before submitting a PR, you <strong>must</strong> run the local Pester verification suite. Your PR will be automatically rejected if it fails the 23-test diagnostic or if it violates the AST module caps.</p>
+        <div class="bento-grid config-grid">
+            <div class="bento-card glass fade-up hover-glow">
+                <h3 class="highlight">Cloud-Native Skills Only</h3>
+                <p>Sovereign operates on a Just-In-Time architecture. We do <strong>not</strong> accept Pull Requests containing massive third-party library wrappers or monolithic local folders.</p>
+                <ul class="custom-list">
+                    <li>Must be fetchable via <code>Fetch-CloudSkill.ps1</code></li>
+                    <li>Must have a public GitHub URL</li>
+                    <li>Must not pollute the global PATH</li>
+                </ul>
+            </div>
             
-            <div class="code-container glass">
+            <div class="bento-card glass fade-up delay-1 hover-glow">
+                <h3 class="highlight">The Pester Testing Mandate</h3>
+                <p>Before submitting a PR, you <strong>must</strong> run the local Pester verification suite. Your PR will be automatically rejected if it fails the 23-test diagnostic.</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>PowerShell</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code>Invoke-Pester -Path "agent-bootstrap/tests"</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="quickstart" class="quickstart section">
+        <div class="bento-card glass max-w fade-up hover-glow">
+            <h2>Frictionless Onboarding</h2>
+            <p class="subtitle">Deploy the Ultimate OS in under 30 seconds.</p>
+            <div class="code-container">
                 <div class="code-header">
                     <span>PowerShell</span>
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
-                <pre><code># Run Local Diagnostics
-Invoke-Pester -Path "agent-bootstrap/tests"</code></pre>
-            </div>
-
-            <div class="flex-buttons margin-top">
-                <a href="https://github.com/tejaswin-amara/Sovereign-OS/blob/main/CONTRIBUTING.md" class="btn btn-primary" target="_blank">Read Full Guide</a>
-                <a href="https://github.com/tejaswin-amara/Sovereign-OS/blob/main/CODE_OF_CONDUCT.md" class="btn btn-outline" target="_blank">Code of Conduct</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="quickstart" class="quickstart section alternate">
-        <div class="section-header fade-in">
-            <h2>Frictionless Onboarding</h2>
-            <p>Deploy the Ultimate Agent OS in seconds.</p>
-        </div>
-        <div class="code-container glass fade-in">
-            <div class="code-header">
-                <span>PowerShell</span>
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-            </div>
-            <pre><code># 1. Clone the repository
+                <pre><code># 1. Clone the repository
 git clone https://github.com/tejaswin-amara/Sovereign-OS.git
 cd Sovereign-OS
 
@@ -225,15 +148,17 @@ pwsh -ExecutionPolicy Bypass -File "./setup.ps1"
 
 # 3. Boot the OS
 pwsh -ExecutionPolicy Bypass -File "./sovereign.ps1" -ProjectPath "$PWD"</code></pre>
+            </div>
         </div>
     </section>
 
     <footer>
         <div class="footer-content">
-            <div class="logo">🔱 Sovereign<span class="highlight">OS</span></div>
-            <p>Built for the Open-Source Intelligence Community.</p>
+            <div class="logo"><span class="trident">🔱</span> Sovereign<span class="highlight">OS</span></div>
+            <p>Engineered for the Open-Source Intelligence Community.</p>
             <div class="footer-links">
-                <a href="https://github.com/tejaswin-amara/Sovereign-OS" target="_blank">GitHub Repository</a>
+                <a href="https://github.com/tejaswin-amara/Sovereign-OS" target="_blank">GitHub</a>
+                <a href="https://github.com/tejaswin-amara/Sovereign-OS/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a>
                 <a href="https://github.com/tejaswin-amara/Sovereign-OS/blob/main/CODE_OF_CONDUCT.md" target="_blank">Code of Conduct</a>
             </div>
         </div>
