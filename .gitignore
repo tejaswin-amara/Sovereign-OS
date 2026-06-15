@@ -1,0 +1,14 @@
+# Sovereign OS Runtime Directories
+.cloud-cache/
+.agents/
+.agent-reach-venv/
+LOGS/
+scratch/
+temp_gci[bracket]/
+
+# Standard Ignore
+node_modules/
+.venv/
+__pycache__/
+*.log
+.env
