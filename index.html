@@ -19,7 +19,9 @@
         <div class="nav-content">
             <div class="logo">🔱 Sovereign<span class="highlight">OS</span></div>
             <div class="nav-links">
-                <a href="#features">Architecture</a>
+                <a href="#features">Features</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#contributing">Contributing</a>
                 <a href="#quickstart">Quick Start</a>
                 <a href="https://github.com/tejaswin-amara/Sovereign-OS" class="btn btn-outline" target="_blank">GitHub</a>
             </div>
@@ -33,7 +35,7 @@
             <p class="subtitle">A radically decoupled, zero-drift governance framework. Sovereign transforms any standard directory into a perfectly synchronized intelligence hub using JIT Cloud Fetching and Atomic Mutex Locks.</p>
             <div class="hero-buttons">
                 <a href="#quickstart" class="btn btn-primary">Initialize Core</a>
-                <a href="#features" class="btn btn-secondary">Explore Architecture</a>
+                <a href="#architecture" class="btn btn-secondary">Deep Dive</a>
             </div>
         </div>
         <div class="hero-terminal fade-in delay-1">
@@ -95,20 +97,116 @@
         </div>
     </section>
 
-    <section id="agent-reach" class="reach section alternate">
-        <div class="reach-content fade-in">
-            <h2>🌐 Agent-Reach Protocol</h2>
-            <p>Agents require universal, non-brittle access to the world. Sovereign OS utilizes the Agent-Reach protocol to act as an upstream CLI router.</p>
-            <ul class="feature-list">
-                <li><strong>Native Bypasses:</strong> No fragile local scraping scripts. Bridges directly to native binaries.</li>
-                <li><strong>Universal Fetch:</strong> Read any webpage natively using <code>r.jina.ai</code> routing.</li>
-                <li><strong>Deep Integrations:</strong> Seamless hook-ins for <code>gh</code> (GitHub CLI) and <code>yt-dlp</code> (YouTube/Media).</li>
-                <li><strong>Semantic Search:</strong> Integrated natively with Exa's MCP architecture.</li>
-            </ul>
+    <!-- NEW ARCHITECTURE SECTION -->
+    <section id="architecture" class="architecture section alternate">
+        <div class="section-header fade-in">
+            <h2>Technical Architecture</h2>
+            <p>Sovereign OS doesn't just run scripts; it fundamentally alters how agents perceive and modify their environment.</p>
+        </div>
+
+        <div class="accordion-container fade-in">
+            <!-- Accordion 1 -->
+            <div class="accordion glass">
+                <button class="accordion-header">
+                    <span>Atomic Mutex Locking (Zero-Drift)</span>
+                    <span class="icon-plus">+</span>
+                </button>
+                <div class="accordion-content">
+                    <p>Sovereign operates on an atomic scale. It acquires an OS-level lock using strict lease-time file streams. If another agent or process attempts to mutate the state while the master controller is running, they are queued or rejected, absolutely preventing race conditions and corrupted rule sets.</p>
+                    <div class="alert alert-warning">
+                        <strong>Security Enforcement:</strong> Bypassing the Mutex lock will result in immediate termination of the agent's session to preserve system integrity.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion 2 -->
+            <div class="accordion glass">
+                <button class="accordion-header">
+                    <span>Cloud-Native JIT Fetching</span>
+                    <span class="icon-plus">+</span>
+                </button>
+                <div class="accordion-content">
+                    <p>Instead of bloating the core OS with monolithic tools, Sovereign uses Just-In-Time (JIT) fetching. Tools are instantly pulled from remote GitHub repositories directly into an ephemeral <code>.cloud-cache</code>. This ensures agents always interact with the most up-to-date versions of tools.</p>
+                    <div class="code-container glass">
+                        <div class="code-header">
+                            <span>PowerShell</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><code># Dynamic Tool Mounting Example
+pwsh agent-bootstrap/scripts/Fetch-CloudSkill.ps1 -Repo "browser-use/browser-use"</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion 3 -->
+            <div class="accordion glass">
+                <button class="accordion-header">
+                    <span>AST Security Sweep</span>
+                    <span class="icon-plus">+</span>
+                </button>
+                <div class="accordion-content">
+                    <p>Before any workflow is executed, <code>security-sweep.ps1</code> runs a full Abstract Syntax Tree (AST) scan of the workspace. It mathematically verifies that the environment is secure by checking for:</p>
+                    <ul class="feature-list small-list">
+                        <li>Missing <code>-ErrorAction</code> flags.</li>
+                        <li>Suppressed <code>catch</code> blocks.</li>
+                        <li>Execution Policy vulnerabilities.</li>
+                        <li>Unsafe <code>Invoke-Expression</code> use.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Accordion 4 -->
+            <div class="accordion glass">
+                <button class="accordion-header">
+                    <span>Agent-Reach Protocol</span>
+                    <span class="icon-plus">+</span>
+                </button>
+                <div class="accordion-content">
+                    <p>To grant agents universal, non-brittle access to the internet, Sovereign OS uses the Agent-Reach protocol. It acts as an upstream CLI router, bypassing slow local scraping scripts in favor of native binaries like <code>gh</code> (GitHub), <code>yt-dlp</code> (YouTube), and <code>r.jina.ai</code> (Web text streaming).</p>
+                    <div class="alert alert-info">
+                        <strong>Channel Health:</strong> Agents can run <code>agent-reach doctor</code> at any time to verify internet connectivity.
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="quickstart" class="quickstart section">
+    <!-- NEW CONTRIBUTING SECTION -->
+    <section id="contributing" class="contributing section">
+        <div class="section-header fade-in">
+            <h2>Community & Contributing</h2>
+            <p>We welcome contributions from the Open-Source Intelligence Community to expand Sovereign's capabilities.</p>
+        </div>
+        
+        <div class="glass padding-large fade-in">
+            <h3 class="highlight">Adding New Cloud-Native Skills</h3>
+            <p>Sovereign operates on a JIT architecture. Do <strong>not</strong> submit Pull Requests containing massive third-party library wrappers. To add a new capability:</p>
+            <ul class="numbered-list">
+                <li>Ensure the capability can be fetched dynamically via <code>Fetch-CloudSkill.ps1</code>.</li>
+                <li>Add the tool to the recommended ultimate stack in the README.</li>
+                <li>Provide an open-source GitHub repository URL that represents the tool.</li>
+            </ul>
+
+            <h3 class="highlight margin-top">The Pester Testing Mandate</h3>
+            <p>Before submitting a PR, you <strong>must</strong> run the local Pester verification suite. Your PR will be automatically rejected if it fails the 23-test diagnostic or if it violates the AST module caps.</p>
+            
+            <div class="code-container glass">
+                <div class="code-header">
+                    <span>PowerShell</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code># Run Local Diagnostics
+Invoke-Pester -Path "agent-bootstrap/tests"</code></pre>
+            </div>
+
+            <div class="flex-buttons margin-top">
+                <a href="https://github.com/tejaswin-amara/Sovereign-OS/blob/main/CONTRIBUTING.md" class="btn btn-primary" target="_blank">Read Full Guide</a>
+                <a href="https://github.com/tejaswin-amara/Sovereign-OS/blob/main/CODE_OF_CONDUCT.md" class="btn btn-outline" target="_blank">Code of Conduct</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="quickstart" class="quickstart section alternate">
         <div class="section-header fade-in">
             <h2>Frictionless Onboarding</h2>
             <p>Deploy the Ultimate Agent OS in seconds.</p>
