@@ -1,10 +1,10 @@
 # security-sweep.ps1 - Autonomous AST and Security Validation Workflow (v13.2.0-CloudNative)
 # Purpose: Pre-commit/Pre-execution parsing to block dynamic code execution and vulnerability leakage.
-# Location: D:/Skills/agent-bootstrap/scripts/security-sweep.ps1
+# Location: C:/Skills/agent-bootstrap/scripts/security-sweep.ps1
 
 [CmdletBinding()]
 param(
-    [string]$ProjectPath = "D:/Skills",
+    [string]$ProjectPath = "C:/Skills",
     [bool]$BlockOnError = $true
 )
 
@@ -25,9 +25,9 @@ $Files = [System.Collections.Generic.List[string]]::new()
 $ExcludeDirs = [System.Collections.Generic.List[string]]::new()
 @('node_modules', '.git', 'dist', '.next', 'build', '.agents', 'LOGS', 'templates', 'G0DM0D3', '.archive-v1.0', 'skills') | ForEach-Object { $ExcludeDirs.Add($_) }
 
-if ($ProjectPath -ieq "D:/Skills" -or $ProjectPath -ieq "D:\Skills") {
+if ($ProjectPath -ieq "C:/Skills" -or $ProjectPath -ieq "C:\Skills") {
     try {
-        $AllSubDirs = Get-ChildItem -Path "D:\Skills" -Directory | Select-Object -ExpandProperty Name
+        $AllSubDirs = Get-ChildItem -Path "C:\Skills" -Directory | Select-Object -ExpandProperty Name
         foreach ($DirName in $AllSubDirs) {
             if ($DirName -ne "agent-bootstrap" -and $DirName -ne ".agents" -and -not $ExcludeDirs.Contains($DirName)) {
                 $ExcludeDirs.Add($DirName)

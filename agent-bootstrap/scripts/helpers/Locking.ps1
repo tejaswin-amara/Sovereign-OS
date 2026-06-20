@@ -1,4 +1,4 @@
-# D:/Skills/agent-bootstrap/scripts/helpers/Locking.ps1
+# C:/Skills/agent-bootstrap/scripts/helpers/Locking.ps1
 
 function Start-SovereignLock {
     [CmdletBinding()]
@@ -15,12 +15,13 @@ function Start-SovereignLock {
     $StartTime = Get-Date
     $BackoffMS = 100
     $MaxBackoffMS = 2000
+    $mode = [System.IO.FileMode]::CreateNew
 
     while ($true) {
         try {
             $fs = [System.IO.File]::Open(
                 $LockFile,
-                [System.IO.FileMode]::CreateNew,
+                $mode,
                 [System.IO.FileAccess]::Write,
                 [System.IO.FileShare]::None
             )
@@ -36,19 +37,25 @@ function Start-SovereignLock {
         }
         catch [System.IO.IOException] {
             $existing = $null
+            $readFailed = $false
             try {
-                $existing = Get-Content $LockFile -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json -ErrorAction SilentlyContinue
+                if (Test-Path $LockFile) {
+                    $existing = Get-Content $LockFile -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop
+                }
             } catch {
-                # Lock file may be held exclusively — cannot read
+                $readFailed = $true
             }
 
             $isStale = $false
-            if ($null -eq $existing) {
+            if ($readFailed) {
+                # Lock file exists but cannot be read (likely held exclusively by another active process)
+                $isStale = $false
+            } elseif ($null -eq $existing) {
                 $isStale = $true
-                Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Lock file is empty or corrupt. Auto-clearing."
+                Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Lock file is empty or corrupt. Overwriting."
             } elseif (-not $existing.PSObject.Properties['PID'] -or -not $existing.PSObject.Properties['StartTime']) {
                 $isStale = $true
-                Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Lock file metadata is missing or invalid. Auto-clearing."
+                Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Lock file metadata is missing or invalid. Overwriting."
             } else {
                 try {
                     $proc = Get-Process -Id $existing.PID -ErrorAction SilentlyContinue
@@ -72,20 +79,21 @@ function Start-SovereignLock {
                         $Elapsed = (Get-Date) - $LockTime
                         if ($Elapsed.TotalSeconds -gt $LeaseTimeoutSec) {
                             $isStale = $true
-                            Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Lock lease expired. Elapsed: $($Elapsed.TotalSeconds)s (Limit: $($LeaseTimeoutSec)s). Auto-clearing stale lock."
+                            Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Lock lease expired. Elapsed: $($Elapsed.TotalSeconds)s (Limit: $($LeaseTimeoutSec)s). Overwriting stale lock."
                         }
                     } catch {
                         $isStale = $true
-                        Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Lock StartTime '$($existing.StartTime)' is unparsable. Auto-clearing suspicious lock."
+                        Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Lock StartTime '$($existing.StartTime)' is unparsable. Overwriting suspicious lock."
                     }
                 }
             }
 
             if ($isStale) {
-                Remove-Item $LockFile -Force -ErrorAction SilentlyContinue
-                # Recursive call removed to prevent stack overflow
+                $mode = [System.IO.FileMode]::Create
                 continue
             }
+
+            $mode = [System.IO.FileMode]::CreateNew
 
             $ElapsedSeconds = ((Get-Date) - $StartTime).TotalSeconds
             if ($ElapsedSeconds -gt $TimeoutSeconds) {

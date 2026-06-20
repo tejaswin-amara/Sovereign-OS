@@ -1,25 +1,24 @@
-# validate-skill.ps1 - D:/Skills Skill Verification Engine (v13.2.0-CloudNative)
+# validate-skill.ps1 - C:/Skills Skill Verification Engine (v13.2.0-CloudNative)
 # Purpose: Check if a skill directory is well-formed with proper documentation.
 
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$true)]
-    [string]$Skill  # Can be a name (e.g., 'zod') or a path (e.g., 'D:/Skills/zod')
+    [string]$Skill  # Can be a name (e.g., 'zod') or a path (e.g., 'C:/Skills/zod')
 )
 
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
-$SkillsRoot = "D:/Skills"
+$SovereignRoot = "C:/Skills"
 
 # Import shared module
-$SovereignPath = "D:/Skills"
-Import-Module "$SovereignPath/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
+Import-Module "$SovereignRoot/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
 
 # Resolve the absolute path
 if (Test-Path $Skill) {
     $SkillPath = (Resolve-Path $Skill).Path
 } else {
-    $SkillPath = Join-Path $SkillsRoot $Skill
+    $SkillPath = Join-Path $SovereignRoot $Skill
 }
 
 $SkillName = Split-Path $SkillPath -Leaf

@@ -1,4 +1,4 @@
-# D:/Skills/agent-bootstrap/scripts/helpers/Validation.ps1
+# C:/Skills/agent-bootstrap/scripts/helpers/Validation.ps1
 
 function Assert-SovereignPattern {
     [CmdletBinding()]

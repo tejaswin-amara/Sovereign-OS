@@ -1,4 +1,4 @@
-# D:/Skills/agent-bootstrap/scripts/helpers/IO.ps1
+# C:/Skills/agent-bootstrap/scripts/helpers/IO.ps1
 
 function Invoke-AtomicMove {
     [CmdletBinding()]

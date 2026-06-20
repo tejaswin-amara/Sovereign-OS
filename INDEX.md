@@ -1,6 +1,6 @@
 # Universal Skills Library — Index
 > [!NOTE]
-> Compressed index. Use `ls D:\Skills` or `grep_search` to discover skills at runtime.
+> Compressed index. Use `ls C:\Skills` or `grep_search` to discover skills at runtime.
 > Skill count is dynamic — run `sovereign.ps1` for the current total.
 
 ## Bootstrap

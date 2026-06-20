@@ -1,6 +1,6 @@
 # 🛠️ [Project Name] Skills Map
 
-This document maps the **[Project Name]** technology stack to the corresponding repositories in the **D:/Skills** library.
+This document maps the **[Project Name]** technology stack to the corresponding repositories in the **C:/Skills** library.
 
 ## 🔥 Core Stack (Tier 1)
 
@@ -24,4 +24,4 @@ This document maps the **[Project Name]** technology stack to the corresponding 
 | **Rules Library** | `awesome-rules/` | Project-specific behavioral calibration |
 
 ---
-*Maintained by the Antigravity Agent. Always refresh via `D:/Skills index` before use.*
+*Maintained by the Antigravity Agent. Always refresh via `C:/Skills index` before use.*

@@ -9,51 +9,10 @@ function Get-PythonDependencies {
     
     $ExcludedDirs = @(".git", "node_modules", ".agents", ".quarantine", "LOGS", "templates", "servers")
     
-    function Get-ManifestFiles {
-        param(
-            [string]$Path,
-            [string]$Filter,
-            [string[]]$Exclusions
-        )
-        $Files = [System.Collections.Generic.List[string]]::new()
-        
-        try {
-            $Info = [System.IO.DirectoryInfo]::new($Path)
-            if ($Info.Attributes.HasFlag([System.IO.FileAttributes]::ReparsePoint)) {
-                return $Files
-            }
-        } catch {
-            return $Files
-        }
-        
-        try {
-            $Matched = Get-ChildItem -LiteralPath $Path -Filter $Filter -File -ErrorAction SilentlyContinue
-            foreach ($f in $Matched) {
-                [void]$Files.Add($f.FullName)
-            }
-        } catch {}
-        
-        try {
-            $SubDirs = Get-ChildItem -LiteralPath $Path -Directory -ErrorAction SilentlyContinue
-            foreach ($dir in $SubDirs) {
-                if ($dir.Name -notin $Exclusions -and $dir.Name -notmatch '^\.') {
-                    $SubFiles = Get-ManifestFiles -Path $dir.FullName -Filter $Filter -Exclusions $Exclusions
-                    if ($null -ne $SubFiles) {
-                        foreach ($file in $SubFiles) {
-                            [void]$Files.Add($file)
-                        }
-                    }
-                }
-            }
-        } catch {}
-        
-        return $Files
-    }
-
     $DetectedDeps = @()
     
     # 1. Parse requirements.txt files
-    $ReqTxtPaths = Get-ManifestFiles -Path $ResolvedWorkspace -Filter "requirements.txt" -Exclusions $ExcludedDirs
+    $ReqTxtPaths = Get-SovereignManifestFiles -Path $ResolvedWorkspace -Filter "requirements.txt" -Exclusions $ExcludedDirs
     foreach ($ReqPath in $ReqTxtPaths) {
         if (Test-Path -LiteralPath $ReqPath) {
             $Lines = Get-Content -LiteralPath $ReqPath -ErrorAction SilentlyContinue
@@ -101,7 +60,7 @@ function Get-PythonDependencies {
     }
     
     # 2. Parse pyproject.toml files
-    $PyProjectPaths = Get-ManifestFiles -Path $ResolvedWorkspace -Filter "pyproject.toml" -Exclusions $ExcludedDirs
+    $PyProjectPaths = Get-SovereignManifestFiles -Path $ResolvedWorkspace -Filter "pyproject.toml" -Exclusions $ExcludedDirs
     foreach ($TomlPath in $PyProjectPaths) {
         if (Test-Path -LiteralPath $TomlPath) {
             $TomlContent = Get-Content -LiteralPath $TomlPath -Raw -ErrorAction SilentlyContinue

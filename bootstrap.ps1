@@ -1,6 +1,6 @@
 # bootstrap.ps1 - Sovereign Project Initializer (v13.2.0-CloudNative)
 # Purpose: Onboard any project into the Sovereign ecosystem with atomic template injection and cap enforcement.
-# Location: D:/Skills/bootstrap.ps1
+# Location: C:/Skills/bootstrap.ps1
 
 [CmdletBinding(SupportsShouldProcess)]
 param(
@@ -10,7 +10,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
-$SovereignPath = "D:/Skills"
+$SovereignPath = "C:/Skills"
 
 # Import shared module
 Import-Module "$SovereignPath/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
@@ -76,42 +76,13 @@ try {
         New-Item -ItemType Junction -Path $WorkflowsDir -Value "$TemplatesSource/workflows" -ErrorAction Stop | Out-Null
         Write-SovereignLog -Level "INFO" -Step "JUNCTION" -Message "Junctions established for rules and workflows."
     } catch {
-        Write-SovereignLog -Level "WARN" -Step "JUNCTION" -Message "Automatic junction creation failed. Attempting elevated links recovery..."
-        
-        $RulesDirEscaped = $RulesDir.Replace("'", "''")
-        $TemplatesRulesEscaped = "$TemplatesSource/rules".Replace("'", "''")
-        $WfDirEscaped = $WorkflowsDir.Replace("'", "''")
-        $TemplatesWfEscaped = "$TemplatesSource/workflows".Replace("'", "''")
-        
-        $ElevCommand = "New-Item -ItemType Junction -Path '$RulesDirEscaped' -Value '$TemplatesRulesEscaped' -Force; New-Item -ItemType Junction -Path '$WfDirEscaped' -Value '$TemplatesWfEscaped' -Force"
-        
+        Write-SovereignLog -Level "WARN" -Step "JUNCTION" -Message "Automatic junction creation failed. Falling back to simple directory copy..."
         try {
-            $Proc = Start-Process pwsh -ArgumentList "-NoProfile -Command `"$ElevCommand`"" -Verb RunAs -PassThru -Wait -WindowStyle Hidden
-            if ($Proc.ExitCode -eq 0 -and (Test-Path $RulesDir) -and (Test-Path $WorkflowsDir)) {
-                Write-SovereignLog -Level "INFO" -Step "JUNCTION" -Message "Elevated link establishment succeeded."
-            } else {
-                throw "Elevation script failed with exit code $($Proc.ExitCode)"
-            }
+            Copy-Item -Path "$TemplatesSource/rules" -Destination $RulesDir -Recurse -Force
+            Copy-Item -Path "$TemplatesSource/workflows" -Destination $WorkflowsDir -Recurse -Force
+            Write-SovereignLog -Level "INFO" -Step "JUNCTION" -Message "Fallback directory copy succeeded."
         } catch {
-            # Elevation failed or user denied UAC, serialize helper action script to project root
-            $ActionScriptPath = Join-Path $ResolvedProject "establish-links.ps1"
-            $ActionContent = @"
-# Run this script as Administrator to establish directory junctions
-`$TemplatesSource = "D:/Skills/templates"
-`$RulesDir = Join-Path `$PSScriptRoot ".agents/rules"
-`$WorkflowsDir = Join-Path `$PSScriptRoot ".agents/workflows"
-
-if (Test-Path `$RulesDir) { Remove-Item `$RulesDir -Force -Recurse -ErrorAction SilentlyContinue }
-if (Test-Path `$WorkflowsDir) { Remove-Item `$WorkflowsDir -Force -Recurse -ErrorAction SilentlyContinue }
-
-New-Item -ItemType Junction -Path `$RulesDir -Value "`$TemplatesSource/rules" -Force
-New-Item -ItemType Junction -Path `$WorkflowsDir -Value "`$TemplatesSource/workflows" -Force
-Write-Host "Directory junctions established successfully!" -ForegroundColor Green
-Start-Sleep -Seconds 2
-"@
-            [System.IO.File]::WriteAllText($ActionScriptPath, $ActionContent)
-            
-            $ErrorMsg = "Junction creation failed. Run helper script '$ActionScriptPath' as Administrator to complete onboarding."
+            $ErrorMsg = "Junction creation and fallback directory copy both failed. Details: $_"
             Write-SovereignLog -Level "ERROR" -Step "JUNCTION" -Message $ErrorMsg
             throw $ErrorMsg
         }

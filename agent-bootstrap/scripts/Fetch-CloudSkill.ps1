@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-$SovereignPath = "D:/Skills"
+$SovereignPath = "C:/Skills"
 Import-Module "$SovereignPath/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
 
 # Parse repo input (e.g. "microsoft/SkillOpt" or "https://github.com/microsoft/SkillOpt")
@@ -17,11 +17,14 @@ if ($CleanRepo -notmatch '^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$') {
 }
 
 $RepoParts = $CleanRepo -split "/"
+if ($RepoParts[0] -eq "." -or $RepoParts[0] -eq ".." -or $RepoParts[1] -eq "." -or $RepoParts[1] -eq "..") {
+    throw "Invalid repo format. Directory traversal is forbidden."
+}
 $RepoName = $RepoParts[-1]
 $TargetUrl = "https://github.com/$CleanRepo"
 
 $ConfigCache = Get-SovereignConfig -KeyPath "governance.cloud_cache_dir"
-$CacheDir = if ($ConfigCache) { $ConfigCache } else { "D:\Skills\.cloud-cache" }
+$CacheDir = if ($ConfigCache) { $ConfigCache } else { "C:\Skills\.cloud-cache" }
 $TargetPath = Join-Path $CacheDir $RepoName
 
 if (-not (Test-Path $CacheDir)) {
@@ -35,8 +38,8 @@ if (Test-Path $TargetPath) {
 
 Write-Host "[FETCH] Mounting '$RepoName' via JIT Cloud Fetch..." -ForegroundColor Cyan
 try {
-    # Blobless shallow clone for lightning fast fetching
-    git clone --filter=blob:none --depth 1 $TargetUrl $TargetPath 2>&1 | Out-Null
+    # Blobless shallow clone for lightning fast fetching with security config parameters
+    git clone -c protocol.file.allow=never -c core.hooksPath=/dev/null --filter=blob:none --depth 1 $TargetUrl $TargetPath 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) { throw "Git clone failed with exit code $LASTEXITCODE" }
     
     # Immediately drop the massive .git folder to save context space

@@ -33,5 +33,7 @@ Export-ModuleMember -Function @(
     'Save-AtomicContent',
     'Assert-SovereignPattern',
     'Start-LogRotation',
-    'Update-SovereignChecksum'
+    'Update-SovereignChecksum',
+    'Get-SovereignManifestFiles',
+    'Invoke-SovereignInternetDiagnostic'
 )

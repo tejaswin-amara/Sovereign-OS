@@ -1,4 +1,4 @@
-# D:/Skills/agent-bootstrap/scripts/helpers/Modularity.ps1
+# C:/Skills/agent-bootstrap/scripts/helpers/Modularity.ps1
 
 function Assert-ModuleCap {
     [CmdletBinding()]
@@ -51,4 +51,49 @@ function Get-DynamicSkillCount {
         Where-Object { $_.Name -notmatch '^_' } |
         Where-Object { $_.Name -notin $ExcludedDirs }
     return @($AllDirs).Count
+}
+
+function Get-SovereignManifestFiles {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [Parameter(Mandatory = $true)]
+        [string]$Filter,
+        [Parameter(Mandatory = $true)]
+        [string[]]$Exclusions
+    )
+    $Files = [System.Collections.Generic.List[string]]::new()
+    
+    try {
+        $Info = [System.IO.DirectoryInfo]::new($Path)
+        if ($Info.Attributes.HasFlag([System.IO.FileAttributes]::ReparsePoint)) {
+            return $Files
+        }
+    } catch {
+        return $Files
+    }
+    
+    try {
+        $Matched = Get-ChildItem -LiteralPath $Path -Filter $Filter -File -ErrorAction SilentlyContinue
+        foreach ($f in $Matched) {
+            [void]$Files.Add($f.FullName)
+        }
+    } catch {}
+    
+    try {
+        $SubDirs = Get-ChildItem -LiteralPath $Path -Directory -ErrorAction SilentlyContinue
+        foreach ($dir in $SubDirs) {
+            if ($dir.Name -notin $Exclusions -and $dir.Name -notmatch '^\.') {
+                $SubFiles = Get-SovereignManifestFiles -Path $dir.FullName -Filter $Filter -Exclusions $Exclusions
+                if ($null -ne $SubFiles) {
+                    foreach ($file in $SubFiles) {
+                        [void]$Files.Add($file)
+                    }
+                }
+            }
+        }
+    } catch {}
+    
+    return $Files
 }

@@ -1,4 +1,4 @@
-# update-checksum.ps1 - Utility wrapper to sign sovereign.config.json (v13.2.0-CloudNative)
+# update-checksum.ps1 - Utility wrapper to sign sovereign.config.json (v14.0.0-CloudNative)
 
 [CmdletBinding()]
 param()

@@ -1,10 +1,10 @@
-# D:/Skills/agent-bootstrap/scripts/helpers/Configuration.ps1
+# C:/Skills/agent-bootstrap/scripts/helpers/Configuration.ps1
 
 function Get-SovereignConfig {
     [CmdletBinding()]
     param([string]$KeyPath)
     
-    $ConfigPath = "D:/Skills/sovereign.config.json"
+    $ConfigPath = "C:/Skills/sovereign.config.json"
     if (-not (Test-Path $ConfigPath)) {
         return $null
     }
@@ -40,15 +40,15 @@ function Save-AtomicContent {
     }
 
     $TempPath = "$Path.$([guid]::NewGuid().ToString().Substring(0,8)).tmp"
-    $Content | Out-File -FilePath $TempPath -Encoding UTF8
+    [System.IO.File]::WriteAllText($TempPath, $Content, [System.Text.Encoding]::UTF8)
     Invoke-AtomicMove -Source $TempPath -Destination $Path
 }
 
 function Assert-SovereignConfigIntegrity {
     [CmdletBinding()]
     param(
-        [string]$ConfigPath = "D:/Skills/sovereign.config.json",
-        [string]$HashPath = "D:/Skills/agent-bootstrap/.config.sha256"
+        [string]$ConfigPath = "C:/Skills/sovereign.config.json",
+        [string]$HashPath = "C:/Skills/agent-bootstrap/.config.sha256"
     )
 
     if (-not (Test-Path $ConfigPath)) {
@@ -57,7 +57,11 @@ function Assert-SovereignConfigIntegrity {
 
     $FileBytes = [System.IO.File]::ReadAllBytes($ConfigPath)
     $Sha256 = [System.Security.Cryptography.SHA256]::Create()
-    $HashBytes = $Sha256.ComputeHash($FileBytes)
+    try {
+        $HashBytes = $Sha256.ComputeHash($FileBytes)
+    } finally {
+        $Sha256.Dispose()
+    }
     $CurrentHash = [System.BitConverter]::ToString($HashBytes).Replace("-", "").ToLower()
 
     if (-not (Test-Path $HashPath)) {

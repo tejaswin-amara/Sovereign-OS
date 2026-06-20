@@ -210,11 +210,15 @@ try {
     # PHASE 6.5: GC — Cloud Cache Garbage Collection [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "GC" -Message "Running Garbage Collection on ephemeral .cloud-cache..."
-    $CloudCacheDir = "$SovereignRoot/.cloud-cache"
+    $CloudCacheDir = "$SovereignRoot\.cloud-cache"
     if (Test-Path $CloudCacheDir) {
         try {
-            Remove-Item -Path "$CloudCacheDir\*" -Recurse -Force -ErrorAction Stop
-            Write-SovereignLog -Level "INFO" -Step "GC" -Message "Cloud cache purged successfully."
+            cmd.exe /c "rmdir /s /q ""$CloudCacheDir"""
+            if (-not (Test-Path $CloudCacheDir)) {
+                Write-SovereignLog -Level "INFO" -Step "GC" -Message "Cloud cache purged successfully."
+            } else {
+                Write-SovereignLog -Level "WARN" -Step "GC" -Message "Cloud cache partially purged. Some locked files remain."
+            }
         } catch {
             Write-SovereignLog -Level "WARN" -Step "GC" -Message "Failed to purge cloud cache. It may be locked."
             $PhaseFailures += "GC_FAIL"

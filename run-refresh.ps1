@@ -6,7 +6,7 @@ Set-StrictMode -Version Latest
 
 Write-Host "[INIT]    Syncing git skill repositories in parallel..." -ForegroundColor Cyan
 
-$Dirs = Get-ChildItem -Path "D:\Skills" -Directory | Where-Object { 
+$Dirs = Get-ChildItem -Path "C:\Skills" -Directory | Where-Object { 
     $_.Name -notmatch "^\." -and $_.Name -ne "agent-bootstrap" -and (Test-Path "$($_.FullName)\.git")
 }
 
@@ -39,9 +39,9 @@ $FailedCount = @($results | Where-Object { -not $_.Success }).Count
 Write-Host "[SYNC]    Refresh complete. Synced: $UpdatedCount, Failed: $FailedCount" -ForegroundColor Cyan
 
 Write-Host "[EXEC]    Running Sovereign Master Controller..." -ForegroundColor Cyan
-pwsh -NoProfile -ExecutionPolicy Bypass -File "D:\Skills\sovereign.ps1" -ProjectPath "D:\Skills"
+pwsh -NoProfile -ExecutionPolicy Bypass -File "C:\Skills\sovereign.ps1" -ProjectPath "C:\Skills"
 if ($LASTEXITCODE -ne 0) { throw "sovereign.ps1 failed with exit code $LASTEXITCODE" }
-pwsh -NoProfile -ExecutionPolicy Bypass -File "D:\Skills\sovereign-check.ps1" -ProjectPath "D:\Skills"
+pwsh -NoProfile -ExecutionPolicy Bypass -File "C:\Skills\sovereign-check.ps1" -ProjectPath "C:\Skills"
 if ($LASTEXITCODE -ne 0) { throw "sovereign-check.ps1 failed with exit code $LASTEXITCODE" }
 
 Write-Host "[DONE]    Sovereign v13.2.0-CloudNative Online." -ForegroundColor Cyan

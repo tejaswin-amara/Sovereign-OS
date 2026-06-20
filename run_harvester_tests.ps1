@@ -1,8 +1,11 @@
-# D:\Skills\run_harvester_tests.ps1
+# C:\Skills\run_harvester_tests.ps1
 # Empirical test runner for skill-harvester and its parsers.
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+
+# Load the helpers module
+Import-Module "C:/Skills/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
 
 # Mock Write-SovereignLog to prevent missing function errors and capture logs
 $script:LogWarnings = [System.Collections.Generic.List[string]]::new()
@@ -20,7 +23,7 @@ function Write-SovereignLog {
 }
 
 # Load the parsers
-$HarvesterDir = "D:\Skills\agent-bootstrap\scripts\harvesters"
+$HarvesterDir = "C:\Skills\agent-bootstrap\scripts\harvesters"
 $Parsers = @("NodeParser.ps1", "PythonParser.ps1", "RustParser.ps1", "GoParser.ps1", "JavaParser.ps1", "DotNetParser.ps1")
 
 foreach ($Parser in $Parsers) {
@@ -34,7 +37,7 @@ foreach ($Parser in $Parsers) {
 }
 
 # Test workspace path
-$FixtureRoot = "D:\Skills\harvester_test_fixtures"
+$FixtureRoot = "C:\Skills\harvester_test_fixtures"
 
 # Setup fixture directories
 function Setup-Fixtures {
@@ -43,17 +46,17 @@ function Setup-Fixtures {
         # Force delete existing
         Remove-Item -LiteralPath $FixtureRoot -Recurse -Force -ErrorAction SilentlyContinue
     }
-    New-Item -LiteralPath $FixtureRoot -ItemType Directory -Force | Out-Null
+    New-Item -Path $FixtureRoot -ItemType Directory -Force | Out-Null
 
     # Case 1: Empty Folder
-    New-Item -LiteralPath (Join-Path $FixtureRoot "empty_dir") -ItemType Directory -Force | Out-Null
+    New-Item -Path (Join-Path $FixtureRoot "empty_dir") -ItemType Directory -Force | Out-Null
 
     # Case 2: Deep Folders
     $deepPath = Join-Path $FixtureRoot "deep_dir"
     for ($i = 1; $i -le 20; $i++) {
         $deepPath = Join-Path $deepPath $i
     }
-    New-Item -LiteralPath $deepPath -ItemType Directory -Force | Out-Null
+    New-Item -Path $deepPath -ItemType Directory -Force | Out-Null
     # Add a package.json at the deepest level
     $pkgJsonContent = @{
         dependencies = @{
@@ -67,10 +70,10 @@ function Setup-Fixtures {
     $specSpaces = Join-Path $FixtureRoot "dir with spaces"
     $specHashes = Join-Path $FixtureRoot "dir#with#hashes"
     $specQuotes = Join-Path $FixtureRoot "dir'with'quotes"
-    New-Item -LiteralPath $specBrackets -ItemType Directory -Force | Out-Null
-    New-Item -LiteralPath $specSpaces -ItemType Directory -Force | Out-Null
-    New-Item -LiteralPath $specHashes -ItemType Directory -Force | Out-Null
-    New-Item -LiteralPath $specQuotes -ItemType Directory -Force | Out-Null
+    New-Item -Path $specBrackets -ItemType Directory -Force | Out-Null
+    New-Item -Path $specSpaces -ItemType Directory -Force | Out-Null
+    New-Item -Path $specHashes -ItemType Directory -Force | Out-Null
+    New-Item -Path $specQuotes -ItemType Directory -Force | Out-Null
 
     # Put a Cargo.toml with serde inside brackets folder
     $cargoContent = @"
@@ -97,7 +100,7 @@ require (
 
     # Case 4: Invalid Manifest Files (Robustness)
     $invalidDir = Join-Path $FixtureRoot "invalid_manifests"
-    New-Item -LiteralPath $invalidDir -ItemType Directory -Force | Out-Null
+    New-Item -Path $invalidDir -ItemType Directory -Force | Out-Null
     # Invalid package.json (invalid JSON syntax)
     Set-Content -LiteralPath (Join-Path $invalidDir "package.json") -Value "{ invalid json: yes "
     # Invalid requirements.txt (empty or weird content)
@@ -112,7 +115,7 @@ broken syntax
 
     # Case 5: Maven/Gradle Mixes
     $mixDir = Join-Path $FixtureRoot "mix_dir"
-    New-Item -LiteralPath $mixDir -ItemType Directory -Force | Out-Null
+    New-Item -Path $mixDir -ItemType Directory -Force | Out-Null
     # pom.xml
     $pomContent = @"
 <project>
@@ -137,9 +140,9 @@ dependencies {
 
     # Case 6: Reparse Point (Symlink/Junction) Recursion
     $junctionDir = Join-Path $FixtureRoot "junction_dir"
-    New-Item -LiteralPath $junctionDir -ItemType Directory -Force | Out-Null
+    New-Item -Path $junctionDir -ItemType Directory -Force | Out-Null
     $subDir = Join-Path $junctionDir "sub_dir"
-    New-Item -LiteralPath $subDir -ItemType Directory -Force | Out-Null
+    New-Item -Path $subDir -ItemType Directory -Force | Out-Null
     
     # Put a csproj inside sub_dir
     $csprojContent = @"
@@ -300,6 +303,9 @@ try {
     $timeoutMiliseconds = 5000
     $task = Start-Job -ScriptBlock {
         param($juncDir, $HarvesterDir)
+        # Load helpers module in the job scope
+        $SovereignRoot = (Resolve-Path -LiteralPath "$HarvesterDir/../../..").Path
+        Import-Module "$SovereignRoot/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
         # Load DotNetParser in the job scope
         . (Join-Path $HarvesterDir "DotNetParser.ps1")
         # Define mock log
@@ -323,6 +329,7 @@ try {
     }
 
     # Clean up junction link first before deleting the root
+    $junctionLink = Join-Path $FixtureRoot "junction_dir\self_loop"
     if (Test-Path -LiteralPath $junctionLink) {
         Write-Host "Removing directory junction link: $junctionLink"
         # On Windows, to remove a directory junction without removing the target content, we can use cmd.exe rmdir
@@ -340,7 +347,7 @@ try {
 }
 
 # Generate markdown report in Results
-$ReportFile = "D:\Skills\.agents\challenger_harvester_5\test_report.md"
+$ReportFile = Join-Path $PSScriptRoot "test_report.md"
 $Report = "# Harvester Parsers Test Report`n`n"
 $Report += "Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')`n`n"
 $Report += "| Test Name | Result | Details |`n"

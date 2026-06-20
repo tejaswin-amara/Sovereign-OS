@@ -1,7 +1,15 @@
-{
-  "$schema": "https://raw.githubusercontent.com/sovereign-skills/schema/main/config-v13.2.0.json",
-  "version": "13.2.0-CloudNative",
+﻿{
+  "$schema": "https://raw.githubusercontent.com/sovereign-skills/schema/main/config-v14.0.0.json",
+  "version": "14.0.0-CloudNative",
   "name": "Sovereign Skills Library",
+  "core_axioms": [
+    "ponytail",
+    "ponytail-audit",
+    "ponytail-debt",
+    "ponytail-gain",
+    "ponytail-help",
+    "ponytail-review"
+  ],
   "description": "Unified configuration for the Sovereign Master Controller. Single source of truth.",
   "security_policy": {
     "allow_pattern": "^[a-zA-Z0-9_-]{2,50}$",
@@ -17,7 +25,7 @@
     "require_signature": false
   },
   "paths": {
-    "skills_root": "D:/Skills",
+    "skills_root": "C:/Skills",
     "core_file": "SOVEREIGN_CORE.md",
     "core_template": "SOVEREIGN_CORE.template.md",
     "version_file": "VERSION",
@@ -35,7 +43,7 @@
   },
   "governance": {
     "module_cap": 32,
-    "skills_count": 0,
+    "skills_count": 2,
     "_skills_count_note": "DYNAMIC - overwritten by sovereign.ps1 at runtime. Never edit manually.",
     "lock_timeout_seconds": 30,
     "lock_lease_timeout_seconds": 600,
@@ -52,9 +60,6 @@
       "LOGS",
       "scratch",
       "templates",
-      "G0DM0D3",
-      "GodMode",
-      "goose",
       "servers",
       ".cloud-cache"
     ]
@@ -63,7 +68,23 @@
     "allowed": [
       "browsermcp",
       "StitchMCP",
-      "exa"
+      "Kluster-Verify-Code",
+      "android-management-api",
+      "chrome-devtools-mcp",
+      "chrome_devtools",
+      "fetch",
+      "figma",
+      "filesystem",
+      "firebase-mcp-server",
+      "github",
+      "github-mcp-server",
+      "google-compute-engine",
+      "google-developer-knowledge",
+      "mcp-knowledge-graph",
+      "memory",
+      "puppeteer",
+      "sequential-thinking",
+      "tavily"
     ],
     "forbidden": [
       "*"
@@ -80,6 +101,7 @@
     "manifest_files": [
       "package.json",
       "requirements.txt",
+      "pyproject.toml",
       "pom.xml",
       "Cargo.toml",
       "go.mod"
@@ -159,6 +181,23 @@
     "e2b": "e2b-dev/E2B",
     "daytona": "daytonaio/daytona",
     "autogen": "microsoft/autogen",
-    "crewai": "crewAIInc/crewAI"
+    "crewai": "crewAIInc/crewAI",
+    "aider": "Aider-AI/aider",
+    "langgraph": "langchain-ai/langgraph",
+    "llama-index": "run-llama/llama_index",
+    "llama_index": "run-llama/llama_index",
+    "skyvern": "skyvern-ai/skyvern",
+    "crawlee": "apify/crawlee",
+    "firecrawl": "mendableai/firecrawl",
+    "exa": "exa-labs/exa-py",
+    "tavily": "tavily-ai/tavily-python",
+    "spider": "spider-rs/spider",
+    "jina": "jina-ai/reader",
+    "litellm": "BerriAI/litellm",
+    "wrangler": "cloudflare/workers-sdk",
+    "sst": "sst/sst",
+    "openai": "openai/openai-python",
+    "anthropic": "anthropics/anthropic-sdk-python",
+    "redis": "redis/node-redis"
   }
 }

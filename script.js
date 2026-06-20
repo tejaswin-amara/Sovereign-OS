@@ -66,6 +66,16 @@ function copyCode(button) {
             button.innerText = originalText;
             button.style.color = '';
         }, 2000);
+    }).catch(err => {
+        console.error('Clipboard copy failed:', err);
+        const originalText = button.innerText;
+        button.innerText = 'Failed';
+        button.style.color = '#ef4444';
+        
+        setTimeout(() => {
+            button.innerText = originalText;
+            button.style.color = '';
+        }, 2000);
     });
 }
 

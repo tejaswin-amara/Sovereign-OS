@@ -1,8 +1,8 @@
-# D:/Skills/agent-bootstrap/scripts/helpers/Version.ps1
+# C:/Skills/agent-bootstrap/scripts/helpers/Version.ps1
 
 function Get-SovereignVersion {
     [CmdletBinding()]
-    param([string]$SkillsRoot = "D:/Skills")
+    param([string]$SkillsRoot = "C:/Skills")
     $VersionFile = Join-Path $SkillsRoot "VERSION"
     if (Test-Path $VersionFile) {
         return (Get-Content $VersionFile -First 1).Trim()

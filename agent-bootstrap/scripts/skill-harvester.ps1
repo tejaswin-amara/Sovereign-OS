@@ -1,6 +1,6 @@
 # SOVEREIGN SKILL HARVESTER v13.2.0-CloudNative (BULLETPROOF - REFACTORED)
 # Purpose: Deep Harvester with project analysis, dependency mapping, and skill matching.
-# Location: D:/Skills/agent-bootstrap/scripts/skill-harvester.ps1
+# Location: C:/Skills/agent-bootstrap/scripts/skill-harvester.ps1
 
 [CmdletBinding()]
 param(
@@ -210,7 +210,7 @@ foreach ($Entry in $MatchedSkills.GetEnumerator()) {
 # [6/7] Generate harvested_skills.md
 $KnowledgeDir = Join-Path $ResolvedWorkspace ".agents/knowledge"
 if (-not (Test-Path -LiteralPath $KnowledgeDir)) { 
-    New-Item -LiteralPath $KnowledgeDir -ItemType Directory -Force | Out-Null 
+    New-Item -Path $KnowledgeDir -ItemType Directory -Force | Out-Null 
 }
 
 $HarvestOutput = "# Sovereign Harvested Skills (v$Version)`n"
@@ -221,7 +221,7 @@ $HarvestOutput += "> Matched Skills: $($VerifiedSkills.Count)`n"
 $HarvestOutput += "> Global Library: $($GlobalLibrary.Count) skills`n`n"
 $HarvestOutput += "## Matched Skills`n`n"
 $HarvestOutput += "> Table generation suppressed for token context efficiency.`n"
-$HarvestOutput += "> See `.agents/knowledge/harvested_skills.md` or query `D:/Skills` directly for details.`n"
+$HarvestOutput += "> See `.agents/knowledge/harvested_skills.md` or query `C:/Skills` directly for details.`n"
 $HarvestOutput += "`n## Axiom Cores`n`n"
 foreach ($Axiom in $Axioms) {
     $HarvestOutput += "- $Axiom`n"
@@ -240,7 +240,7 @@ elseif ($DetectedDeps -contains "fastify" -or $DetectedDeps -contains "hono" -or
 $ExcludeHarvestDirs = @($ExcludedDirs) + @('node_modules', '.agents')
 function Get-FastHarvestFileCount {
     param([string]$Path)
-    if ($Path -ieq "D:\Skills" -or $Path -ieq "D:/Skills") {
+    if ($Path -ieq "C:\Skills" -or $Path -ieq "C:/Skills") {
         $script:LocalFileCount = (Get-ChildItem -LiteralPath $Path -File -ErrorAction SilentlyContinue | Measure-Object).Count
         $script:LocalFileCount += (Get-ChildItem -LiteralPath (Join-Path $Path "agent-bootstrap") -File -Recurse -ErrorAction SilentlyContinue | Measure-Object).Count
         return

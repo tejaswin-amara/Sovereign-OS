@@ -41,8 +41,8 @@ Describe "Sovereign Remediation Empirical Verification" {
             }
 
             # In the original logic, $isStale remains false, so file is not deleted.
-            $isStale | Should Be $false
-            (Test-Path $script:LockFile) | Should Be $true
+            $isStale | Should -Be $false
+            (Test-Path $script:LockFile) | Should -Be $true
         }
 
         It "Remediated logic should detect empty lock file as stale, delete it, and allow acquisition" {
@@ -67,8 +67,8 @@ Describe "Sovereign Remediation Empirical Verification" {
             }
 
             # File should be successfully deleted
-            $isStale | Should Be $true
-            (Test-Path $script:LockFile) | Should Be $false
+            $isStale | Should -Be $true
+            (Test-Path $script:LockFile) | Should -Be $false
         }
 
         It "Remediated logic should detect corrupt JSON lock file as stale, delete it, and allow acquisition" {
@@ -93,8 +93,8 @@ Describe "Sovereign Remediation Empirical Verification" {
             }
 
             # File should be successfully deleted
-            $isStale | Should Be $true
-            (Test-Path $script:LockFile) | Should Be $false
+            $isStale | Should -Be $true
+            (Test-Path $script:LockFile) | Should -Be $false
         }
 
         It "Remediated logic should detect missing metadata in JSON lock file as stale and delete it" {
@@ -120,8 +120,8 @@ Describe "Sovereign Remediation Empirical Verification" {
             }
 
             # File should be successfully deleted
-            $isStale | Should Be $true
-            (Test-Path $script:LockFile) | Should Be $false
+            $isStale | Should -Be $true
+            (Test-Path $script:LockFile) | Should -Be $false
         }
     }
 
@@ -134,8 +134,8 @@ Describe "Sovereign Remediation Empirical Verification" {
             } else {
                 $Warnings += "No Lore.md found. Capturing hard-won lessons in Lore.md is recommended."
             }
-            $Warnings.Count | Should Be 1
-            $Warnings[0] | Should Match "No Lore.md found"
+            $Warnings.Count | Should -Be 1
+            $Warnings[0] | Should -Match "No Lore.md found"
         }
 
         It "Should catch empty or whitespace-only Lore.md and add warning" {
@@ -153,8 +153,8 @@ Describe "Sovereign Remediation Empirical Verification" {
                 if ($null -eq $loreContent -or $loreContent.Trim().Length -lt 20) {
                     $Warnings += "Lore.md is very short - consider expanding the captured wisdom."
                 }
-                $Warnings.Count | Should Be 1
-                $Warnings[0] | Should Match "Lore.md is very short"
+                $Warnings.Count | Should -Be 1
+                $Warnings[0] | Should -Match "Lore.md is very short"
             }
         }
 
@@ -164,8 +164,8 @@ Describe "Sovereign Remediation Empirical Verification" {
             if ($null -eq $loreContent -or $loreContent.Trim().Length -lt 20) {
                 $Warnings += "Lore.md is very short - consider expanding the captured wisdom."
             }
-            $Warnings.Count | Should Be 1
-            $Warnings[0] | Should Match "Lore.md is very short"
+            $Warnings.Count | Should -Be 1
+            $Warnings[0] | Should -Match "Lore.md is very short"
         }
 
         It "Should allow valid Lore.md (>= 20 chars) without warnings" {
@@ -174,7 +174,7 @@ Describe "Sovereign Remediation Empirical Verification" {
             if ($null -eq $loreContent -or $loreContent.Trim().Length -lt 20) {
                 $Warnings += "Lore.md is very short - consider expanding the captured wisdom."
             }
-            $Warnings.Count | Should Be 0
+            $Warnings.Count | Should -Be 0
         }
     }
 
@@ -206,7 +206,7 @@ Describe "Sovereign Remediation Empirical Verification" {
             # Direct cmdlet call — avoids Invoke-Expression AST violation
             New-Item -ItemType Junction -Path $dest -Value $script:SrcDir -Force | Out-Null
 
-            (Test-Path $dest) | Should Be $true
+            (Test-Path $dest) | Should -Be $true
         }
 
         It "Junction creation should work when path contains single quotes" {
@@ -217,7 +217,7 @@ Describe "Sovereign Remediation Empirical Verification" {
             # Direct cmdlet call — avoids Invoke-Expression AST violation
             New-Item -ItemType Junction -Path $dest -Value $script:SrcDir -Force | Out-Null
 
-            (Test-Path $dest) | Should Be $true
+            (Test-Path $dest) | Should -Be $true
         }
 
         It "Get-ChildItem using -LiteralPath should succeed when path contains brackets (BS-05)" {
@@ -230,7 +230,7 @@ Describe "Sovereign Remediation Empirical Verification" {
             try {
                 # This should succeed and not throw an exception
                 $files = Get-ChildItem -LiteralPath $bracketDir -ErrorAction Stop
-                $files | Should Not BeNullOrEmpty
+                $files.Count | Should -BeGreaterThan 0
             } finally {
                 if (Test-Path $bracketDir) {
                     Remove-Item -LiteralPath $bracketDir -Recurse -Force -ErrorAction SilentlyContinue
@@ -241,15 +241,15 @@ Describe "Sovereign Remediation Empirical Verification" {
 
     Context "4. Path Normalization (BS-07)" {
         It "Should correctly normalize backslashes to forward slashes in Windows path" {
-            $WindowsPath = "D:\Skills\agent-bootstrap\scripts"
+            $WindowsPath = "C:\Skills\agent-bootstrap\scripts"
             
             # Original logic
             $OriginalNormalized = $WindowsPath -replace '\\\\', '/'
-            $OriginalNormalized | Should Be "D:\Skills\agent-bootstrap\scripts" # Fails to replace single backslash
+            $OriginalNormalized | Should -Be "C:\Skills\agent-bootstrap\scripts" # Fails to replace single backslash
 
             # Remediated logic
             $RemediatedNormalized = $WindowsPath.Replace('\', '/')
-            $RemediatedNormalized | Should Be "D:/Skills/agent-bootstrap/scripts" # Succeeds
+            $RemediatedNormalized | Should -Be "C:/Skills/agent-bootstrap/scripts" # Succeeds
         }
     }
 }

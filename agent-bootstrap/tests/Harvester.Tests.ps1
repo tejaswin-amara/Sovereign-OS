@@ -7,14 +7,21 @@ $SovereignRoot = (Resolve-Path "$PSScriptRoot/../..").Path
 # Import the main harvester helpers or dot-source the parsers
 Describe "Sovereign Harvester Parsers" {
     BeforeAll {
+        $script:SovereignRoot = (Resolve-Path "$PSScriptRoot/../..").Path
+        if (-not $script:SovereignRoot) { $script:SovereignRoot = "C:/Skills" }
+        
         $script:MockWorkspace = Join-Path $PSScriptRoot "mock_workspace"
         if (Test-Path -LiteralPath $script:MockWorkspace) {
             Remove-Item -LiteralPath $script:MockWorkspace -Recurse -Force -ErrorAction SilentlyContinue
         }
         New-Item -Path $script:MockWorkspace -ItemType Directory -Force | Out-Null
         
+        # Load the helpers module required by parsers
+        $HelpersPath = Join-Path $script:SovereignRoot "agent-bootstrap/scripts/helpers.psm1"
+        Import-Module $HelpersPath -Force -DisableNameChecking
+        
         # Load the parsers
-        $HarvestersPath = Join-Path $SovereignRoot "agent-bootstrap/scripts/harvesters"
+        $HarvestersPath = Join-Path $script:SovereignRoot "agent-bootstrap/scripts/harvesters"
         Get-ChildItem -LiteralPath $HarvestersPath -Filter "*Parser.ps1" | ForEach-Object {
             . $_.FullName
         }
@@ -44,9 +51,9 @@ Describe "Sovereign Harvester Parsers" {
             [System.IO.File]::WriteAllText((Join-Path $SubFolder "package.json"), $PkgJsonContent)
             
             $deps = Get-NodeDependencies -ResolvedWorkspace $script:MockWorkspace
-            $deps -contains "express" | Should Be $true
-            $deps -contains "lodash" | Should Be $true
-            $deps -contains "jest" | Should Be $true
+            $deps -contains "express" | Should -Be $true
+            $deps -contains "lodash" | Should -Be $true
+            $deps -contains "jest" | Should -Be $true
         }
     }
 
@@ -73,11 +80,11 @@ numpy = { version = "^1.20" }
             [System.IO.File]::WriteAllText((Join-Path $SubFolder "pyproject.toml"), $PyProjContent)
             
             $deps = Get-PythonDependencies -ResolvedWorkspace $script:MockWorkspace
-            $deps -contains "requests" | Should Be $true
-            $deps -contains "django" | Should Be $true
-            $deps -contains "pytest" | Should Be $true
-            $deps -contains "numpy" | Should Be $true
-            $deps -contains "python" | Should Be $false
+            $deps -contains "requests" | Should -Be $true
+            $deps -contains "django" | Should -Be $true
+            $deps -contains "pytest" | Should -Be $true
+            $deps -contains "numpy" | Should -Be $true
+            $deps -contains "python" | Should -Be $false
         }
 
         It "Should parse PEP 621 style dependencies in pyproject.toml" {
@@ -98,10 +105,10 @@ dependencies = [
             [System.IO.File]::WriteAllText((Join-Path $SubFolder "pyproject.toml"), $PyProjContent)
             
             $deps = Get-PythonDependencies -ResolvedWorkspace $script:MockWorkspace
-            $deps -contains "requests" | Should Be $true
-            $deps -contains "pandas" | Should Be $true
-            $deps -contains "ruamel.yaml" | Should Be $true
-            $deps -contains "numpy" | Should Be $true
+            $deps -contains "requests" | Should -Be $true
+            $deps -contains "pandas" | Should -Be $true
+            $deps -contains "ruamel.yaml" | Should -Be $true
+            $deps -contains "numpy" | Should -Be $true
         }
     }
 
@@ -128,12 +135,12 @@ openssl = "0.10"
             [System.IO.File]::WriteAllText((Join-Path $SubFolder "Cargo.toml"), $CargoContent)
             
             $deps = Get-RustDependencies -ResolvedWorkspace $script:MockWorkspace
-            $deps -contains "serde" | Should Be $true
-            $deps -contains "tokio" | Should Be $true
-            $deps -contains "rand" | Should Be $true
-            $deps -contains "openssl" | Should Be $true
-            $deps -contains "version" | Should Be $false
-            $deps -contains "features" | Should Be $false
+            $deps -contains "serde" | Should -Be $true
+            $deps -contains "tokio" | Should -Be $true
+            $deps -contains "rand" | Should -Be $true
+            $deps -contains "openssl" | Should -Be $true
+            $deps -contains "version" | Should -Be $false
+            $deps -contains "features" | Should -Be $false
         }
     }
 
@@ -157,9 +164,9 @@ require github.com/stretchr/testify v1.7.0
             [System.IO.File]::WriteAllText((Join-Path $SubFolder "go.mod"), $GoContent)
             
             $deps = Get-GoDependencies -ResolvedWorkspace $script:MockWorkspace
-            $deps -contains "gin" | Should Be $true
-            $deps -contains "logrus" | Should Be $true
-            $deps -contains "testify" | Should Be $true
+            $deps -contains "gin" | Should -Be $true
+            $deps -contains "logrus" | Should -Be $true
+            $deps -contains "testify" | Should -Be $true
         }
     }
 
@@ -198,11 +205,11 @@ dependencies {
             [System.IO.File]::WriteAllText((Join-Path $SubFolder "build.gradle"), $GradleContent)
             
             $deps = Get-JavaDependencies -ResolvedWorkspace $script:MockWorkspace
-            $deps -contains "spring-core" | Should Be $true
-            $deps -contains "slf4j-api" | Should Be $true
-            $deps -contains "junit" | Should Be $true
-            $deps -contains "maven-compiler-plugin" | Should Be $false
-            $deps -contains "test-app" | Should Be $false
+            $deps -contains "spring-core" | Should -Be $true
+            $deps -contains "slf4j-api" | Should -Be $true
+            $deps -contains "junit" | Should -Be $true
+            $deps -contains "maven-compiler-plugin" | Should -Be $false
+            $deps -contains "test-app" | Should -Be $false
         }
     }
 
@@ -223,9 +230,9 @@ dependencies {
             [System.IO.File]::WriteAllText((Join-Path $SubFolder "dotnet_proj.csproj"), $CsprojContent)
             
             $deps = Get-DotNetDependencies -ResolvedWorkspace $script:MockWorkspace
-            $deps -contains "Newtonsoft.Json" | Should Be $true
-            $deps -contains "Microsoft.Extensions.Logging" | Should Be $true
-            $deps -contains "System.Text.Json" | Should Be $true
+            $deps -contains "Newtonsoft.Json" | Should -Be $true
+            $deps -contains "Microsoft.Extensions.Logging" | Should -Be $true
+            $deps -contains "System.Text.Json" | Should -Be $true
         }
     }
 }

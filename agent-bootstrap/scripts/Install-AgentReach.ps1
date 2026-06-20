@@ -1,6 +1,6 @@
 # Install-AgentReach.ps1 — Sovereign Internet Reach Installer
 # Purpose: Install Agent-Reach runtime and zero-config channels for Sovereign.
-# Location: D:/Skills/agent-bootstrap/scripts/Install-AgentReach.ps1
+# Location: C:/Skills/agent-bootstrap/scripts/Install-AgentReach.ps1
 
 [CmdletBinding()]
 param(
