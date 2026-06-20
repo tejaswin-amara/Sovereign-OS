@@ -21,7 +21,7 @@
 
 ## 3. Skills Library
 - Cloud-Native: Sovereign operates with ZERO permanent local skills. (Currently active in cache: {{SKILL_COUNT}})
-- Discovery: If you need a framework or tool (e.g. Next.js, JCode, Biopython, RDKit, Android Architecture), pull it from GitHub dynamically.
+- Discovery: If you need a framework or tool (e.g. Next.js, JCode, Biopython, RDKit, AlphaFold, PyMOL, OpenAlex, ChEMBL, Android Architecture), pull it from GitHub dynamically.
 - JIT Loading: Run `pwsh C:/Skills/agent-bootstrap/scripts/Fetch-CloudSkill.ps1 -Repo "org/repo"`.
 - Mounting: Skills are temporarily mounted in `C:/Skills/.cloud-cache/`.
 - Validation: Read the mounted `README.md` or `SKILL.md` before execution.

@@ -110,7 +110,9 @@ if ($DoctorExit -eq 0) {
 # -------------------------------------------------------------------------
 Write-Host "[REACH] Installing jcode for browser automation..." -ForegroundColor Cyan
 try {
-    irm https://raw.githubusercontent.com/1jehuang/jcode/master/scripts/install.ps1 | iex
+    $InstallScriptPath = "$env:TEMP/install_jcode.ps1"
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/1jehuang/jcode/master/scripts/install.ps1" -OutFile $InstallScriptPath -UseBasicParsing
+    & $InstallScriptPath
     Write-Host "[SUCCESS] jcode installed successfully." -ForegroundColor Green
 } catch {
     Write-Host "[WARN] jcode installation failed." -ForegroundColor Yellow

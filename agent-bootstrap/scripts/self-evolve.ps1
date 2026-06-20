@@ -247,18 +247,33 @@ try {
 
     # PONYTAIL DEBT SWEEP
     Write-SovereignLog -Level "INFO" -Step "EVOLUTION" -Message "Scanning for Ponytail lazy-dev shortcuts..."
-    $ExcludeDirs = @("node_modules", ".git", ".agents", ".cloud-cache", "LOGS")
-    $Files = Get-ChildItem -Path $WorkspacePath -Recurse -File -Include "*.ps1","*.ts","*.tsx","*.js","*.md","*.py" -ErrorAction SilentlyContinue | Where-Object {
-        $path = $_.FullName
-        $skip = $false
-        foreach ($ex in $ExcludeDirs) {
-            if ($path -match "\\$ex\\") {
-                $skip = $true
-                break
+    $ExcludeDirsList = [System.Collections.Generic.List[string]]::new()
+    @("node_modules", ".git", ".agents", ".cloud-cache", "LOGS", ".agent-reach-venv", ".venv", "__pycache__", "dist", ".next", "build") | ForEach-Object { $ExcludeDirsList.Add($_) }
+    
+    $Files = [System.Collections.Generic.List[string]]::new()
+    function Get-PonytailFilesInternal {
+        param([string]$CurrentPath)
+        try {
+            $Dirs = [System.IO.Directory]::EnumerateDirectories($CurrentPath)
+            foreach ($Dir in $Dirs) {
+                $DirName = [System.IO.Path]::GetFileName($Dir)
+                if (-not $ExcludeDirsList.Contains($DirName) -and $DirName -notmatch "^\.") {
+                    $DirInfo = [System.IO.DirectoryInfo]::new($Dir)
+                    if (-not $DirInfo.LinkTarget) {
+                        Get-PonytailFilesInternal -CurrentPath $Dir
+                    }
+                }
             }
-        }
-        -not $skip
+            $FoundFiles = [System.IO.Directory]::EnumerateFiles($CurrentPath)
+            foreach ($File in $FoundFiles) {
+                $Ext = [System.IO.Path]::GetExtension($File).ToLower()
+                if ($Ext -in @(".ps1", ".psm1", ".js", ".ts", ".tsx", ".jsx", ".md", ".py")) {
+                    $Files.Add($File)
+                }
+            }
+        } catch {}
     }
+    Get-PonytailFilesInternal -CurrentPath $WorkspacePath
     
     $PonytailMarkers = @()
     if ($Files) {

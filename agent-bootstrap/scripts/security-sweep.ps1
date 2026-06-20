@@ -23,7 +23,7 @@ $Files = [System.Collections.Generic.List[string]]::new()
 
 # Performance Optimization: Early pruning of huge directories to avoid traversing hundreds of thousands of files.
 $ExcludeDirs = [System.Collections.Generic.List[string]]::new()
-@('node_modules', '.git', 'dist', '.next', 'build', '.agents', 'LOGS', 'templates', 'G0DM0D3', '.archive-v1.0', 'skills') | ForEach-Object { $ExcludeDirs.Add($_) }
+@('node_modules', '.git', 'dist', '.next', 'build', '.agents', 'LOGS', 'templates', 'G0DM0D3', '.archive-v1.0', 'skills', '.agent-reach-venv', '.venv', '__pycache__') | ForEach-Object { $ExcludeDirs.Add($_) }
 
 if ($ProjectPath -ieq "C:/Skills" -or $ProjectPath -ieq "C:\Skills") {
     try {
