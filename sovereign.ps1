@@ -61,7 +61,7 @@ if (-not $ResolvedProject) { $ResolvedProject = $ProjectPath }
 # -------------------------------------------------------------------------
 # 5. PRE-FLIGHT INTEGRITY & VALIDATION
 # -------------------------------------------------------------------------
-Verify-SovereignIntegrity -RootPath $SovereignRoot
+Test-SovereignIntegrity -RootPath $SovereignRoot
 Assert-SovereignConfigIntegrity -ConfigPath "$SovereignRoot/sovereign.config.json" -HashPath "$SovereignRoot/agent-bootstrap/.config.sha256"
 
 # Validate required config keys

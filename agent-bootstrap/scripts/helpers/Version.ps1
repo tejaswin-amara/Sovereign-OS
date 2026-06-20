@@ -10,7 +10,7 @@ function Get-SovereignVersion {
     throw "VERSION_MISSING: Cannot find $VersionFile"
 }
 
-function Verify-SovereignIntegrity {
+function Test-SovereignIntegrity {
     [CmdletBinding()]
     param([string]$RootPath = "$PSScriptRoot/../../..")
 

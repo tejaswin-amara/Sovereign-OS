@@ -27,7 +27,7 @@ Export-ModuleMember -Function @(
     'Write-SovereignLog',
     'Start-SovereignLock',
     'Stop-SovereignLock',
-    'Verify-SovereignIntegrity',
+    'Test-SovereignIntegrity',
     'Assert-ModuleCap',
     'Invoke-AtomicMove',
     'Save-AtomicContent',
