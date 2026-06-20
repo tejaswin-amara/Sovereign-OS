@@ -15,6 +15,15 @@ Run `sovereign.ps1` to initialize the environment and sync the library.
 - `playwright`: E2E testing.
 - `better-auth`: Authentication.
 - `tailwind-css`: Styling.
+- `jcode`: Native browser automation and TUI workflow runner.
+- `uv`: Lightning fast Python package management and virtual environments.
+
+## Science & Clinical
+- `biology` / `chemistry` / `genomics` / `proteins`: Biopython, RDKit, HTSlib, and AlphaFold.
+- `chembl` / `clinvar` / `dbsnp` / `ensembl` / `gnomad` / `gtex` / `uniprot`: Bioactive drug databases, variant archives, and genomics portals.
+- `clinicaltrials` / `openfda` / `opentargets` / `reactome`: Clinical trials APIs, FDA safety metrics, and target discovery pipelines.
+- `arxiv` / `biorxiv` / `europepmc` / `openalex`: Comprehensive literature and academic paper search engines.
+- `pymol`: Open-source molecular visualization.
 
 ## Triggers
 - **New Feature**: `@antigravity-workflows`, `@brainstorming`, `@tdd-workflow`
