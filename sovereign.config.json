@@ -200,6 +200,7 @@
     "anthropic": "anthropics/anthropic-sdk-python",
     "redis": "redis/node-redis",
     "jcode": "1jehuang/jcode",
+    "turbovec": "RyanCodrai/turbovec",
     "biology": "biopython/biopython",
     "chemistry": "rdkit/rdkit",
     "genomics": "samtools/htslib",
