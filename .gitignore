@@ -4,7 +4,8 @@
 .agent-reach-venv/
 LOGS/
 scratch/
-temp_gci[bracket]/
+temp_gci\[bracket\]/
+test_report.md
 
 # Standard Ignore
 node_modules/
