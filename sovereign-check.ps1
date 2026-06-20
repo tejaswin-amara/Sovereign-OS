@@ -42,8 +42,8 @@ $Config = Get-SovereignConfig
 try {
     $sovScript = "$SovereignRoot/sovereign.ps1"
     if (Test-Path $sovScript) {
-        $header = Get-Content $sovScript -Head 1
-        if ($header -match 'v13\.\d+\.\d+') {
+        $header = Get-Content $sovScript -Head 5 | Out-String
+        if ($header -match 'v(13|14)\.\d+\.\d+') {
             Write-SovereignLog -Level "INFO" -Step "CTRL" -Message "Controller version aligned: $($Matches[0])"
         } else {
             Write-SovereignLog -Level "WARN" -Step "CTRL" -Message "Controller version unknown"

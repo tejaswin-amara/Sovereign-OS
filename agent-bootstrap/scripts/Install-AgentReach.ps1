@@ -105,5 +105,16 @@ if ($DoctorExit -eq 0) {
     Write-Host "[WARN] Some channels may need configuration. Run 'agent-reach doctor' for details." -ForegroundColor Yellow
 }
 
+# -------------------------------------------------------------------------
+# 8. INSTALL JCODE
+# -------------------------------------------------------------------------
+Write-Host "[REACH] Installing jcode for browser automation..." -ForegroundColor Cyan
+try {
+    irm https://raw.githubusercontent.com/1jehuang/jcode/master/scripts/install.ps1 | iex
+    Write-Host "[SUCCESS] jcode installed successfully." -ForegroundColor Green
+} catch {
+    Write-Host "[WARN] jcode installation failed." -ForegroundColor Yellow
+}
+
 Write-Host "[REACH] Installation complete. Venv: $VenvDir" -ForegroundColor Cyan
 return

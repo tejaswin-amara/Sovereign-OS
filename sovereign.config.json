@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://raw.githubusercontent.com/sovereign-skills/schema/main/config-v14.0.0.json",
   "version": "14.0.0-CloudNative",
   "name": "Sovereign Skills Library",
@@ -198,6 +198,12 @@
     "sst": "sst/sst",
     "openai": "openai/openai-python",
     "anthropic": "anthropics/anthropic-sdk-python",
-    "redis": "redis/node-redis"
+    "redis": "redis/node-redis",
+    "jcode": "1jehuang/jcode",
+    "biology": "biopython/biopython",
+    "chemistry": "rdkit/rdkit",
+    "genomics": "samtools/htslib",
+    "proteins": "deepmind/alphafold",
+    "android": "android/architecture-samples"
   }
 }
