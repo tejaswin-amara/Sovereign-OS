@@ -1,4 +1,4 @@
-# bootstrap.ps1 - Sovereign Project Initializer (v13.2.0-CloudNative)
+# bootstrap.ps1 - Sovereign Project Initializer (v14.0.0-CloudNative)
 # Purpose: Onboard any project into the Sovereign ecosystem with atomic template injection and cap enforcement.
 # Location: C:/Skills/bootstrap.ps1
 

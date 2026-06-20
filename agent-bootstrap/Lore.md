@@ -49,3 +49,8 @@
 ### Lore Update [2026-06-04 14:30]
 - **Context**: Project Persistence
 - **Learning**: Upgraded to Sovereign v13.2.0-CloudNative. Consolidating all legacy files into a single dynamic SOVEREIGN_CORE.md startup governance. Integrated Get-DynamicSkillCount filesystem discovery, removing hardcoded counts. Upgraded remote-fetch regex to 3-tier sanitization. Cleaned up redundant scripts.
+
+
+### Lore Update [2026-06-20 17:08]
+- **Context**: Project Persistence
+- **Learning**: Upgraded to Sovereign v14.0.0-CloudNative. Integrated jcode browser automation, expanded dep_to_skill_map with science/clinical/biology/chemistry/genomics/protein domains, added 30+ biomedical API skill mappings. Fixed all stale version strings (11 files), wrong drive letter references (2 files), corrected ARCHITECTURE.md pipeline phase order, added .sovereign.lock to .gitignore. Full pipeline validated: ALL PHASES PASSED, 0 AST vulnerabilities.

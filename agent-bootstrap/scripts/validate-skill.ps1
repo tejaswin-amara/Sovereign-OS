@@ -1,4 +1,4 @@
-# validate-skill.ps1 - C:/Skills Skill Verification Engine (v13.2.0-CloudNative)
+# validate-skill.ps1 - C:/Skills Skill Verification Engine (v14.0.0-CloudNative)
 # Purpose: Check if a skill directory is well-formed with proper documentation.
 
 [CmdletBinding()]

@@ -2,6 +2,7 @@
 .cloud-cache/
 .agents/
 .agent-reach-venv/
+.sovereign.lock
 LOGS/
 scratch/
 temp_gci\[bracket\]/

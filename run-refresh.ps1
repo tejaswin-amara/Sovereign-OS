@@ -1,4 +1,4 @@
-# run-refresh.ps1 - Parallel Library Sync & Initialization Runner (v13.2.0-CloudNative)
+# run-refresh.ps1 - Parallel Library Sync & Initialization Runner (v14.0.0-CloudNative)
 # Purpose: Fetches and pulls all git skill repositories in parallel, then runs the controller pipeline.
 
 $ErrorActionPreference = "Stop"
@@ -44,4 +44,4 @@ if ($LASTEXITCODE -ne 0) { throw "sovereign.ps1 failed with exit code $LASTEXITC
 pwsh -NoProfile -ExecutionPolicy Bypass -File "C:\Skills\sovereign-check.ps1" -ProjectPath "C:\Skills"
 if ($LASTEXITCODE -ne 0) { throw "sovereign-check.ps1 failed with exit code $LASTEXITCODE" }
 
-Write-Host "[DONE]    Sovereign v13.2.0-CloudNative Online." -ForegroundColor Cyan
+Write-Host "[DONE]    Sovereign v14.0.0-CloudNative Online." -ForegroundColor Cyan

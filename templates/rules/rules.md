@@ -29,7 +29,7 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 ## Auto-Healed Rules (2026-06-11)
 - Enforce TypeScript strict mode for all new files.
 
-## Absorbed Learnings (v13.2.0-CloudNative Hardened)
+## Absorbed Learnings (v14.0.0-CloudNative Hardened)
 | Date | Category | Learning | Action Taken |
 |---|---|---|---|
 | 2026-04-25 | Hardening | **v13.0.0-PRODUCTION TERMINAL HARDENING**: Resolved SHA parity mismatch by baking `VERCEL_GIT_COMMIT_SHA` into `next.config.mjs` and updating diagnostics route to prioritize baked-in variables. | Patched `next.config.mjs` and `route.ts`. |
@@ -46,7 +46,7 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 | 2026-06-03 | Hardening | **WINDOWS LONG PATHS BLOCKER**: Handled git clone failures of deeply-nested repositories under Windows by appending `-c core.longpaths=true` to all clone operations. | Patched scripts/processes to use long paths. |
 | 2026-06-03 | Hardening | **ROOT README.MD VERIFICATION BLOCKER**: GitBook-based repositories (like `awesome-kubernetes`) that store markdown documentation in a subfolder (`/docs/`) instead of the root directory trigger verification audit errors. | Created root-level README.md redirecting to the docs directory to resolve verification errors. |
 | 2026-06-03 | Security | **CONFIG INTEGRITY PROTECTION**: Automated config integrity checks in the controller mandate that `agent-bootstrap/.config.sha256` has its read-only attribute cleared, rewritten with the exact SHA256 (no trailing newline), and resealed. | Implemented automated sign-config flow. |
-| 2026-06-04 | Upgrade | **v13.2.0-CloudNative DEPLOYMENT**: Executed complete monorepo alignment to v13.2.0-CloudNative. Onboarded nested projects (`campus-connect-main`), purged legacy files (`CONTRACT.md`), synchronized all learnings templates, and validated zero-failure compliance. | Patched update scripts, templates, and finalized project onboarding. |
+| 2026-06-04 | Upgrade | **v14.0.0-CloudNative DEPLOYMENT**: Executed complete monorepo alignment to v14.0.0-CloudNative. Onboarded nested projects (`campus-connect-main`), purged legacy files (`CONTRACT.md`), synchronized all learnings templates, and validated zero-failure compliance. | Patched update scripts, templates, and finalized project onboarding. |
 
 ## Absorbed Learnings (v13.0.0-Production Hardened)
 | Date | Category | Learning | Action Taken |
@@ -60,7 +60,7 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 | 2026-06-02 | Governance | **v13.0.0-PRODUCTION SOVEREIGN SYSTEM AUDIT**: Conducted a global audit mapping and successfully synced the local 126-skill Harvester framework. Confirmed 0 failures on all reparse junction points and verified 100% zero-drift alignment against the physical CONTRACT.md invariants. | Executed full `sovereign.ps1` and `sovereign-check.ps1` validation sweeps. |
 | 2026-06-02 | Deployment | **DUAL-DELIVERY GITHUB PAGES STRATEGY**: Designed a zero-dependency client-side architecture (`index.html` + `script.js`) executing microgrid gymnasium physics and continuous SAC neural-network policies in ES6 JavaScript. Enables high-fidelity interactive simulation on GitHub Pages without server-side resources, complementing the local Streamlit dashboard. | Developed `index.html`, `styles.css`, and `script.js`. |
 
-## Absorbed Learnings (v13.2.0-CloudNative Domain & Medical Extensions)
+## Absorbed Learnings (v14.0.0-CloudNative Domain & Medical Extensions)
 | Date | Category | Learning | Action Taken |
 |---|---|---|---|
 | 2026-06-04 | Database | **FIRESTORE OFFLINE PERSISTENCE DECOUPLING**: Swapping custom offline queues with Firestore's native persistent caching reduces UI state complexity, eliminates race conditions on network status changes, and ensures database integrity. | Rebuilt App.tsx and context to use native Firestore caching. |
@@ -76,7 +76,7 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 | 2026-06-05 | Circadian Endocrinology | **CIRCADIAN HORMONE PULSES & SATIETY SHIFTS**: Diurnally simulated cortisol and melatonin rhythms modeled using cosine curves, allowing acrophase shifts based on late sleep and late meals. Satiety parameters Melatonin/Leptin/Ghrelin and stress factors HRV/RestingHR calculate a unified index (HSI) creating homeostatic hunger boundaries. | Implemented endocrineService.ts, useEndocrine.ts, and Endocrine tab in Dashboard.tsx. |
 | 2026-06-06 | Immunological Surveillance | **IMMUNE TELEMETRY & SII CALCULATIONS**: Integrated continuous proxy biomarkers (hs-CRP, IL-6, TNF-α) to calculate a Systemic Inflammatory Index (SII) scaled by glycemic standard deviation. Interlocked with macro target ratios, caffeine windows, and anti-inflammatory supplement suggestions. | Implemented immuneService.ts, useImmune.ts, and Immune tab in Dashboard.tsx. |
 
-## Absorbed Learnings (v13.2.0-CloudNative Core & OS Refinements)
+## Absorbed Learnings (v14.0.0-CloudNative Core & OS Refinements)
 | Feature | Insight/Aha Moment | Associated Files | Date |
 |---|---|---|---|
 | Configurable Reward Weights & Dynamic SVG Speed | Parameterized reward weights in `GridConfig` to facilitate dynamic sweeps and added SVG path animation duration scaling based on real-time power throughput in both static HTML and Streamlit visualizers. | `environments.py`, `tests/test_env.py`, `script.js`, `app.py` | 2026-06-11 |

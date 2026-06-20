@@ -1,6 +1,6 @@
-# self-evolve.ps1 - The Sovereign Intelligence Engine (v13.2.0-CloudNative)
+# self-evolve.ps1 - The Sovereign Intelligence Engine (v14.0.0-CloudNative)
 # Purpose: Autonomous drift detection, rule refinement, and skill gap analysis.
-# Version: 13.2.0-CloudNative
+# Version: 14.0.0-CloudNative
 
 [CmdletBinding()]
 param(

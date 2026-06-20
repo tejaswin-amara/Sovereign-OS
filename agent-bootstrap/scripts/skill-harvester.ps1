@@ -1,4 +1,4 @@
-# SOVEREIGN SKILL HARVESTER v13.2.0-CloudNative (BULLETPROOF - REFACTORED)
+# SOVEREIGN SKILL HARVESTER v14.0.0-CloudNative (BULLETPROOF - REFACTORED)
 # Purpose: Deep Harvester with project analysis, dependency mapping, and skill matching.
 # Location: C:/Skills/agent-bootstrap/scripts/skill-harvester.ps1
 

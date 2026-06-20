@@ -1,4 +1,4 @@
-# 🚀 Universal Agent Bootstrap Protocol (v13.2.0-CloudNative)
+# 🚀 Universal Agent Bootstrap Protocol (v14.0.0-CloudNative)
 
 This directory contains the core helper scripts, validation tools, and templates for onboarding workspace projects into the **C:/Skills** ecosystem.
 
@@ -16,4 +16,4 @@ pwsh -ExecutionPolicy Bypass -File "C:/Skills/bootstrap.ps1" -ProjectPath "C:/pa
 3. **Skill Harvesting**: `skill-harvester.ps1` runs automatically, mapping framework dependencies to skill folders.
 
 ---
-*Maintained by the Antigravity Agent. v13.2.0-CloudNative.*
+*Maintained by the Antigravity Agent. v14.0.0-CloudNative.*

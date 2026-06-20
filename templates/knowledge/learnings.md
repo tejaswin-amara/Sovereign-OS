@@ -1,6 +1,6 @@
-# Sovereign Learning Buffer (v13.2.0-CloudNative HARDENED)
+# Sovereign Learning Buffer (v14.0.0-CloudNative HARDENED)
 
-This file is a persistent ledger of architectural wins, failures, and "Aha!" moments. The Sovereign Evolution Engine (v13.2.0-CloudNative) reads this file during every execution to refine project rules and workflows.
+This file is a persistent ledger of architectural wins, failures, and "Aha!" moments. The Sovereign Evolution Engine (v14.0.0-CloudNative) reads this file during every execution to refine project rules and workflows.
 
 ## 🗒️ Recent Learnings
 
@@ -20,7 +20,7 @@ This file is a persistent ledger of architectural wins, failures, and "Aha!" mom
 | 2026-06-03 | Hardening | **WINDOWS LONG PATHS BLOCKER**: Handled git clone failures of deeply-nested repositories under Windows by appending `-c core.longpaths=true` to all clone operations. | Patched scripts/processes to use long paths. |
 | 2026-06-03 | Hardening | **ROOT README.MD VERIFICATION BLOCKER**: GitBook-based repositories (like `awesome-kubernetes`) that store markdown documentation in a subfolder (`/docs/`) instead of the root directory trigger verification audit errors. | Created root-level README.md redirecting to the docs directory to resolve verification errors. |
 | 2026-06-03 | Security | **CONFIG INTEGRITY PROTECTION**: Automated config integrity checks in the controller mandate that `agent-bootstrap/.config.sha256` has its read-only attribute cleared, rewritten with the exact SHA256 (no trailing newline), and resealed. | Implemented automated sign-config flow. |
-| 2026-06-04 | Upgrade | **v13.2.0-CloudNative DEPLOYMENT**: Executed complete monorepo alignment to v13.2.0-CloudNative. Onboarded nested projects (`campus-connect-main`), purged legacy files (`CONTRACT.md`), synchronized all learnings templates, and validated zero-failure compliance. | Patched update scripts, templates, and finalized project onboarding. |
+| 2026-06-04 | Upgrade | **v14.0.0-CloudNative DEPLOYMENT**: Executed complete monorepo alignment to v14.0.0-CloudNative. Onboarded nested projects (`campus-connect-main`), purged legacy files (`CONTRACT.md`), synchronized all learnings templates, and validated zero-failure compliance. | Patched update scripts, templates, and finalized project onboarding. |
 
 
 ## 🚀 Optimization Hypotheses

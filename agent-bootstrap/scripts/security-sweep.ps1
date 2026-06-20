@@ -1,4 +1,4 @@
-# security-sweep.ps1 - Autonomous AST and Security Validation Workflow (v13.2.0-CloudNative)
+# security-sweep.ps1 - Autonomous AST and Security Validation Workflow (v14.0.0-CloudNative)
 # Purpose: Pre-commit/Pre-execution parsing to block dynamic code execution and vulnerability leakage.
 # Location: C:/Skills/agent-bootstrap/scripts/security-sweep.ps1
 
@@ -97,7 +97,7 @@ foreach ($File in $Files) {
         }
     }
 
-    # JavaScript/TypeScript Token / Regex AST Scan (v13.2.0-CloudNative: Line-by-line with precise snippets)
+    # JavaScript/TypeScript Token / Regex AST Scan (v14.0.0-CloudNative: Line-by-line with precise snippets)
     if ($Extension -in @(".js", ".ts", ".tsx", ".jsx")) {
         $Lines = $Content -split '\r?\n'
         $ApprovedDeps = @()
@@ -121,7 +121,7 @@ foreach ($File in $Files) {
             if ($LineContent -match '(?<![a-zA-Z0-9_$.])exec(Sync)?\s*\(' -or $LineContent -match 'child_process\.exec(Sync)?\s*\(') {
                 $Violations.Add("[JS/TS SCAN] Shell spawn 'exec/execSync' execution detected in: $FilePath at line $($i + 1): `"$($LineContent.Trim())`"")
             }
-            # v13.2.0-CloudNative: Check for import/require package whitelisting
+            # v14.0.0-CloudNative: Check for import/require package whitelisting
             if ($LineContent -match 'import\s+.*?\s+from\s+[''"](?<pkg>[a-zA-Z0-9_@./-]+)[''"]' -or $LineContent -match 'require\s*\([''"](?<pkg>[a-zA-Z0-9_@./-]+)[''"]\)') {
                 $Pkg = $Matches['pkg']
                 $CleanPkg = $Pkg.Split('/')[0]

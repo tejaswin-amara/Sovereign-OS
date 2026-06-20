@@ -1,4 +1,4 @@
-# CLOUD-NATIVE SKILLS (v13.2.0-CloudNative)
+# CLOUD-NATIVE SKILLS (v14.0.0-CloudNative)
 1. Read `sovereign.config.json` & `.agents/knowledge/harvested_skills.md`.
 2. **Cloud-Native JIT Fetch**: Sovereign no longer relies on static local repositories. When you need a skill, framework, or documentation, dynamically mount it from GitHub using:
    `pwsh C:/Skills/agent-bootstrap/scripts/Fetch-CloudSkill.ps1 -Repo "org/repo"`

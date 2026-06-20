@@ -1,6 +1,6 @@
 # sovereign.ps1 - The Sovereign Master Controller (v14.0.0-CloudNative)
 # Purpose: Unified Orchestrator with OS-level Locking, Phase-Gated Execution, and State Reconciliation.
-# Location: D:/Skills/sovereign.ps1
+# Location: C:/Skills/sovereign.ps1
 
 [CmdletBinding(SupportsShouldProcess)]
 param(

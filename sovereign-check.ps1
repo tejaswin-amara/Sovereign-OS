@@ -1,4 +1,4 @@
-# sovereign-check.ps1 - Enterprise Audit Tool (v13.2.0-CloudNative)
+# sovereign-check.ps1 - Enterprise Audit Tool (v14.0.0-CloudNative)
 # Purpose: Deep integrity scanning of governance, complexity cap, and skill-sync states.
 # Each check is isolated — one failure does not crash others.
 

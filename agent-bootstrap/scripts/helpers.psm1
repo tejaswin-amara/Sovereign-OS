@@ -1,6 +1,6 @@
-# D:/Skills/agent-bootstrap/scripts/helpers.psm1
+# C:/Skills/agent-bootstrap/scripts/helpers.psm1
 Set-StrictMode -Version Latest
-# Sovereign Shared Module (v13.2.0-CloudNative)
+# Sovereign Shared Module (v14.0.0-CloudNative)
 # Purpose: Atomic operations, structured logging, mutex management, and governance enforcement.
 
 $HelperFiles = @(
