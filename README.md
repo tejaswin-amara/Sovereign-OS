@@ -56,13 +56,16 @@ The entire OS operates via a single unified command (`sovereign.ps1`). Executing
 1. 🔒 **OS-Level Mutex Lock**: Secures the environment for atomic writes.
 2. 🛡️ **Integrity & Config Verification**: Cryptographically validates core files against SHA256 checksums.
 3. 📦 **Skill Harvesting**: Analyzes local files and intelligently maps project requirements to cloud skills.
-4. 🧬 **Self-Evolution Engine**: Analyzes agent drift, absorbs session learnings, auto-fetches missing tools, and compiles the Turbovec index.
+4. 🧬 **Self-Evolution Engine**: Analyzes agent drift, absorbs session learnings, auto-fetches missing tools, compiles the Turbovec index, and executes Ponytail sweeps.
 5. 🔍 **AST Security Sweep**: Scans all active scripts to guarantee 0 vulnerabilities before operation.
 6. ☁️ **JIT Cloud-Native Skill Fetching**: Dynamically fetches tools directly from GitHub.
 7. 🗑️ **Blazing Ephemeral GC**: Natively prunes the `.cloud-cache` instantly via OS hooks, avoiding memory leaks.
 
 ### 2. Zero-Trust Execution
 Sovereign operates entirely headless. Every script, module, and rule is rigorously governed by the `sovereign.config.json` module caps. The engine implements strict PowerShell typing (`Set-StrictMode -Version Latest`) and robust error handling to prevent silent failures.
+
+### 3. Agent-Reach Protocol
+Agents have unhindered, protocol-level access to the internet. The Agent-Reach sub-engine provides standardized CLI tools allowing agents to natively parse YouTube, read any webpage via Jina, and utilize the Exa semantic search MCP seamlessly.
 
 ---
 
