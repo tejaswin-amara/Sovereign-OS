@@ -226,6 +226,12 @@
     "pymol": "schrodinger/pymol-open-source",
     "reactome": "reactome/reactome-base",
     "ucsc-kent": "ucscGenomeBrowser/kent",
-    "bioservices": "cokelaer/bioservices"
+    "bioservices": "cokelaer/bioservices",
+    "graphrag": "microsoft/graphrag",
+    "dspy": "stanfordnlp/dspy",
+    "pydantic-ai": "pydantic/pydantic-ai",
+    "open-interpreter": "OpenInterpreter/open-interpreter",
+    "smolagents": "huggingface/smolagents",
+    "cline": "cline/cline"
   }
 }

@@ -305,7 +305,8 @@ try {
 
     try {
         # Check if turbovec is available in the cloud cache or via local CLI
-        $TurbovecArgs = "-Index `"$WorkspacePath`" -Out `"$OmnivectorPath`" -Mode Delta -Fast"
+        # Apex Evolution: Index both Workspace and .cloud-cache
+        $TurbovecArgs = "-Index `"$WorkspacePath`",`"$SkillsPath/.cloud-cache`" -Out `"$OmnivectorPath`" -Mode Delta -Fast"
         if (Test-Path $TurbovecCache) {
             Write-SovereignLog -Level "INFO" -Step "EVOLUTION" -Message "Invoking cached Turbovec engine with Delta-Sync."
             # Hypothetical execution of turbovec via cache
