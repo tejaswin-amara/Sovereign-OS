@@ -31,10 +31,16 @@ CREATE TABLE IF NOT EXISTS token_usage (
 );
 "@
 
-$InitSql | sqlite3 $DbPath
-
-# Insert telemetry event
-$InsertSql = "INSERT INTO token_usage (agent_id, prompt_tokens, completion_tokens, estimated_cost) VALUES ('$AgentId', $PromptTokens, $CompletionTokens, $EstimatedCost);"
-$InsertSql | sqlite3 $DbPath
-
-Write-Host "Telemetry logged successfully to $DbPath"
+if (Get-Command sqlite3 -ErrorAction SilentlyContinue) {
+    $InitSql | sqlite3 $DbPath
+    $InsertSql | sqlite3 $DbPath
+    Write-Host "Telemetry logged successfully to SQLite ($DbPath)"
+} else {
+    $CsvPath = Join-Path $LogsDir "telemetry.csv"
+    if (-Not (Test-Path $CsvPath)) {
+        "timestamp,agent_id,prompt_tokens,completion_tokens,estimated_cost" | Out-File $CsvPath -Encoding utf8
+    }
+    $Date = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    "$Date,$AgentId,$PromptTokens,$CompletionTokens,$EstimatedCost" | Out-File $CsvPath -Append -Encoding utf8
+    Write-Host "Telemetry logged successfully to CSV Fallback ($CsvPath)"
+}

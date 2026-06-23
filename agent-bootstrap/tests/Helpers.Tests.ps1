@@ -96,7 +96,7 @@ Describe "Sovereign Helpers Unit Tests" {
             } | ConvertTo-Json
             [System.IO.File]::WriteAllText($script:MockConfigPath, $ConfigData)
             
-            { Assert-SovereignConfigIntegrity -ConfigPath $script:MockConfigPath -HashPath $script:MockHashPath } | Should -Not -Be -Throw
+            { Assert-SovereignConfigIntegrity -ConfigPath $script:MockConfigPath -HashPath $script:MockHashPath } | Should -Not -Throw
             (Test-Path $script:MockHashPath) | Should -Be $true
         }
 
@@ -138,9 +138,9 @@ Describe "Sovereign Helpers Unit Tests" {
             (Test-Path $LogFile) | Should -Be $true
             
             $LoggedEntry = Get-Content $LogFile | ConvertFrom-Json
-            $LoggedEntry.message | Should -Not -Be -Match "C:/Skills"
-            $LoggedEntry.message | Should -Not -Be -Match "C:/Users/Home"
-            $LoggedEntry.message | Should -Not -Be -Match "D:\\Temp"
+            $LoggedEntry.message | Should -Not -Match "C:/Skills"
+            $LoggedEntry.message | Should -Not -Match "C:/Users/Home"
+            $LoggedEntry.message | Should -Not -Match "D:\\Temp"
             $LoggedEntry.message | Should -Match "<SkillsRoot>"
             $LoggedEntry.message | Should -Match "<UserHome>"
             $LoggedEntry.message | Should -Match "<DrivePath>"
@@ -189,7 +189,7 @@ Describe "Sovereign Helpers Unit Tests" {
             $LockFile = Join-Path $script:TestWorkspace "mutex.lock"
             
             $Mutex = Start-SovereignLock -LockFile $LockFile -TimeoutSeconds 2
-            $Mutex | Should -Not -BeNullOrEmpty
+            $Mutex | Should -Not -Be $null
             $Mutex.GetType().Name | Should -Be "Mutex"
             
             # Release mutex
@@ -210,11 +210,10 @@ Describe "Sovereign Helpers Unit Tests" {
             }
             
             # Wait for the job to start and acquire the lock
-            Start-Sleep -Milliseconds 800
+            Start-Sleep -Seconds 2
             
             try {
-                # Attempting to acquire lock should timeout and throw
-                { Start-SovereignLock -LockFile $LockFile -TimeoutSeconds 1 } | Should -Throw -ExceptionType "*LOCK_TIMEOUT*"
+                { Start-SovereignLock -LockFile $LockFile -TimeoutSeconds 1 } | Should -Throw "*LOCK_TIMEOUT*"
             } finally {
                 # Cleanup job
                 Stop-Job $Job

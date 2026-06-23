@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://raw.githubusercontent.com/tejaswin-amara/schema/main/config-v14.0.0.json",
   "version": "14.0.0-CloudNative",
   "name": "Sovereign Skills Library",
@@ -226,6 +226,7 @@
     "pydantic-ai": "pydantic/pydantic-ai",
     "open-interpreter": "OpenInterpreter/open-interpreter",
     "smolagents": "huggingface/smolagents",
-    "cline": "cline/cline"
+    "cline": "cline/cline",
+    "dummy": "dummy/test"
   }
 }
