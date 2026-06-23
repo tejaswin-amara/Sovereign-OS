@@ -13,11 +13,11 @@ Sovereign OS is a radically decoupled, zero-intervention governance framework fo
 
 ---
 
-## 🚀 The Cloud-Native Paradigm
+## 🚀 The Apex Engine & Cloud-Native Paradigm
 
 Sovereign `v14.0.0-CloudNative` entirely eliminates local bloat. It leverages a revolutionary **JIT (Just-In-Time) Cloud Fetching** architecture to instantly mount external repositories into an ephemeral `.cloud-cache`. 
 
-Rather than maintaining static local knowledge bases, Sovereign allows agents to instantly pull the most advanced open-source tools—from web automation to RAG pipelines—directly from GitHub on-the-fly. It also natively integrates the **Ponytail (Lazy Senior Dev) Mode** inside the Self-Evolution engine to aggressively prune technical debt and block over-engineered architectures.
+Rather than maintaining static local knowledge bases, Sovereign allows agents to instantly pull the most advanced open-source tools—from web automation to RAG pipelines—directly from GitHub on-the-fly. The new **Apex Engine** introduces an Omni-Fetch layer capable of parallel-acquiring over 86 state-of-the-art frameworks, immediately indexing them via **Turbovec Semantic Vectoring** to create a massive, hyper-intelligent knowledge base for the Omni-Harvester. It also natively integrates the **Ponytail (Lazy Senior Dev) Mode** inside the Self-Evolution engine to aggressively prune technical debt and block over-engineered architectures.
 
 ### The Ultimate Agent Stack (Natively Integrated)
 Sovereign OS is designed to orchestrate the absolute pinnacle of current AI technology:
