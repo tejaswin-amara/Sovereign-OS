@@ -31,9 +31,25 @@ if (-not (Test-Path $CacheDir)) {
     New-Item -Path $CacheDir -ItemType Directory -Force | Out-Null
 }
 
+$HashFile = Join-Path $TargetPath ".commit_hash"
+$CurrentHash = if (Test-Path $HashFile) { Get-Content $HashFile } else { $null }
+
+try {
+    # Check if remote has changed
+    $RemoteHead = git ls-remote $TargetUrl HEAD 2>&1 | Select-String -Pattern "^([a-f0-9]+)\s+HEAD"
+    $LatestHash = if ($RemoteHead) { $RemoteHead.Matches.Groups[1].Value } else { $null }
+} catch {
+    $LatestHash = $null
+}
+
 if (Test-Path $TargetPath) {
-    Write-Host "[CACHE HIT] '$RepoName' is already mounted in $TargetPath" -ForegroundColor Green
-    return
+    if ($LatestHash -and $CurrentHash -and $LatestHash -eq $CurrentHash) {
+        Write-Host "[CACHE HIT] '$RepoName' is up-to-date at $LatestHash" -ForegroundColor Green
+        return
+    } else {
+        Write-Host "[CACHE STALE] '$RepoName' has updates. Evicting old cache..." -ForegroundColor Yellow
+        Remove-Item -Path $TargetPath -Recurse -Force -ErrorAction SilentlyContinue
+    }
 }
 
 Write-Host "[FETCH] Mounting '$RepoName' via JIT Cloud Fetch..." -ForegroundColor Cyan
@@ -46,6 +62,10 @@ try {
     $GitFolder = Join-Path $TargetPath ".git"
     if (Test-Path $GitFolder) {
         Remove-Item -Path $GitFolder -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    
+    if ($LatestHash) {
+        Set-Content -Path $HashFile -Value $LatestHash
     }
     
     Write-Host "[SUCCESS] Skill '$RepoName' is ready at: $TargetPath" -ForegroundColor Green

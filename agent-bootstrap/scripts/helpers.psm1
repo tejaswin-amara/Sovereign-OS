@@ -12,6 +12,7 @@ $HelperFiles = @(
     "Modularity.ps1"
     "IO.ps1"
     "Validation.ps1"
+    "OmniSearch.ps1"
 )
 
 foreach ($File in $HelperFiles) {
@@ -35,5 +36,6 @@ Export-ModuleMember -Function @(
     'Start-LogRotation',
     'Update-SovereignChecksum',
     'Get-SovereignManifestFiles',
-    'Invoke-SovereignInternetDiagnostic'
+    'Invoke-SovereignInternetDiagnostic',
+    'Invoke-OmniSearch'
 )

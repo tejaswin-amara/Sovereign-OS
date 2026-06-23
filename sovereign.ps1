@@ -258,7 +258,16 @@ try {
     Write-SovereignLog -Level "INFO" -Step "COMPLETE" -Message $StatusMsg
 
 } catch {
-    Write-SovereignLog -Level "ERROR" -Step "EXECUTION" -Message "Fatal error: $($_.Exception.Message)"
+    $ErrMsg = $_.Exception.Message
+    Write-SovereignLog -Level "ERROR" -Step "EXECUTION" -Message "Fatal error: $ErrMsg"
+    
+    # Autonomous Internet Routing for fatal errors
+    Write-SovereignLog -Level "INFO" -Step "OMNISEARCH" -Message "Attempting autonomous internet routing to resolve: $ErrMsg"
+    $Solution = Invoke-OmniSearch -Query "PowerShell $ErrMsg" -Mode "Web" -MaxResults 2
+    if ($Solution) {
+        Write-SovereignLog -Level "INFO" -Step "OMNISEARCH" -Message "OmniSearch retrieved potential solutions. Logged to agent telemetry."
+    }
+    
     exit 1
 } finally {
     # Guaranteed lock cleanup — Mutex is always released

@@ -57,25 +57,28 @@ $DetectedTags = @()
 
 $HarvestersPath = Join-Path $SovereignRoot "agent-bootstrap/scripts/harvesters"
 if (Test-Path -LiteralPath $HarvestersPath) {
-    Get-ChildItem -LiteralPath $HarvestersPath -Filter "*Parser.ps1" | ForEach-Object {
-        try {
-            . $_.FullName
-        } catch {
-            Write-SovereignLog -Level "WARN" -Step "HARVEST" -Message "Failed to load parser script $($_.Name): $_"
+    $HarvesterScripts = Get-ChildItem -LiteralPath $HarvestersPath -Filter "*Parser.ps1"
+    
+    if ($HarvesterScripts) {
+        # Run empirical parsers concurrently using runspaces
+        $ParallelDeps = $HarvesterScripts | ForEach-Object -Parallel {
+            $ScriptPath = $_.FullName
+            $Workspace = $using:ResolvedWorkspace
+            try {
+                . $ScriptPath
+                $ParserFunc = Get-Command -Name "Get-*Dependencies" -CommandType Function -ErrorAction SilentlyContinue | Select-Object -First 1
+                if ($ParserFunc) {
+                    & $ParserFunc.Name -ResolvedWorkspace $Workspace
+                }
+            } catch {}
+        } -ThrottleLimit ($HarvesterScripts.Count)
+        
+        if ($ParallelDeps) {
+            $DetectedDeps += @($ParallelDeps)
         }
     }
 } else {
     Write-SovereignLog -Level "WARN" -Step "HARVEST" -Message "Harvesters directory not found at $HarvestersPath"
-}
-
-$ParserFunctions = Get-Command -Name "Get-*Dependencies" -CommandType Function
-foreach ($Func in $ParserFunctions) {
-    try {
-        $Deps = & $Func.Name -ResolvedWorkspace $ResolvedWorkspace
-        if ($Deps) { $DetectedDeps += $Deps }
-    } catch {
-        Write-SovereignLog -Level "WARN" -Step "HARVEST" -Message "Failed executing $($Func.Name): $_"
-    }
 }
 
 $DetectedDeps = $DetectedDeps | Select-Object -Unique
