@@ -6,44 +6,37 @@ Here is the comprehensive list of remaining tasks:
 
 ---
 
-## 🛠️ Immediate Fixes & Technical Debt
+## ✅ Completed (Milestone 1)
 
-### 1. Pre-Commit Hook Repair
-- **Issue**: During commits, the engine throws `error: cannot spawn .git/hooks/pre-commit: No such file or directory`. We are currently forced to bypass this using `git commit --no-verify`.
-- **To-Do**: Delete the corrupted hook or rebuild the `.git/hooks/pre-commit` file to cleanly enforce formatting and Pester tests natively on Windows.
-
-### 2. Pester Test Coverage Expansion
-- **Issue**: We have exhaustive integration scripts (`test_complete_sovereign.ps1`), but unit-level test coverage in the `agent-bootstrap/tests` directory needs expansion.
-- **To-Do**: Write isolated Pester 5 tests for the `helpers.psm1` functions (Logging, Mutex locking, OS-level hooks).
-
----
-
-## ⚡ Infrastructure & Pipeline
-
-### 3. GitHub Actions CI/CD Integration
-- **Issue**: The repository does not currently have automated GitHub Actions to run the test sweeps in the cloud on Pull Requests.
-- **To-Do**: Create `.github/workflows/ci.yml` to automatically execute `test_complete_sovereign.ps1` and `test_all_repos.ps1` natively on GitHub's Ubuntu/Windows runners.
-
-### 4. Containerization (Docker)
-- **Issue**: Sovereign relies on local PowerShell 7+ installations.
-- **To-Do**: Write a highly optimized `Dockerfile` and `docker-compose.yml` to sandbox the entire Sovereign environment. This guarantees perfect toolchain environments regardless of the host machine.
-
-### 5. Config Management CLI
-- **Issue**: Adding new frameworks to the `.cloud-cache` currently requires manually editing the massive `sovereign.config.json` map.
-- **To-Do**: Build a native PowerShell command (e.g., `Add-SovereignSkill -Repo "org/repo"`) that automatically modifies the JSON safely.
+1. **Pre-Commit Hook Repair**: Cleaned and formatted the `.git/hooks/pre-commit` to cleanly enforce formatting and Pester tests natively on Windows.
+2. **Pester Test Coverage Expansion**: Created exhaustive E2E tests and `Helpers.Tests.ps1` to cover `helpers.psm1`.
+3. **GitHub Actions CI/CD Integration**: Shipped `.github/workflows/ci.yml`.
+4. **Containerization (Docker)**: Built `Dockerfile` for Ubuntu-based execution.
+5. **Config Management CLI**: Implemented `Add-SovereignSkill.ps1`.
+6. **E2B & Sandboxed Execution Binding**: Updated `omni_harvester` configuration to explicitly wrap risky commands in E2B Cloud Environments.
+7. **Telemetry & Cost Monitoring**: Built `Log-SovereignTelemetry.ps1` for SQLite integration in `LOGS/telemetry.db`.
+8. **Multi-Agent Orchestration**: Built `Start-SovereignSwarm.ps1`.
 
 ---
 
-## 🧠 Advanced Agent Capabilities
+## 🛠️ Immediate Fixes & Technical Debt (Upcoming)
 
-### 6. E2B & Sandboxed Execution Binding
-- **Issue**: We downloaded the `e2b-dev/E2B` and `browser-use` repositories, but the local Sovereign scripts do not strictly force agents into secure E2B sandboxes for arbitrary code execution.
-- **To-Do**: Update the `omni_harvester` configuration to explicitly wrap risky python/shell commands inside E2B Cloud Environments for impenetrable security.
+### 1. Hardened E2B Python Execution Wrapper
+- **Issue**: The `omni_harvester` prompt mandates E2B, but there is no native script to actually execute Python securely via the E2B SDK locally.
+- **To-Do**: Build a native `Invoke-E2BSandbox.ps1` script that acts as the universal proxy for all agent terminal execution, natively trapping untrusted python output.
 
-### 7. Telemetry & Cost Monitoring
-- **Issue**: Autonomous agents can run up expensive token bills when traversing the massive `omnivector.index`.
-- **To-Do**: Integrate a local SQLite or OpenTelemetry tracker to log LLM token usage, tool execution durations, and API costs directly into the `LOGS/` directory.
+### 2. Full LangGraph/CrewAI Integration
+- **Issue**: `Start-SovereignSwarm.ps1` orchestrates via powershell sleep synchronization (mocking the graph).
+- **To-Do**: Translate the swarm sequence into a pure python `graph.py` utilizing the LangGraph framework, and invoke it via the PowerShell wrapper.
 
-### 8. Multi-Agent Orchestration (CrewAI / LangGraph)
-- **Issue**: Sovereign OS acts as the hyper-visor for the Omni-Harvester.
-- **To-Do**: Now that we have fetched `langgraph` and `crewAI`, build a native `Start-SovereignSwarm.ps1` script to launch a dedicated team of sub-agents (e.g., Researcher, Coder, Reviewer) rather than relying on a single omni-agent.
+### 3. Telemetry Middlewares
+- **Issue**: `Log-SovereignTelemetry.ps1` exists but is not automatically triggered by `sovereign.ps1`.
+- **To-Do**: Embed the telemetry hook into the `Mutex Lock` and `GC` phases of the Master Controller to record absolute start/stop metrics for all tasks.
+
+### 4. Advanced Dependency Resolution
+- **Issue**: `Add-SovereignSkill.ps1` mutates the schema, but it does not trigger `Fetch-CloudSkill.ps1`.
+- **To-Do**: Link the Config CLI with the Fetcher so that adding a dependency instantly downloads and caches it in `.cloud-cache`.
+
+### 5. Docker Orchestration
+- **Issue**: The `Dockerfile` is built but not orchestrated for local development loops.
+- **To-Do**: Build `docker-compose.yml` to spin up Sovereign alongside a local LLM API (like Ollama) for completely offline, zero-cost, hyper-secure intelligence execution.

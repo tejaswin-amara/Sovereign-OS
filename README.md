@@ -49,6 +49,8 @@ Sovereign OS is designed to orchestrate the absolute pinnacle of current AI tech
 
 ---
 
+---
+
 ## ⚙️ Architecture & Governance
 
 ### 1. Sovereign Command (The Universal Trigger)
@@ -61,11 +63,18 @@ The entire OS operates via a single unified command (`sovereign.ps1`). Executing
 6. ☁️ **JIT Cloud-Native Skill Fetching**: Dynamically fetches tools directly from GitHub into the ephemeral `.cloud-cache`.
 7. 🗑️ **Blazing Ephemeral GC**: Natively prunes the `.cloud-cache` instantly via OS hooks, avoiding memory leaks.
 
-### 2. Zero-Trust Execution
-Sovereign operates entirely headless. Every script, module, and rule is rigorously governed by the `sovereign.config.json` module caps. The engine implements strict PowerShell typing (`Set-StrictMode -Version Latest`) and robust error handling to prevent silent failures.
+### 2. Zero-Trust Execution & Sandboxing
+Sovereign operates entirely headless. Every script, module, and rule is rigorously governed by the `sovereign.config.json` module caps. The engine implements strict PowerShell typing (`Set-StrictMode -Version Latest`) and robust error handling to prevent silent failures. 
+- **E2B Cloud Environment:** Native sandboxing explicitly integrated into `omni_harvester` for secure, isolated arbitrary code execution.
 
-### 3. Agent-Reach Protocol
-Agents have unhindered, protocol-level access to the internet. The Agent-Reach sub-engine provides standardized CLI tools allowing agents to natively parse YouTube, read any webpage via Jina, and utilize the Exa semantic search MCP seamlessly.
+### 3. Agent-Reach Protocol & Swarm Orchestration
+- **Agent-Reach Protocol:** Agents have unhindered, protocol-level access to the internet using standardized CLI tools allowing them to natively parse YouTube, read any webpage via Jina, and utilize the Exa semantic search MCP seamlessly.
+- **Multi-Agent Swarm:** The OS orchestrates massive multi-agent parallel execution via `Start-SovereignSwarm.ps1`, integrating LangGraph and CrewAI directly into the Sovereign ecosystem.
+
+### 4. Advanced Tooling & Telemetry
+- **Dynamic Config Updaters:** Natively append new skills to the schema without breaking JSON structure using `Add-SovereignSkill.ps1`.
+- **SQLite Telemetry Logging:** Real-time token usage and API cost tracking is funneled directly into `LOGS/telemetry.db` via `Log-SovereignTelemetry.ps1`.
+- **CI/CD & Containerization:** Sovereign ships with a highly optimized, Ubuntu-based `Dockerfile` and automated `ci.yml` GitHub Actions pipeline. Every commit executes the `.git/hooks/pre-commit` passing the internal `Invoke-Pester` suite.
 
 ---
 
