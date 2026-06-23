@@ -58,7 +58,7 @@ The entire OS operates via a single unified command (`sovereign.ps1`). Executing
 3. 📦 **Skill Harvesting**: Analyzes local files and intelligently maps project requirements to cloud skills.
 4. 🧬 **Self-Evolution Engine**: Analyzes agent drift, absorbs session learnings, auto-fetches missing tools, compiles the Turbovec index, and executes Ponytail sweeps.
 5. 🔍 **AST Security Sweep**: Scans all active scripts to guarantee 0 vulnerabilities before operation.
-6. ☁️ **JIT Cloud-Native Skill Fetching**: Dynamically fetches tools directly from GitHub.
+6. ☁️ **JIT Cloud-Native Skill Fetching**: Dynamically fetches tools directly from GitHub into the ephemeral `.cloud-cache`.
 7. 🗑️ **Blazing Ephemeral GC**: Natively prunes the `.cloud-cache` instantly via OS hooks, avoiding memory leaks.
 
 ### 2. Zero-Trust Execution
@@ -92,7 +92,7 @@ pwsh ./agent-bootstrap/scripts/Fetch-CloudSkill.ps1 -Repo "browser-use/browser-u
 ---
 
 ## 🤝 Contributing
-We welcome contributions! Before submitting a PR, please read our [Contributing Guidelines](CONTRIBUTING.md) and ensure you have run the exhaustive test suite (`.\test_complete_sovereign.ps1`).
+We welcome contributions! Before submitting a PR, please read our [Contributing Guidelines](CONTRIBUTING.md) and ensure you have run the exhaustive test suite (`.\test_complete_sovereign.ps1`) and the Pester suite (`Invoke-Pester -Path "agent-bootstrap/tests"`).
 
 ## 📄 License
 Sovereign OS is released under the [MIT License](LICENSE). It is built for the open-source community to push the boundaries of what autonomous agent architectures can achieve.
