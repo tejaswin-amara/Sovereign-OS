@@ -2,9 +2,14 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$Repo,
 
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$false)]
     [string]$PackageName
 )
+
+if ([string]::IsNullOrEmpty($PackageName)) {
+    $CleanRepo = $Repo.TrimEnd('/','\')
+    $PackageName = ($CleanRepo -split '[/\\]')[-1]
+}
 
 $ConfigFile = "C:\Skills\sovereign.config.json"
 
@@ -14,6 +19,25 @@ if (-Not (Test-Path $ConfigFile)) {
 }
 
 $Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json -Depth 10
+
+# Validate repo format: must be in the format 'owner/repo'
+if ($Repo -notmatch '^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$') {
+    throw "Invalid repository format: '$Repo'. Must be in 'owner/repo' format."
+}
+
+# Validate security policy on PackageName and Repo
+if ($Config.security_policy) {
+    if ($Config.security_policy.deny_patterns) {
+        foreach ($pattern in $Config.security_policy.deny_patterns) {
+            if ($Repo -match $pattern) {
+                throw "Repository '$Repo' violates security pattern '$pattern'."
+            }
+            if ($PackageName -match $pattern) {
+                throw "PackageName '$PackageName' violates security pattern '$pattern'."
+            }
+        }
+    }
+}
 
 if ($Config.dep_to_skill_map.$PackageName) {
     Write-Warning "Package '$PackageName' already maps to '$($Config.dep_to_skill_map.$PackageName)'. Updating to '$Repo'."

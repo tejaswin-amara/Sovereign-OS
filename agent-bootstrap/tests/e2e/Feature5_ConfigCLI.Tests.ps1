@@ -30,9 +30,9 @@ Describe "Feature 5: Config Management CLI" -Tag "Feature5", "Tier1", "Tier2" {
             $backup = "$configPath.bak"
             Copy-Item $configPath $backup -Force
             try {
-                & $script:CliPath -Repo "testorg/testrepo"
+                & $script:CliPath -Repo "testorg/testrepo" -PackageName "testrepo"
                 $config = Get-Content $configPath | ConvertFrom-Json
-                $config.governance.dep_to_skill_map."testorg/testrepo" | Should -Not -BeNullOrEmpty
+                $config.dep_to_skill_map."testrepo" | Should -Not -BeNullOrEmpty
             } finally {
                 Copy-Item $backup $configPath -Force
                 Remove-Item $backup -Force
@@ -71,7 +71,7 @@ Describe "Feature 5: Config Management CLI" -Tag "Feature5", "Tier1", "Tier2" {
                 $true | Should -Be $true
                 return
             }
-            { & $script:CliPath -Repo "invalid_format" } | Should -Throw
+            { & $script:CliPath -Repo "invalid_format" -PackageName "invalid_format" } | Should -Throw
         }
 
         It "TC-05-T2-63: Rejects Path Traversal" {
@@ -79,7 +79,7 @@ Describe "Feature 5: Config Management CLI" -Tag "Feature5", "Tier1", "Tier2" {
                 $true | Should -Be $true
                 return
             }
-            { & $script:CliPath -Repo "../../repo" } | Should -Throw
+            { & $script:CliPath -Repo "../../repo" -PackageName "repo" } | Should -Throw
         }
 
         It "TC-05-T2-64: Read-Only Config Override" {
@@ -90,7 +90,7 @@ Describe "Feature 5: Config Management CLI" -Tag "Feature5", "Tier1", "Tier2" {
             $configPath = Join-Path $script:SovereignRoot "sovereign.config.json"
             Set-ItemProperty -Path $configPath -Name IsReadOnly -Value $true
             try {
-                { & $script:CliPath -Repo "testorg/testrepo" } | Should -Not -Throw
+                { & $script:CliPath -Repo "testorg/testrepo" -PackageName "testrepo" } | Should -Not -Throw
             } finally {
                 Set-ItemProperty -Path $configPath -Name IsReadOnly -Value $false
             }

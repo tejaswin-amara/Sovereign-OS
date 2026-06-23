@@ -227,6 +227,7 @@
     "open-interpreter": "OpenInterpreter/open-interpreter",
     "smolagents": "huggingface/smolagents",
     "cline": "cline/cline",
-    "dummy": "dummy/test"
+    "dummy": "dummy/test",
+    "inferred-package": "test/inferred-package"
   }
 }

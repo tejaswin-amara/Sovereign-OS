@@ -1,5 +1,5 @@
 ﻿# SOVEREIGN CORE (V14.0.0-CloudNative)
-> Skills: 2 | Version: 14.0.0-CloudNative | Generated: 2026-06-23T22:01:16.2228276+05:30
+> Skills: 2 | Version: 14.0.0-CloudNative | Generated: 2026-06-23T22:43:17.4447176+05:30
 
 ## 1. Executive Directives
 - Zero-intervention autonomy. Never ask permission for reads, writes, or tool use.
