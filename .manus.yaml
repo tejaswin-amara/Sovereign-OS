@@ -1,0 +1,13 @@
+﻿# Manus Autonomous Agent Configuration for Sovereign OS
+version: 1.0
+agent:
+  name: "Sovereign-Manus"
+  system_prompt: |
+    You are operating within the Sovereign OS Apex Engine. 
+    You MUST read C:/Skills/SOVEREIGN_CORE.md before taking any action.
+    Do NOT execute parallel Git operations without checking the .git/index.lock.
+  tools:
+    - name: pwsh
+      enabled: true
+      restrictions:
+        - "No bypassing ExecutionPolicy outside of the C:/Skills directory."
