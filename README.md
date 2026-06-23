@@ -32,13 +32,14 @@ Sovereign OS is designed to orchestrate the absolute pinnacle of current AI tech
 ## ⚙️ Architecture & Governance
 
 ### 1. Sovereign Command (The Universal Trigger)
-The entire OS operates via a single unified command (`sovereign.ps1`). Executing this command triggers a 6-phase pipeline:
+The entire OS operates via a single unified command (`sovereign.ps1`). Executing this command triggers a 7-phase pipeline:
 1. 🔒 **OS-Level Mutex Lock**: Secures the environment for atomic writes.
 2. 🛡️ **Integrity & Config Verification**: Cryptographically validates core files against SHA256 checksums.
 3. 📦 **Skill Harvesting**: Analyzes local files and intelligently maps project requirements to cloud skills.
 4. 🧬 **Self-Evolution Engine**: Analyzes agent drift, absorbs session learnings, auto-fetches missing tools, and executes Ponytail sweeps.
 5. 🔍 **AST Security Sweep**: Scans all active scripts to guarantee 0 vulnerabilities before operation.
-6. 🗑️ **Blazing Ephemeral GC**: Natively prunes the `.cloud-cache` instantly via OS hooks, avoiding memory leaks.
+6. ☁️ **JIT Cloud-Native Skill Fetching**: Dynamically fetches open-source tools directly from GitHub into the ephemeral `.cloud-cache`.
+7. 🗑️ **Blazing Ephemeral GC**: Natively prunes the `.cloud-cache` instantly via OS hooks, avoiding memory leaks.
 
 ### 2. Zero-Trust Execution
 Sovereign operates entirely headless. Every script, module, and rule is rigorously governed by the `sovereign.config.json` module caps. The engine implements strict PowerShell typing (`Set-StrictMode -Version Latest`) and robust error handling to prevent silent failures.

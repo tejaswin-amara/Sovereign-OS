@@ -26,7 +26,7 @@ $ResolvedProject = (Resolve-Path $ProjectPath -ErrorAction SilentlyContinue).Pat
 if (-not $ResolvedProject) { $ResolvedProject = $ProjectPath }
 
 # Dynamic version
-$Version = "13.2.0-CloudNative"
+$Version = "14.0.0-CloudNative"
 try {
     $Version = Get-SovereignVersion -SkillsRoot $SovereignRoot
 } catch {
@@ -124,7 +124,7 @@ try {
         } else {
             Write-SovereignLog -Level "WARN" -Step "COUNT" -Message "Count drift: config=$ConfigCount vs filesystem=$DynamicCount"
             if ($Heal) {
-                $LockStream = Start-SovereignLock -LockFile "$SovereignRoot/.sovereign.lock"
+                $Mutex = Start-SovereignLock -LockFile "$SovereignRoot/.sovereign.lock"
                 try {
                     $Config.governance.skills_count = $DynamicCount
                     $PrettyJson = ConvertTo-Json -InputObject $Config -Depth 100
@@ -132,7 +132,7 @@ try {
                     Update-SovereignChecksum -ConfigPath "$SovereignRoot/sovereign.config.json" -HashPath "$SovereignRoot/agent-bootstrap/.config.sha256" | Out-Null
                     Write-SovereignLog -Level "INFO" -Step "COUNT" -Message "Healed: count set to $DynamicCount"
                 } finally {
-                    Stop-SovereignLock -LockFile "$SovereignRoot/.sovereign.lock" -LockStream $LockStream
+                    Stop-SovereignLock -LockFile "$SovereignRoot/.sovereign.lock" -Mutex $Mutex
                 }
             }
         }
@@ -152,7 +152,7 @@ try {
         } else {
             Write-SovereignLog -Level "WARN" -Step "CFGVER" -Message "Version drift: config=$($Config.version) vs VERSION=$Version"
             if ($Heal) {
-                $LockStream = Start-SovereignLock -LockFile "$SovereignRoot/.sovereign.lock"
+                $Mutex = Start-SovereignLock -LockFile "$SovereignRoot/.sovereign.lock"
                 try {
                     $Config.version = $Version
                     $PrettyJson = ConvertTo-Json -InputObject $Config -Depth 100
@@ -160,7 +160,7 @@ try {
                     Update-SovereignChecksum -ConfigPath "$SovereignRoot/sovereign.config.json" -HashPath "$SovereignRoot/agent-bootstrap/.config.sha256" | Out-Null
                     Write-SovereignLog -Level "INFO" -Step "CFGVER" -Message "Healed: version set to $Version"
                 } finally {
-                    Stop-SovereignLock -LockFile "$SovereignRoot/.sovereign.lock" -LockStream $LockStream
+                    Stop-SovereignLock -LockFile "$SovereignRoot/.sovereign.lock" -Mutex $Mutex
                 }
             }
         }

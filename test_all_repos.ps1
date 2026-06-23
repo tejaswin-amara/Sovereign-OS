@@ -2,7 +2,7 @@
 # Exhaustively tests every single parameter of the cloud integration framework across all mapped repos.
 
 $ErrorActionPreference = "Continue"
-$SovereignRoot = "C:/Skills"
+$SovereignRoot = $PSScriptRoot
 
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host " INTEGRATION TEST SWEEP " -ForegroundColor Cyan

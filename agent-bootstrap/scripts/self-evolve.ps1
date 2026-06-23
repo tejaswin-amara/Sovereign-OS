@@ -8,7 +8,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$SkillsPath = "C:/Skills"
+$SkillsPath = (Resolve-Path "$PSScriptRoot/../..").Path
 Import-Module "$SkillsPath/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
 $Version = Get-SovereignVersion -SkillsRoot $SkillsPath
 $AgentDir = Join-Path $WorkspacePath ".agents"

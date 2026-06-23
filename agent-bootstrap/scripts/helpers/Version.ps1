@@ -2,7 +2,7 @@
 
 function Get-SovereignVersion {
     [CmdletBinding()]
-    param([string]$SkillsRoot = "C:/Skills")
+    param([string]$SkillsRoot = "$PSScriptRoot/../../..")
     $VersionFile = Join-Path $SkillsRoot "VERSION"
     if (Test-Path $VersionFile) {
         return (Get-Content $VersionFile -First 1).Trim()

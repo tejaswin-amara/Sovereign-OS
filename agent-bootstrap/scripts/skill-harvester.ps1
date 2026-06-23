@@ -221,7 +221,7 @@ $HarvestOutput += "> Matched Skills: $($VerifiedSkills.Count)`n"
 $HarvestOutput += "> Global Library: $($GlobalLibrary.Count) skills`n`n"
 $HarvestOutput += "## Matched Skills`n`n"
 $HarvestOutput += "> Table generation suppressed for token context efficiency.`n"
-$HarvestOutput += "> See `.agents/knowledge/harvested_skills.md` or query `C:/Skills` directly for details.`n"
+$HarvestOutput += "> See `.agents/knowledge/harvested_skills.md` or query `$SovereignRoot` directly for details.`n"
 $HarvestOutput += "`n## Axiom Cores`n`n"
 foreach ($Axiom in $Axioms) {
     $HarvestOutput += "- $Axiom`n"
@@ -239,8 +239,9 @@ elseif ($DetectedDeps -contains "fastify" -or $DetectedDeps -contains "hono" -or
 
 $ExcludeHarvestDirs = @($ExcludedDirs) + @('node_modules', '.agents')
 function Get-FastHarvestFileCount {
-    param([string]$Path)
-    if ($Path -ieq "C:\Skills" -or $Path -ieq "C:/Skills") {
+    param([string]$Path, [int]$Depth = 0)
+    if ($Depth -gt 15) { return }
+    if ($Path -ieq $SovereignRoot -or $Path -ieq ($SovereignRoot -replace '\\', '/')) {
         $script:LocalFileCount = (Get-ChildItem -LiteralPath $Path -File -ErrorAction SilentlyContinue | Measure-Object).Count
         $script:LocalFileCount += (Get-ChildItem -LiteralPath (Join-Path $Path "agent-bootstrap") -File -Recurse -ErrorAction SilentlyContinue | Measure-Object).Count
         return
@@ -252,7 +253,7 @@ function Get-FastHarvestFileCount {
             if ($DirName -notin $ExcludeHarvestDirs -and $DirName -notmatch "^\.") {
                 try {
                     if (-not [System.IO.DirectoryInfo]::new($Dir).Attributes.HasFlag([System.IO.FileAttributes]::ReparsePoint)) {
-                        Get-FastHarvestFileCount -Path $Dir
+                        Get-FastHarvestFileCount -Path $Dir -Depth ($Depth + 1)
                     }
                 } catch {
                     Write-SovereignLog -Level "WARN" -Step "HARVEST" -Message "Skipping unreadable directory $($Dir): $_"

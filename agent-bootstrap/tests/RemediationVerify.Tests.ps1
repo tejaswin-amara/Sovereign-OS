@@ -249,7 +249,7 @@ Describe "Sovereign Remediation Empirical Verification" {
 
             # Remediated logic
             $RemediatedNormalized = $WindowsPath.Replace('\', '/')
-            $RemediatedNormalized | Should -Be "C:/Skills/agent-bootstrap/scripts" # Succeeds
+            $RemediatedNormalized | Should -Be "$((Resolve-Path "$PSScriptRoot/../..").Path -replace '\\', '/')/agent-bootstrap/scripts" # Succeeds
         }
     }
 }

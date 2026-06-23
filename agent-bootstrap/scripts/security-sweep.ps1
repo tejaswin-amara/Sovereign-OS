@@ -4,7 +4,7 @@
 
 [CmdletBinding()]
 param(
-    [string]$ProjectPath = "C:/Skills",
+    [string]$ProjectPath = "",
     [bool]$BlockOnError = $true
 )
 
@@ -12,6 +12,8 @@ Set-StrictMode -Version Latest
 
 # Core imports
 $SovereignRoot = (Resolve-Path "$PSScriptRoot/../..").Path
+if ([string]::IsNullOrWhiteSpace($ProjectPath)) { $ProjectPath = $SovereignRoot }
+
 Import-Module "$SovereignRoot/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
 $Version = Get-SovereignVersion -SkillsRoot $SovereignRoot
 $Config = Get-SovereignConfig
@@ -21,21 +23,19 @@ Write-SovereignLog -Level "INFO" -Step "SECURITY_SWEEP" -Message "Initializing A
 $Violations = [System.Collections.Generic.List[string]]::new()
 $Files = [System.Collections.Generic.List[string]]::new()
 
-# Performance Optimization: Early pruning of huge directories to avoid traversing hundreds of thousands of files.
+# Performance Optimization: Early pruning of huge directories
 $ExcludeDirs = [System.Collections.Generic.List[string]]::new()
-@('node_modules', '.git', 'dist', '.next', 'build', '.agents', 'LOGS', 'templates', 'G0DM0D3', '.archive-v1.0', 'skills', '.agent-reach-venv', '.venv', '__pycache__') | ForEach-Object { $ExcludeDirs.Add($_) }
+@('node_modules', '.git', 'dist', '.next', 'build', '.agents', 'LOGS', 'templates', 'G0DM0D3', '.archive-v1.0', 'skills', '.agent-reach-venv', '.venv', '__pycache__', 'servers') | ForEach-Object { $ExcludeDirs.Add($_) }
 
-if ($ProjectPath -ieq "C:/Skills" -or $ProjectPath -ieq "C:\Skills") {
-    try {
-        $AllSubDirs = Get-ChildItem -Path "C:\Skills" -Directory | Select-Object -ExpandProperty Name
-        foreach ($DirName in $AllSubDirs) {
-            if ($DirName -ne "agent-bootstrap" -and $DirName -ne ".agents" -and -not $ExcludeDirs.Contains($DirName)) {
-                $ExcludeDirs.Add($DirName)
-            }
+try {
+    $AllSubDirs = Get-ChildItem -Path $ProjectPath -Directory -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
+    foreach ($DirName in $AllSubDirs) {
+        if ($DirName -ne "agent-bootstrap" -and $DirName -ne ".agents" -and -not $ExcludeDirs.Contains($DirName)) {
+            $ExcludeDirs.Add($DirName)
         }
-    } catch {
-        Write-SovereignLog -Level "WARN" -Step "SECURITY_SWEEP" -Message "Failed to build exclusion list: $_"
     }
+} catch {
+    Write-SovereignLog -Level "WARN" -Step "SECURITY_SWEEP" -Message "Failed to build exclusion list: $_"
 }
 
 function Get-TargetFiles {
@@ -45,7 +45,6 @@ function Get-TargetFiles {
         foreach ($Dir in $Dirs) {
             $DirName = [System.IO.Path]::GetFileName($Dir)
             if (-not $ExcludeDirs.Contains($DirName) -and $DirName -notmatch "^\.") {
-                # Prevent infinite loop on junctions/symlinks
                 $DirInfo = [System.IO.DirectoryInfo]::new($Dir)
                 if (-not $DirInfo.LinkTarget) {
                     Get-TargetFiles -CurrentPath $Dir
@@ -81,23 +80,35 @@ foreach ($File in $Files) {
         $Tokens = $null
         $AST = [System.Management.Automation.Language.Parser]::ParseInput($Content, [ref]$Tokens, [ref]$Errors)
 
-        # Look for Invoke-Expression (iex) statements in AST
-        $IexCalls = $AST.FindAll({
+        # Look for Invoke-Expression, scriptblocks, and encoded commands
+        $ViolatingNodes = $AST.FindAll({
             param($AstNode)
-            $AstNode -is [System.Management.Automation.Language.CommandAst] -and
-            ($AstNode.GetCommandName() -ieq "Invoke-Expression" -or $AstNode.GetCommandName() -ieq "iex")
+            if ($AstNode -is [System.Management.Automation.Language.CommandAst]) {
+                $cmd = $AstNode.GetCommandName()
+                if ($cmd -ieq "Invoke-Expression" -or $cmd -ieq "iex") { return $true }
+            }
+            if ($AstNode -is [System.Management.Automation.Language.MemberExpressionAst]) {
+                $member = $AstNode.Member.Extent.Text
+                if ($member -match "Invoke" -or $member -match "Create") {
+                    if ($AstNode.Expression.Extent.Text -match "\[scriptblock\]") { return $true }
+                }
+            }
+            if ($AstNode -is [System.Management.Automation.Language.StringConstantExpressionAst]) {
+                if ($AstNode.Value -match "powershell.*-e(nc|ncoded)?\s+[A-Za-z0-9+/=]+") { return $true }
+            }
+            return $false
         }, $true)
 
-        if ($IexCalls) {
-            foreach ($call in $IexCalls) {
-                $Line = $call.Extent.StartLineNumber
-                $Snippet = $call.Extent.Text
-                $Violations.Add("[POWERSHELL AST] Dynamic Command Execution (iex/Invoke-Expression) detected in: $FilePath at line $($Line): `"$Snippet`"")
+        if ($ViolatingNodes) {
+            foreach ($node in $ViolatingNodes) {
+                $Line = $node.Extent.StartLineNumber
+                $Snippet = $node.Extent.Text
+                $Violations.Add("[POWERSHELL AST] Dynamic Command Execution detected in: $FilePath at line $($Line): `"$Snippet`"")
             }
         }
     }
 
-    # JavaScript/TypeScript Token / Regex AST Scan (v14.0.0-CloudNative: Line-by-line with precise snippets)
+    # JavaScript/TypeScript Token / Regex AST Scan
     if ($Extension -in @(".js", ".ts", ".tsx", ".jsx")) {
         $Lines = $Content -split '\r?\n'
         $ApprovedDeps = @()
@@ -106,22 +117,28 @@ foreach ($File in $Files) {
         }
         $NodeBuiltins = @("path", "fs", "child_process", "crypto", "events", "stream", "os", "http", "https", "util", "url", "querystring", "zlib", "buffer", "process")
 
-        for ($i = 0; $i -lt @($Lines).Count; $i++) {
+        for ($i = 0; $i -lt $Lines.Count; $i++) {
             $LineContent = $Lines[$i]
-            # Check for eval() - must not be preceded by a dot (e.g. redis.eval is safe)
-            if ($LineContent -match '(?<![a-zA-Z0-9_$.])eval\s*\(') {
+            
+            # Security: Harden eval() bypasses
+            if (($LineContent -match 'eval\s*\(' -and $LineContent -notmatch '[a-zA-Z0-9_$]\.eval\s*\(') -or 
+                ($LineContent -match '\[\s*[''"]eval[''"]\s*\]') -or 
+                ($LineContent -match '\(\s*0\s*,\s*eval\s*\)')) {
                 $Violations.Add("[JS/TS SCAN] Dangerous 'eval()' execution detected in: $FilePath at line $($i + 1): `"$($LineContent.Trim())`"")
             }
+            
             # Check for new Function()
             if ($LineContent -match 'new\s+Function\s*\(') {
                 $Violations.Add("[JS/TS SCAN] Dynamic compilation 'new Function()' detected in: $FilePath at line $($i + 1): `"$($LineContent.Trim())`"")
             }
-            # Check for child_process exec/execSync - block if called globally/directly or via child_process object
-            # Avoid flagging safe pattern matching like regex.exec() or pipeline.exec()
-            if ($LineContent -match '(?<![a-zA-Z0-9_$.])exec(Sync)?\s*\(' -or $LineContent -match 'child_process\.exec(Sync)?\s*\(') {
+            
+            # Security: Harden exec() bypasses
+            if (($LineContent -match 'exec(Sync)?\s*\(' -and $LineContent -notmatch '[a-zA-Z0-9_$]\.exec(Sync)?\s*\(') -or 
+                $LineContent -match 'child_process\.exec(Sync)?\s*\(' -or
+                $LineContent -match '\[\s*[''"]exec(Sync)?[''"]\s*\]') {
                 $Violations.Add("[JS/TS SCAN] Shell spawn 'exec/execSync' execution detected in: $FilePath at line $($i + 1): `"$($LineContent.Trim())`"")
             }
-            # v14.0.0-CloudNative: Check for import/require package whitelisting
+            
             if ($LineContent -match 'import\s+.*?\s+from\s+[''"](?<pkg>[a-zA-Z0-9_@./-]+)[''"]' -or $LineContent -match 'require\s*\([''"](?<pkg>[a-zA-Z0-9_@./-]+)[''"]\)') {
                 $Pkg = $Matches['pkg']
                 $CleanPkg = $Pkg.Split('/')[0]

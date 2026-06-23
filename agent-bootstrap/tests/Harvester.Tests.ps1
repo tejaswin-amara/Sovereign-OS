@@ -8,7 +8,7 @@ $SovereignRoot = (Resolve-Path "$PSScriptRoot/../..").Path
 Describe "Sovereign Harvester Parsers" {
     BeforeAll {
         $script:SovereignRoot = (Resolve-Path "$PSScriptRoot/../..").Path
-        if (-not $script:SovereignRoot) { $script:SovereignRoot = "C:/Skills" }
+        if (-not $script:SovereignRoot) { $script:SovereignRoot = (Resolve-Path "$PSScriptRoot/../..").Path }
         
         $script:MockWorkspace = Join-Path $PSScriptRoot "mock_workspace"
         if (Test-Path -LiteralPath $script:MockWorkspace) {

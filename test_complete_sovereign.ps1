@@ -1,7 +1,7 @@
 # test_complete_sovereign.ps1
 
 $ErrorActionPreference = "Continue"
-$SovereignRoot = "C:/Skills"
+$SovereignRoot = $PSScriptRoot
 $Results = @()
 
 function Log-Result {

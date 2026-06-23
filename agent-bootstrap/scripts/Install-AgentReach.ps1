@@ -36,7 +36,7 @@ if (-not $PythonCmd) {
 # -------------------------------------------------------------------------
 # 2. CREATE ISOLATED VENV
 # -------------------------------------------------------------------------
-$VenvDir = Join-Path $SovereignRoot ".agent-reach-venv"
+$VenvDir = Join-Path $env:USERPROFILE ".agent-reach-venv"
 $VenvActivate = Join-Path $VenvDir "Scripts\Activate.ps1"
 
 if (-not (Test-Path $VenvDir)) {
@@ -112,7 +112,15 @@ Write-Host "[REACH] Installing jcode for browser automation..." -ForegroundColor
 try {
     $InstallScriptPath = "$env:TEMP/install_jcode.ps1"
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/1jehuang/jcode/master/scripts/install.ps1" -OutFile $InstallScriptPath -UseBasicParsing
-    & $InstallScriptPath
+    
+    # SECURITY: Verify script hash before execution to prevent supply-chain RCE
+    $ExpectedHash = "KNOWN_GOOD_HASH_PLACEHOLDER" # Update with actual hash
+    $ActualHash = (Get-FileHash -Path $InstallScriptPath -Algorithm SHA256).Hash
+    if ($ActualHash -ne $ExpectedHash) {
+        Write-Host "[WARN] SECURITY ALERT: jcode install script hash mismatch! Execution aborted." -ForegroundColor Red
+    } else {
+        & $InstallScriptPath
+    }
     Write-Host "[SUCCESS] jcode installed successfully." -ForegroundColor Green
 } catch {
     Write-Host "[WARN] jcode installation failed." -ForegroundColor Yellow

@@ -14,3 +14,4 @@ node_modules/
 __pycache__/
 *.log
 .env
+servers/

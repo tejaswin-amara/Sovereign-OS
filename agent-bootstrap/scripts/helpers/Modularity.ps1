@@ -71,6 +71,7 @@ function Get-SovereignManifestFiles {
             return $Files
         }
     } catch {
+        Write-SovereignLog -Level "WARN" -Step "MODULARITY" -Message "Failed to read directory info for $($Path): $_"
         return $Files
     }
     
@@ -79,7 +80,9 @@ function Get-SovereignManifestFiles {
         foreach ($f in $Matched) {
             [void]$Files.Add($f.FullName)
         }
-    } catch {}
+    } catch {
+        Write-SovereignLog -Level "WARN" -Step "MODULARITY" -Message "Failed to get child items for $($Path): $_"
+    }
     
     try {
         $SubDirs = Get-ChildItem -LiteralPath $Path -Directory -ErrorAction SilentlyContinue
@@ -93,7 +96,9 @@ function Get-SovereignManifestFiles {
                 }
             }
         }
-    } catch {}
+    } catch {
+        Write-SovereignLog -Level "WARN" -Step "MODULARITY" -Message "Failed to traverse subdirectories for $($Path): $_"
+    }
     
     return $Files
 }

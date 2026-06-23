@@ -92,11 +92,11 @@ if (Test-Path $AgentDir) {
 # -------------------------------------------------------------------------
 # 6. PHASE-GATED EXECUTION (Lock INSIDE try, critical phase abort)
 # -------------------------------------------------------------------------
-$LockStream = $null
+$Mutex = $null
 
 try {
     # Lock acquisition INSIDE try block — guarantees finally cleanup
-    $LockStream = Start-SovereignLock -LockFile $LockFile -TimeoutSeconds 30
+    $Mutex = Start-SovereignLock -LockFile $LockFile -TimeoutSeconds 30
     Write-SovereignLog -Level "INFO" -Step "MUTEX" -Message "OS-Level Lock Acquired."
 
     # ------------------------------------------------------------------
@@ -112,7 +112,15 @@ try {
     Write-SovereignLog -Level "INFO" -Step "INIT" -Message "Dynamic skill count: $DynamicCount"
 
     if ($UpdateLibrary -and (Test-Path "$SovereignRoot/.git")) {
-        Push-Location $SovereignRoot; git pull --quiet; Pop-Location
+        try {
+            Push-Location $SovereignRoot
+            $GitOut = git pull --quiet --no-verify 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                Write-SovereignLog -Level "WARN" -Step "INIT" -Message "git pull failed: $GitOut"
+            }
+        } finally {
+            Pop-Location
+        }
     }
 
     # Overwrite config.governance.skills_count with dynamic count and save ONLY if changed
@@ -210,8 +218,8 @@ try {
     # PHASE 6.5: GC — Cloud Cache Garbage Collection [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "GC" -Message "Running Garbage Collection on ephemeral .cloud-cache..."
-    $CloudCacheDir = "$SovereignRoot\.cloud-cache"
-    if (Test-Path $CloudCacheDir) {
+    $CloudCacheDir = Join-Path $SovereignRoot ".cloud-cache"
+    if ((Test-Path $CloudCacheDir) -and $CloudCacheDir.EndsWith(".cloud-cache") -and $CloudCacheDir.Length -gt 10) {
         try {
             cmd.exe /c "rmdir /s /q ""$CloudCacheDir"""
             if (-not (Test-Path $CloudCacheDir)) {
@@ -253,9 +261,9 @@ try {
     Write-SovereignLog -Level "ERROR" -Step "EXECUTION" -Message "Fatal error: $($_.Exception.Message)"
     exit 1
 } finally {
-    # Guaranteed lock cleanup — LockStream is always released
-    if ($LockStream) {
-        Stop-SovereignLock -LockFile $LockFile -LockStream $LockStream
+    # Guaranteed lock cleanup — Mutex is always released
+    if ($Mutex) {
+        Stop-SovereignLock -LockFile $LockFile -Mutex $Mutex
         Write-SovereignLog -Level "INFO" -Step "MUTEX" -Message "Lock released."
     }
 }

@@ -10,6 +10,10 @@ if (-not (Get-Variable -Name "CorrelationID" -Scope "Script" -ErrorAction Silent
     $script:CorrelationID = [guid]::NewGuid().ToString().Substring(0,8)
 }
 
+# In-memory batch queue to prevent severe Disk I/O bottlenecks
+$global:SovereignLogBatch = [System.Collections.Generic.List[string]]::new()
+$global:SovereignLogFlushThreshold = 50
+
 function Set-SovereignLogContext {
     [CmdletBinding()]
     param([string]$LogDir, [string]$RunId, [string]$CorrId)
@@ -18,14 +22,21 @@ function Set-SovereignLogContext {
     if ($CorrId) { $script:CorrelationID = $CorrId }
 }
 
+function Flush-SovereignLogs {
+    if ($global:SovereignLogBatch.Count -gt 0) {
+        if (-not (Test-Path $script:SovereignLogDir)) { 
+            New-Item -Path $script:SovereignLogDir -ItemType Directory -Force | Out-Null 
+        }
+        $LogPath = "$($script:SovereignLogDir)/sovereign-audit.jsonl"
+        $BatchedLogs = ($global:SovereignLogBatch -join "`n") + "`n"
+        [System.IO.File]::AppendAllText($LogPath, $BatchedLogs, [System.Text.Encoding]::UTF8)
+        $global:SovereignLogBatch.Clear()
+    }
+}
+
 function Write-SovereignLog {
     [CmdletBinding()]
     param([string]$Level, [string]$Step, [string]$Message)
-    
-    # Ensure log directory exists
-    if (-not (Test-Path $script:SovereignLogDir)) { 
-        New-Item -Path $script:SovereignLogDir -ItemType Directory -Force | Out-Null 
-    }
     
     # Sanitize sensitive absolute paths in messages
     $SanitizedMessage = $Message
@@ -37,7 +48,8 @@ function Write-SovereignLog {
         $TempMsg = $SanitizedMessage.Replace("\", "/")
         $TempMsg = [regex]::Replace($TempMsg, "(?i)$SkillsRootEscaped", "<SkillsRoot>")
         $TempMsg = [regex]::Replace($TempMsg, "(?i)$UserHomeEscaped", "<UserHome>")
-        $TempMsg = [regex]::Replace($TempMsg, "(?i)[a-zA-Z]:/", "<Drive>/")
+        # Fix log corruption: only redact actual windows paths, not SHA256 hashes
+        $TempMsg = [regex]::Replace($TempMsg, "(?i)\b[a-z]:[/\\](?:[\w\.\-]+[/\\]?)+", "<DrivePath>")
         $SanitizedMessage = $TempMsg
     }
 
@@ -49,7 +61,12 @@ function Write-SovereignLog {
         step = $Step
         message = $SanitizedMessage
     } | ConvertTo-Json -Compress
-    $LogEntry | Out-File -FilePath "$($script:SovereignLogDir)/sovereign-audit.jsonl" -Append -Encoding UTF8
+    
+    # Add to batch
+    $global:SovereignLogBatch.Add($LogEntry)
+    if ($global:SovereignLogBatch.Count -ge $global:SovereignLogFlushThreshold) {
+        Flush-SovereignLogs
+    }
     
     $TimeStamp = Get-Date -Format "HH:mm:ss"
     $PaddedStep = $Step.PadRight(16).Substring(0, 16)
@@ -79,7 +96,6 @@ function Start-LogRotation {
         $MaxSizeBytes = if ($ConfigSizeMB) { [long]([int]$ConfigSizeMB * 1MB) } else { 10MB }
     }
 
-    # Delete older log files based on retention policy
     $LimitDate = (Get-Date).AddDays(-$MaxAgeDays)
     Get-ChildItem $LogDir -Filter "*.jsonl" -ErrorAction SilentlyContinue |
     Where-Object { $_.LastWriteTime -lt $LimitDate } |
@@ -87,12 +103,10 @@ function Start-LogRotation {
         Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue
     }
 
-    # Atomic rolling log rotation for active audit log
     $AuditLog = Join-Path $LogDir "sovereign-audit.jsonl"
     if (Test-Path $AuditLog) {
         $File = Get-Item $AuditLog
         if ($File.Length -gt $MaxSizeBytes) {
-            # Shift existing rotated logs (keep up to 5 history files: .1 to .5)
             for ($i = 4; $i -ge 1; $i--) {
                 $OldLog = Join-Path $LogDir "sovereign-audit.$i.jsonl"
                 $NewLog = Join-Path $LogDir "sovereign-audit.$($i+1).jsonl"
@@ -100,7 +114,6 @@ function Start-LogRotation {
                     Move-Item $OldLog $NewLog -Force -ErrorAction SilentlyContinue
                 }
             }
-            # Move active log to .1
             $RotatedLog = Join-Path $LogDir "sovereign-audit.1.jsonl"
             Move-Item $AuditLog $RotatedLog -Force -ErrorAction SilentlyContinue
         }

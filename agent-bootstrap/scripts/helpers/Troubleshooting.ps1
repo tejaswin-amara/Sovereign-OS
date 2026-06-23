@@ -10,8 +10,13 @@ function Invoke-SovereignInternetDiagnostic {
     try {
         Write-SovereignLog -Level "INFO" -Step "AUTO_DIAG" -Message "Initiating Jina web search for fatal error context..."
         
+        # SECURITY: Redact sensitive local paths from the error message before sending to internet
+        $SanitizedError = $ErrorMessage -replace '(?i)[a-z]:\\[\w\-\.\\]+', '<REDACTED_PATH>'
+        $SanitizedError = $SanitizedError -replace '(?i)[a-z]:/[\w\-\./]+', '<REDACTED_PATH>'
+        $SanitizedError = $SanitizedError -replace '(?i)\$env:USERPROFILE', '<REDACTED_USERPROFILE>'
+
         # Prepare the query for DuckDuckGo
-        $Query = "PowerShell Error " + $ErrorMessage
+        $Query = "PowerShell Error " + $SanitizedError
         # We need to escape it to form a proper URL query string
         $EncodedQuery = [uri]::EscapeDataString($Query)
         
@@ -26,11 +31,14 @@ function Invoke-SovereignInternetDiagnostic {
             $Lines = $Result -split "`n" | Select-Object -First 40
             $Summary = $Lines -join "`n"
             
-            $LogDir = if ($script:SovereignLogDir) { $script:SovereignLogDir } else { "$PSScriptRoot/../../../LOGS" }
-            $DiagPath = Join-Path $LogDir "sovereign-internet-diagnostic.md"
+            $LogDir = if ($script:SovereignLogDir) { $script:SovereignLogDir } else { (Resolve-Path "$PSScriptRoot/../../../LOGS").Path }
+            if (-not (Test-Path $LogDir)) { New-Item -ItemType Directory -Force -Path $LogDir | Out-Null }
+            
+            $RunID = if ($script:SovereignRunId) { $script:SovereignRunId } else { [guid]::NewGuid().ToString().Substring(0,8) }
+            $DiagPath = Join-Path $LogDir "sovereign-internet-diagnostic-$RunID.md"
             
             $Content = "## Sovereign Auto-Diagnostic Result`n`n"
-            $Content += "**Error:** $ErrorMessage`n`n"
+            $Content += "**Error:** $SanitizedError`n`n"
             $Content += "**Timestamp:** $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')`n`n"
             $Content += "### Web Search Results:`n`n"
             $Content += "$Summary`n`n"

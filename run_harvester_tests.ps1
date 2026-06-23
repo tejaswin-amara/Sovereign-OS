@@ -5,7 +5,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 # Load the helpers module
-Import-Module "C:/Skills/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
+Import-Module "$PSScriptRoot/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
 
 # Mock Write-SovereignLog to prevent missing function errors and capture logs
 $script:LogWarnings = [System.Collections.Generic.List[string]]::new()

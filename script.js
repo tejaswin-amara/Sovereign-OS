@@ -88,7 +88,7 @@ const terminalLines = [
     { text: '[EVOLUTION] Auto-fetching skill: browser-use', class: 'term-sys', delay: 1000 },
     { text: 'Mounting to .cloud-cache/browser-use...', class: 'term-secondary', delay: 400 },
     { text: '[SECURITY] AST Sweep: 0 vulnerabilities found.', class: 'term-success', delay: 800 },
-    { text: '[SUCCESS] Sovereign v13.2.0 ONLINE', class: 'term-success', delay: 600 }
+    { text: '[SUCCESS] Sovereign v14.0.0-CloudNative ONLINE', class: 'term-success', delay: 600 }
 ];
 
 async function startTerminalBoot() {
@@ -105,7 +105,7 @@ async function startTerminalBoot() {
         p.className = `term-line ${line.class}`;
         
         if (line.class === 'term-prompt') {
-            p.innerHTML = `<span style="color:var(--text-secondary)">PS D:\\Skills></span> ${line.text}`;
+            p.innerHTML = `<span style="color:var(--text-secondary)">PS C:\\Skills></span> ${line.text}`;
         } else {
             p.innerText = line.text;
         }

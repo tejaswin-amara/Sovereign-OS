@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-$SovereignPath = "C:/Skills"
+$SovereignPath = (Resolve-Path "$PSScriptRoot/../..").Path
 Import-Module "$SovereignPath/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
 
 # Parse repo input (e.g. "microsoft/SkillOpt" or "https://github.com/microsoft/SkillOpt")

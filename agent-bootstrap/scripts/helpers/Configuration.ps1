@@ -4,7 +4,8 @@ function Get-SovereignConfig {
     [CmdletBinding()]
     param([string]$KeyPath)
     
-    $ConfigPath = "C:/Skills/sovereign.config.json"
+    $SovereignRoot = (Resolve-Path "$PSScriptRoot/../../..").Path
+    $ConfigPath = "$SovereignRoot/sovereign.config.json"
     if (-not (Test-Path $ConfigPath)) {
         return $null
     }
@@ -47,9 +48,13 @@ function Save-AtomicContent {
 function Assert-SovereignConfigIntegrity {
     [CmdletBinding()]
     param(
-        [string]$ConfigPath = "C:/Skills/sovereign.config.json",
-        [string]$HashPath = "C:/Skills/agent-bootstrap/.config.sha256"
+        [string]$ConfigPath = "",
+        [string]$HashPath = ""
     )
+
+    $SovereignRoot = (Resolve-Path "$PSScriptRoot/../../..").Path
+    if ([string]::IsNullOrWhiteSpace($ConfigPath)) { $ConfigPath = "$SovereignRoot/sovereign.config.json" }
+    if ([string]::IsNullOrWhiteSpace($HashPath)) { $HashPath = "$SovereignRoot/agent-bootstrap/.config.sha256" }
 
     if (-not (Test-Path $ConfigPath)) {
         throw "CONFIG_MISSING: sovereign.config.json is missing!"
@@ -66,12 +71,30 @@ function Assert-SovereignConfigIntegrity {
 
     if (-not (Test-Path $HashPath)) {
         Write-SovereignLog -Level "WARN" -Step "INTEGRITY" -Message "Initializing config checksum at $HashPath"
-        [System.IO.File]::WriteAllText($HashPath, $CurrentHash)
+        
+        # DPAPI Encrypt
+        Add-Type -AssemblyName System.Security
+        $HashStringBytes = [System.Text.Encoding]::UTF8.GetBytes($CurrentHash)
+        $EncryptedBytes = [System.Security.Cryptography.ProtectedData]::Protect($HashStringBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+        $EncryptedBase64 = [Convert]::ToBase64String($EncryptedBytes)
+
+        [System.IO.File]::WriteAllText($HashPath, $EncryptedBase64)
         Set-ItemProperty -Path $HashPath -Name IsReadOnly -Value $true -ErrorAction SilentlyContinue
         return $true
     }
 
-    $MasterHash = (Get-Content $HashPath -First 1).Trim().ToLower()
+    $EncryptedBase64 = (Get-Content $HashPath -First 1).Trim()
+    
+    # DPAPI Decrypt
+    try {
+        Add-Type -AssemblyName System.Security
+        $EncryptedBytes = [Convert]::FromBase64String($EncryptedBase64)
+        $DecryptedBytes = [System.Security.Cryptography.ProtectedData]::Unprotect($EncryptedBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+        $MasterHash = [System.Text.Encoding]::UTF8.GetString($DecryptedBytes).ToLower()
+    } catch {
+        # Fallback to plaintext if DPAPI fails (backwards compatibility for the first run)
+        $MasterHash = $EncryptedBase64.ToLower()
+    }
 
     if ($CurrentHash -ne $MasterHash) {
         $ErrorMsg = "CONFIG_INTEGRITY_VIOLATION: The global sovereign.config.json has been modified or tampered with! " +

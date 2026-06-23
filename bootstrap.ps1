@@ -10,7 +10,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
-$SovereignPath = "C:/Skills"
+$SovereignPath = $PSScriptRoot
 
 # Import shared module
 Import-Module "$SovereignPath/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
