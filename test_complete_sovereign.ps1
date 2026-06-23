@@ -2,11 +2,11 @@
 
 $ErrorActionPreference = "Continue"
 $SovereignRoot = $PSScriptRoot
-$Results = @()
+$script:Results = @()
 
 function Log-Result {
     param([string]$Suite, [string]$Status, [string]$Details)
-    $global:Results += [PSCustomObject]@{ Suite = $Suite; Status = $Status; Details = $Details }
+    $script:Results += [PSCustomObject]@{ Suite = $Suite; Status = $Status; Details = $Details }
     $Color = if ($Status -eq "PASS") { "Green" } elseif ($Status -eq "WARN") { "Yellow" } else { "Red" }
     Write-Host "[$Status] $Suite - $Details" -ForegroundColor $Color
 }
@@ -71,8 +71,8 @@ if (Test-Path $LocalSkillsPath) {
 Write-Host "`n=========================================" -ForegroundColor Cyan
 Write-Host " EXHAUSTIVE AUDIT SUMMARY" -ForegroundColor Cyan
 Write-Host "=========================================" -ForegroundColor Cyan
-$Results | Format-Table -AutoSize
+$script:Results | Format-Table -AutoSize
 
 $ReportPath = "$SovereignRoot/comprehensive_audit_report.json"
-$Results | ConvertTo-Json | Out-File $ReportPath -Encoding utf8
+$script:Results | ConvertTo-Json | Out-File $ReportPath -Encoding utf8
 Write-Host "Report saved to: $ReportPath" -ForegroundColor Cyan
