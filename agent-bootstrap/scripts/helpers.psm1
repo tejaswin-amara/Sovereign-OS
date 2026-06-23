@@ -13,6 +13,7 @@ $HelperFiles = @(
     "IO.ps1"
     "Validation.ps1"
     "OmniSearch.ps1"
+    "Troubleshooting.ps1"
 )
 
 foreach ($File in $HelperFiles) {

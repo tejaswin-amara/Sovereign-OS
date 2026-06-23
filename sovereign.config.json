@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://raw.githubusercontent.com/tejaswin-amara/schema/main/config-v14.0.0.json",
   "version": "14.0.0-CloudNative",
   "name": "Sovereign Skills Library",
@@ -46,7 +46,7 @@
   },
   "governance": {
     "module_cap": 32,
-    "skills_count": 6,
+    "skills_count": 2,
     "_skills_count_note": "DYNAMIC - overwritten by sovereign.ps1 at runtime. Never edit manually.",
     "lock_timeout_seconds": 30,
     "lock_lease_timeout_seconds": 600,

@@ -121,3 +121,10 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 | AST Scan Compliant Execution | Avoid piping WebRequest to `iex` in scripts; download scripts to temporary files and execute them with `&` to satisfy AST checks. | [Install-AgentReach.ps1](file:///C:/Skills/agent-bootstrap/scripts/Install-AgentReach.ps1) | 2026-06-20 |
 | Fast Traversal in Sweeps | Avoid recursive Get-ChildItem for whole-workspace scans; use [System.IO.Directory]::EnumerateDirectories and pre-exclude virtual environments to keep scans under 1s. | [self-evolve.ps1](file:///C:/Skills/agent-bootstrap/scripts/self-evolve.ps1) | 2026-06-20 |
 
+
+
+## Absorbed Learnings (2026-06-23)
+| Feature | Insight/Aha Moment | Associated Files | Date |
+|---|---|---|---|
+| E2E Testing Track | Placing E2E tests in a dedicated subfolder `agent-bootstrap/tests/e2e` maintains folder layout cleanliness and permits tag-based filtering under Pester 5. | `agent-bootstrap/tests/e2e/`, `TEST_INFRA.md` | 2026-06-23 |
+
