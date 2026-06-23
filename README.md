@@ -17,14 +17,34 @@ Sovereign OS is a radically decoupled, zero-intervention governance framework fo
 
 Sovereign `v14.0.0-CloudNative` entirely eliminates local bloat. It leverages a revolutionary **JIT (Just-In-Time) Cloud Fetching** architecture to instantly mount external repositories into an ephemeral `.cloud-cache`. 
 
-Rather than maintaining static local knowledge bases, Sovereign allows agents to instantly pull the most advanced open-source tools—from web automation to RAG pipelines—directly from GitHub on-the-fly. The new **Apex Engine** introduces an Omni-Fetch layer capable of parallel-acquiring over 86 state-of-the-art frameworks, immediately indexing them via **Turbovec Semantic Vectoring** to create a massive, hyper-intelligent knowledge base for the Omni-Harvester. It also natively integrates the **Ponytail (Lazy Senior Dev) Mode** inside the Self-Evolution engine to aggressively prune technical debt and block over-engineered architectures.
+Rather than maintaining static local knowledge bases, Sovereign allows agents to instantly pull the most advanced open-source tools—from web automation to RAG pipelines—directly from GitHub on-the-fly. 
 
-### The Ultimate Agent Stack (Natively Integrated)
-Sovereign OS is designed to orchestrate the absolute pinnacle of current AI technology:
+The new **Apex Engine** introduces an Omni-Fetch layer capable of parallel-acquiring over **86+ state-of-the-art frameworks**, immediately indexing them via **Turbovec Semantic Vectoring** to create a massive, hyper-intelligent knowledge base. It natively integrates the **Ponytail (Lazy Senior Dev) Mode** inside the Self-Evolution engine to aggressively prune technical debt and block over-engineered architectures.
+
+---
+
+## 🤖 Universal Cross-Platform AI Compatibility
+
+Sovereign OS isn't just a local script. It natively binds to the world's most powerful AI agents and IDEs, forcing them to obey OS governance rules the second they enter the workspace. Out of the box, Sovereign OS seamlessly injects its `SOVEREIGN_CORE.md` master directive into:
+
+- 🔶 **Claude Desktop**: Natively hooks via `claude_desktop_config.json`
+- 🧠 **Manus Autonomous Agent**: Governed via `.manus.yaml`
+- 💻 **Cursor IDE**: Bound via `.cursorrules`
+- 🏄‍♂️ **Windsurf IDE**: Bound via `.windsurfrules`
+- 🧩 **Cline / RooCode**: Bound via `.clinerules`
+- ⌨️ **Aider CLI**: Governed via `.aider.conf.yml`
+- ✈️ **GitHub Copilot**: Governed via `.github/copilot-instructions.md`
+
+Any AI system running in a Sovereign repository will instantly query the Turbovec Semantic Index instead of hallucinating logic, and it will aggressively use JIT Cloud Fetching instead of installing unnecessary local NPM/PIP packages.
+
+---
+
+## 🌐 The Ultimate Agent Stack (Natively Indexed)
+Sovereign OS is designed to orchestrate the absolute pinnacle of current AI technology. The Apex Engine continuously indexes the following frameworks into your agent's memory:
 - 🕵️ **Web Exploration**: `browser-use`, `skyvern`, `crawlee`, `firecrawl`, `jina-ai/reader`
-- 🧠 **Orchestration**: `langchain-ai/langgraph`, `crewAIInc/crewAI`
+- 🧠 **Orchestration**: `langchain-ai/langgraph`, `crewAIInc/crewAI`, `stanfordnlp/dspy`, `microsoft/graphrag`
 - 💾 **Memory & Sandboxing**: `mem0ai/mem0`, `e2b-dev/E2B`
-- 💻 **Coding & RAG**: `Aider-AI/aider`, `run-llama/llama_index`
+- 💻 **Coding & RAG**: `Aider-AI/aider`, `run-llama/llama_index`, `pydantic/pydantic-ai`
 - 🔌 **Universal APIs**: Anthropic MCP Servers, `BerriAI/litellm`
 
 ---
@@ -36,16 +56,13 @@ The entire OS operates via a single unified command (`sovereign.ps1`). Executing
 1. 🔒 **OS-Level Mutex Lock**: Secures the environment for atomic writes.
 2. 🛡️ **Integrity & Config Verification**: Cryptographically validates core files against SHA256 checksums.
 3. 📦 **Skill Harvesting**: Analyzes local files and intelligently maps project requirements to cloud skills.
-4. 🧬 **Self-Evolution Engine**: Analyzes agent drift, absorbs session learnings, auto-fetches missing tools, and executes Ponytail sweeps.
+4. 🧬 **Self-Evolution Engine**: Analyzes agent drift, absorbs session learnings, auto-fetches missing tools, and compiles the Turbovec index.
 5. 🔍 **AST Security Sweep**: Scans all active scripts to guarantee 0 vulnerabilities before operation.
-6. ☁️ **JIT Cloud-Native Skill Fetching**: Dynamically fetches open-source tools directly from GitHub into the ephemeral `.cloud-cache`.
+6. ☁️ **JIT Cloud-Native Skill Fetching**: Dynamically fetches tools directly from GitHub.
 7. 🗑️ **Blazing Ephemeral GC**: Natively prunes the `.cloud-cache` instantly via OS hooks, avoiding memory leaks.
 
 ### 2. Zero-Trust Execution
 Sovereign operates entirely headless. Every script, module, and rule is rigorously governed by the `sovereign.config.json` module caps. The engine implements strict PowerShell typing (`Set-StrictMode -Version Latest`) and robust error handling to prevent silent failures.
-
-### 3. Agent-Reach Protocol
-Agents have unhindered, protocol-level access to the internet. The Agent-Reach sub-engine provides standardized CLI tools allowing agents to natively parse YouTube, read any webpage via Jina, and utilize the Exa semantic search MCP seamlessly.
 
 ---
 
@@ -72,7 +89,7 @@ pwsh ./agent-bootstrap/scripts/Fetch-CloudSkill.ps1 -Repo "browser-use/browser-u
 ---
 
 ## 🤝 Contributing
-We welcome contributions! Before submitting a PR, please read our [Contributing Guidelines](CONTRIBUTING.md) and ensure you have run the Pester suite (`Invoke-Pester -Path "agent-bootstrap/tests"`).
+We welcome contributions! Before submitting a PR, please read our [Contributing Guidelines](CONTRIBUTING.md) and ensure you have run the exhaustive test suite (`.\test_complete_sovereign.ps1`).
 
 ## 📄 License
 Sovereign OS is released under the [MIT License](LICENSE). It is built for the open-source community to push the boundaries of what autonomous agent architectures can achieve.
