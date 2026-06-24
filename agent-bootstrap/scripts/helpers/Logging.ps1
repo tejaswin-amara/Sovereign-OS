@@ -1,4 +1,5 @@
 # C:/Skills/agent-bootstrap/scripts/helpers/Logging.ps1
+Set-StrictMode -Version Latest
 
 if (-not (Get-Variable -Name "SovereignLogDir" -Scope "Script" -ErrorAction SilentlyContinue)) {
     $script:SovereignLogDir = "$PSScriptRoot/../../../LOGS"

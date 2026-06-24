@@ -1,6 +1,7 @@
 # OmniSearch.ps1 - Autonomous Internet Routing Engine
 # Purpose: Dynamically route failed queries or errors directly to the internet (via Exa, Jina, or gh CLI)
 # to autonomously fetch solutions.
+Set-StrictMode -Version Latest
 
 function Invoke-OmniSearch {
     [CmdletBinding()]
@@ -22,7 +23,11 @@ function Invoke-OmniSearch {
         # Fallback to pure curl via Jina Reader if AgentReach isn't installed
         $JinaURL = "https://s.jina.ai/" + [uri]::EscapeDataString($Query)
         try {
-            $Result = curl.exe -s $JinaURL
+            if (Get-Command curl.exe -ErrorAction SilentlyContinue) {
+                $Result = curl.exe -s $JinaURL
+            } else {
+                $Result = Invoke-RestMethod -Uri $JinaURL -UseBasicParsing
+            }
             return $Result
         } catch {
             return $null

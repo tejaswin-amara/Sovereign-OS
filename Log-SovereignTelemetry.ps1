@@ -12,6 +12,8 @@ param(
     [decimal]$EstimatedCost
 )
 
+Set-StrictMode -Version Latest
+
 $LogsDir = "C:\Skills\LOGS"
 if (-Not (Test-Path $LogsDir)) {
     New-Item -ItemType Directory -Path $LogsDir | Out-Null
@@ -34,7 +36,7 @@ CREATE TABLE IF NOT EXISTS token_usage (
 if (Get-Command sqlite3 -ErrorAction SilentlyContinue) {
     $InitSql | sqlite3 $DbPath
     $InsertSql | sqlite3 $DbPath
-    Write-Host "Telemetry logged successfully to SQLite ($DbPath)"
+    Write-Information "Telemetry logged successfully to SQLite ($DbPath)" -InformationAction Continue
 } else {
     $CsvPath = Join-Path $LogsDir "telemetry.csv"
     if (-Not (Test-Path $CsvPath)) {
@@ -42,5 +44,5 @@ if (Get-Command sqlite3 -ErrorAction SilentlyContinue) {
     }
     $Date = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
     "$Date,$AgentId,$PromptTokens,$CompletionTokens,$EstimatedCost" | Out-File $CsvPath -Append -Encoding utf8
-    Write-Host "Telemetry logged successfully to CSV Fallback ($CsvPath)"
+    Write-Information "Telemetry logged successfully to CSV Fallback ($CsvPath)" -InformationAction Continue
 }

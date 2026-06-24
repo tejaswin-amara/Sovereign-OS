@@ -1,4 +1,4 @@
-# sovereign.ps1 - The Sovereign Master Controller (v14.0.0-CloudNative)
+﻿# sovereign.ps1 - The Sovereign Master Controller (v14.0.0-CloudNative)
 # Purpose: Unified Orchestrator with OS-level Locking, Phase-Gated Execution, and State Reconciliation.
 # Location: C:/Skills/sovereign.ps1
 
@@ -95,6 +95,7 @@ if (Test-Path $AgentDir) {
 $Mutex = $null
 
 try {
+    $ExecutionStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
     # Lock acquisition INSIDE try block — guarantees finally cleanup
     $Mutex = Start-SovereignLock -LockFile $LockFile -TimeoutSeconds 30
     Write-SovereignLog -Level "INFO" -Step "MUTEX" -Message "OS-Level Lock Acquired."
@@ -274,6 +275,18 @@ try {
     if ($Mutex) {
         Stop-SovereignLock -LockFile $LockFile -Mutex $Mutex
         Write-SovereignLog -Level "INFO" -Step "MUTEX" -Message "Lock released."
+    }
+
+    if ($null -ne $ExecutionStopwatch) {
+        $ExecutionStopwatch.Stop()
+        $ElapsedMs = $ExecutionStopwatch.ElapsedMilliseconds
+        $EstimatedCost = ($ElapsedMs / 1000) * 0.00001 # Minimal heuristic cost
+        
+        Write-SovereignLog -Level "INFO" -Step "TELEMETRY" -Message "Execution finished in $ElapsedMs ms. Pushing to telemetry store."
+        $TelemetryScript = "$SovereignRoot/Log-SovereignTelemetry.ps1"
+        if (Test-Path $TelemetryScript) {
+            & $TelemetryScript -AgentId "Sovereign-Master" -PromptTokens 0 -CompletionTokens 0 -EstimatedCost $EstimatedCost
+        }
     }
 }
 

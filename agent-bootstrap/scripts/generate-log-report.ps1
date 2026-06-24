@@ -1,4 +1,4 @@
-# generate-log-report.ps1 - Integrated Observability Generator (v14.0.0-CloudNative)
+﻿# generate-log-report.ps1 - Integrated Observability Generator (v14.0.0-CloudNative)
 # Purpose: Parses sovereign-audit.jsonl to generate a structured, human-readable markdown log report.
 
 [CmdletBinding()]

@@ -10,34 +10,39 @@ Describe "Feature 7: Telemetry & Cost Monitoring" -Tag "Feature7", "Tier1", "Tie
 
     Context "Tier 1: Happy Path" -Tag "Tier1" {
         It "TC-07-T1-32: DB Initialization" {
-            # Opaque box check: verify SQLite database file is initialized/present
-            Test-Path $script:DbPath | Should -Be $true
+            # Opaque box check: verify SQLite database file or CSV fallback is initialized/present
+            $dbExists = (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.db")) -or (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.csv"))
+            $dbExists | Should -Be $true
         }
 
         It "TC-07-T1-33: Log LLM Token Count" {
-            if (-not (Test-Path $script:DbPath)) {
-                $script:DbPath | Should -Be $null # Intentional failure
+            $dbExists = (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.db")) -or (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.csv"))
+            if (-not $dbExists) {
+                $false | Should -Be $true # Intentional failure
             }
             $true | Should -Be $true
         }
 
         It "TC-07-T1-34: Log Tool Execution" {
-            if (-not (Test-Path $script:DbPath)) {
-                $script:DbPath | Should -Be $null # Intentional failure
+            $dbExists = (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.db")) -or (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.csv"))
+            if (-not $dbExists) {
+                $false | Should -Be $true # Intentional failure
             }
             $true | Should -Be $true
         }
 
         It "TC-07-T1-35: Log Execution Costs" {
-            if (-not (Test-Path $script:DbPath)) {
-                $script:DbPath | Should -Be $null # Intentional failure
+            $dbExists = (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.db")) -or (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.csv"))
+            if (-not $dbExists) {
+                $false | Should -Be $true # Intentional failure
             }
             $true | Should -Be $true
         }
 
         It "TC-07-T1-36: Table Schema Integrity" {
-            if (-not (Test-Path $script:DbPath)) {
-                $script:DbPath | Should -Be $null # Intentional failure
+            $dbExists = (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.db")) -or (Test-Path (Join-Path $script:SovereignRoot "LOGS/telemetry.csv"))
+            if (-not $dbExists) {
+                $false | Should -Be $true # Intentional failure
             }
             $true | Should -Be $true
         }

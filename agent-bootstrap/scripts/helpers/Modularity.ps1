@@ -1,10 +1,12 @@
 # C:/Skills/agent-bootstrap/scripts/helpers/Modularity.ps1
+Set-StrictMode -Version Latest
 
 function Assert-ModuleCap {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
         [string]$AgentDir,
+        [Parameter(Mandatory = $false)]
         [int]$Cap = 0
     )
 

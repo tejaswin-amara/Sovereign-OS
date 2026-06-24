@@ -1,4 +1,5 @@
 # C:/Skills/agent-bootstrap/scripts/helpers/Troubleshooting.ps1
+Set-StrictMode -Version Latest
 
 function Invoke-SovereignInternetDiagnostic {
     [CmdletBinding()]
@@ -24,7 +25,11 @@ function Invoke-SovereignInternetDiagnostic {
         $Url = "https://r.jina.ai/https://html.duckduckgo.com/html/?q=$EncodedQuery"
         
         # Use simple curl.exe for maximum reliability and bypass of PS-specific invoke-restmethod bugs
-        $Result = curl.exe -s --max-time 15 $Url
+        if (Get-Command curl.exe -ErrorAction SilentlyContinue) {
+            $Result = curl.exe -s --max-time 15 $Url
+        } else {
+            $Result = Invoke-RestMethod -Uri $Url -TimeoutSec 15 -UseBasicParsing
+        }
         
         if ($Result) {
             # Take only the top 40 lines of markdown to avoid massive context bloat

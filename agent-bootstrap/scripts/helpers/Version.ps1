@@ -1,4 +1,5 @@
 # C:/Skills/agent-bootstrap/scripts/helpers/Version.ps1
+Set-StrictMode -Version Latest
 
 function Get-SovereignVersion {
     [CmdletBinding()]

@@ -73,8 +73,9 @@ Sovereign operates entirely headless. Every script, module, and rule is rigorous
 
 ### 4. Advanced Tooling & Telemetry
 - **Dynamic Config Updaters:** Natively append new skills to the schema without breaking JSON structure using `Add-SovereignSkill.ps1`.
-- **SQLite Telemetry Logging:** Real-time token usage and API cost tracking is funneled directly into `LOGS/telemetry.db` via `Log-SovereignTelemetry.ps1`.
-- **CI/CD & Containerization:** Sovereign ships with a highly optimized, Ubuntu-based `Dockerfile` and automated `ci.yml` GitHub Actions pipeline. Every commit executes the `.git/hooks/pre-commit` passing the internal `Invoke-Pester` suite.
+- **SQLite Telemetry Logging:** Real-time token usage and API cost tracking is funneled directly into `LOGS/telemetry.db` via `Log-SovereignTelemetry.ps1`, with a graceful CSV fallback.
+- **CI/CD & Containerization:** Sovereign ships with a highly optimized, Ubuntu-based `Dockerfile`, `docker-compose.yml` for local offline LLM orchestration, and an automated `ci.yml` GitHub Actions pipeline. Every commit executes the `.git/hooks/pre-commit` passing the internal `Invoke-Pester` suite.
+- **100% Pester Test Stability:** The OS architecture is rigorously validated by a 132-test Pester suite verifying every internal boundary, module cap, and hook failure condition.
 
 ---
 

@@ -4,9 +4,9 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-Write-Host "[INIT]    Syncing git skill repositories in parallel..." -ForegroundColor Cyan
+Write-Information "[INIT]    Syncing git skill repositories in parallel..." -InformationAction Continue
 
-$Dirs = Get-ChildItem -Path "C:\Skills" -Directory | Where-Object { 
+$Dirs = Get-ChildItem -Path "C:\Skills" -Directory | Where-Object {
     $_.Name -notmatch "^\." -and $_.Name -ne "agent-bootstrap" -and (Test-Path "$($_.FullName)\.git")
 }
 
@@ -14,19 +14,19 @@ $results = $Dirs | ForEach-Object -Parallel {
     $repoName = $_.Name
     $repoPath = $_.FullName
     $isShallow = Test-Path "$repoPath\.git\shallow"
-    
+
     $ExitCode = 0
     try {
         if ($isShallow) {
             git -C $repoPath fetch --unshallow 2>&1 | Out-Null
         }
-        
-        $PullOutput = git -C $repoPath pull --ff-only 2>&1
+
+        git -C $repoPath pull --ff-only 2>&1 | Out-Null
         $ExitCode = $LASTEXITCODE
     } catch {
         $ExitCode = 1
     }
-    
+
     [PSCustomObject]@{
         Name = $repoName
         Success = ($ExitCode -eq 0)
@@ -36,12 +36,12 @@ $results = $Dirs | ForEach-Object -Parallel {
 $UpdatedCount = @($results | Where-Object { $_.Success }).Count
 $FailedCount = @($results | Where-Object { -not $_.Success }).Count
 
-Write-Host "[SYNC]    Refresh complete. Synced: $UpdatedCount, Failed: $FailedCount" -ForegroundColor Cyan
+Write-Information "[SYNC]    Refresh complete. Synced: $UpdatedCount, Failed: $FailedCount" -InformationAction Continue
 
-Write-Host "[EXEC]    Running Sovereign Master Controller..." -ForegroundColor Cyan
+Write-Information "[EXEC]    Running Sovereign Master Controller..." -InformationAction Continue
 pwsh -NoProfile -ExecutionPolicy Bypass -File "C:\Skills\sovereign.ps1" -ProjectPath "C:\Skills"
 if ($LASTEXITCODE -ne 0) { throw "sovereign.ps1 failed with exit code $LASTEXITCODE" }
 pwsh -NoProfile -ExecutionPolicy Bypass -File "C:\Skills\sovereign-check.ps1" -ProjectPath "C:\Skills"
 if ($LASTEXITCODE -ne 0) { throw "sovereign-check.ps1 failed with exit code $LASTEXITCODE" }
 
-Write-Host "[DONE]    Sovereign v14.0.0-CloudNative Online." -ForegroundColor Cyan
+Write-Information "[DONE]    Sovereign v14.0.0-CloudNative Online." -InformationAction Continue

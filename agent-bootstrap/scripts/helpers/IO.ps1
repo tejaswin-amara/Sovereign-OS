@@ -1,4 +1,5 @@
 # C:/Skills/agent-bootstrap/scripts/helpers/IO.ps1
+Set-StrictMode -Version Latest
 
 function Invoke-AtomicMove {
     [CmdletBinding()]

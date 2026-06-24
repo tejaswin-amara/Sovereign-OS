@@ -1,4 +1,5 @@
 # C:/Skills/agent-bootstrap/scripts/helpers/Configuration.ps1
+Set-StrictMode -Version Latest
 
 function Get-SovereignConfig {
     [CmdletBinding()]
@@ -60,23 +61,12 @@ function Assert-SovereignConfigIntegrity {
         throw "CONFIG_MISSING: sovereign.config.json is missing!"
     }
 
-    $FileBytes = [System.IO.File]::ReadAllBytes($ConfigPath)
-    $Sha256 = [System.Security.Cryptography.SHA256]::Create()
-    try {
-        $HashBytes = $Sha256.ComputeHash($FileBytes)
-    } finally {
-        $Sha256.Dispose()
-    }
-    $CurrentHash = [System.BitConverter]::ToString($HashBytes).Replace("-", "").ToLower()
+    $CurrentHash = Get-SovereignFileHash -FilePath $ConfigPath
 
     if (-not (Test-Path $HashPath)) {
         Write-SovereignLog -Level "WARN" -Step "INTEGRITY" -Message "Initializing config checksum at $HashPath"
         
-        # DPAPI Encrypt
-        Add-Type -AssemblyName System.Security
-        $HashStringBytes = [System.Text.Encoding]::UTF8.GetBytes($CurrentHash)
-        $EncryptedBytes = [System.Security.Cryptography.ProtectedData]::Protect($HashStringBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
-        $EncryptedBase64 = [Convert]::ToBase64String($EncryptedBytes)
+        $EncryptedBase64 = Protect-SovereignHash -Hash $CurrentHash
 
         [System.IO.File]::WriteAllText($HashPath, $EncryptedBase64)
         Set-ItemProperty -Path $HashPath -Name IsReadOnly -Value $true -ErrorAction SilentlyContinue

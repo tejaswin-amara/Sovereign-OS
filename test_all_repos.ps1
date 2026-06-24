@@ -1,17 +1,18 @@
 # test_all_repos.ps1
 # Exhaustively tests every single parameter of the cloud integration framework across all mapped repos.
 
+Set-StrictMode -Version Latest
 $ErrorActionPreference = "Continue"
 $SovereignRoot = $PSScriptRoot
 
-Write-Host "=========================================" -ForegroundColor Cyan
-Write-Host " INTEGRATION TEST SWEEP " -ForegroundColor Cyan
-Write-Host "=========================================" -ForegroundColor Cyan
+Write-Information -InformationAction Continue "=========================================" -ForegroundColor Cyan
+Write-Information -InformationAction Continue " INTEGRATION TEST SWEEP " -ForegroundColor Cyan
+Write-Information -InformationAction Continue "=========================================" -ForegroundColor Cyan
 
 # Parse config
 $ConfigPath = "$SovereignRoot/sovereign.config.json"
 if (-not (Test-Path $ConfigPath)) {
-    Write-Host "FATAL: Config file missing." -ForegroundColor Red
+    Write-Information -InformationAction Continue "FATAL: Config file missing." -ForegroundColor Red
     exit 1
 }
 
@@ -26,7 +27,7 @@ foreach ($Property in $Mappings.psobject.properties) {
     }
 }
 
-Write-Host "Found $($UniqueRepos.Count) unique repositories to test." -ForegroundColor Cyan
+Write-Information -InformationAction Continue "Found $($UniqueRepos.Count) unique repositories to test." -ForegroundColor Cyan
 
 # Report generation
 $ReportPath = "$SovereignRoot/integration_test_report.md"
@@ -39,7 +40,7 @@ $FailCount = 0
 $SuccessCount = 0
 
 foreach ($Repo in $UniqueRepos) {
-    Write-Host "`nTesting Repository: $Repo" -ForegroundColor Yellow
+    Write-Information -InformationAction Continue "`nTesting Repository: $Repo" -ForegroundColor Yellow
     $RepoName = $Repo.Split('/')[-1]
     $CachePath = "$SovereignRoot/.cloud-cache/$RepoName"
     $FetchStatus = "FAIL"
@@ -47,20 +48,20 @@ foreach ($Repo in $UniqueRepos) {
     $Details = ""
 
     # 1. Fetch
-    Write-Host "  -> Fetching $Repo..."
+    Write-Information -InformationAction Continue "  -> Fetching $Repo..."
     $FetchOutput = & pwsh -ExecutionPolicy Bypass -File "$SovereignRoot/agent-bootstrap/scripts/Fetch-CloudSkill.ps1" -Repo $Repo 2>&1
     
     if (Test-Path $CachePath) {
         $FetchStatus = "PASS"
-        Write-Host "  [+] Fetch successful." -ForegroundColor Green
+        Write-Information -InformationAction Continue "  [+] Fetch successful." -ForegroundColor Green
         
         # 2. Validate
-        Write-Host "  -> Validating parameters..."
+        Write-Information -InformationAction Continue "  -> Validating parameters..."
         try {
             $ValidateOutput = & pwsh -ExecutionPolicy Bypass -File "$SovereignRoot/agent-bootstrap/scripts/validate-skill.ps1" -Skill $CachePath 2>&1
             if ($LASTEXITCODE -eq 0 -or $ValidateOutput -match "validated successfully") {
                 $ValidateStatus = "PASS"
-                Write-Host "  [+] Validation passed." -ForegroundColor Green
+                Write-Information -InformationAction Continue "  [+] Validation passed." -ForegroundColor Green
                 $Warnings = ($ValidateOutput | Where-Object { $_ -match "\[WARN\]" }) -join "; "
                 if ($Warnings) {
                     $Details = "Warnings: $Warnings"
@@ -69,17 +70,17 @@ foreach ($Repo in $UniqueRepos) {
                 }
             } else {
                 $ValidateStatus = "FAIL"
-                Write-Host "  [-] Validation failed." -ForegroundColor Red
+                Write-Information -InformationAction Continue "  [-] Validation failed." -ForegroundColor Red
                 $Errors = ($ValidateOutput | Where-Object { $_ -match "\[ERROR\]" -or $_ -match "Exception" }) -join "; "
                 $Details = "Errors: $Errors"
             }
         } catch {
             $ValidateStatus = "FAIL"
-            Write-Host "  [-] Validation crashed." -ForegroundColor Red
+            Write-Information -InformationAction Continue "  [-] Validation crashed." -ForegroundColor Red
             $Details = "Crash: $_"
         }
     } else {
-        Write-Host "  [-] Fetch failed." -ForegroundColor Red
+        Write-Information -InformationAction Continue "  [-] Fetch failed." -ForegroundColor Red
         $Details = "Fetch output: $FetchOutput"
     }
 
@@ -92,7 +93,7 @@ foreach ($Repo in $UniqueRepos) {
     "| $Repo | $FetchStatus | $ValidateStatus | $Details |" | Out-File -FilePath $ReportPath -Encoding utf8 -Append
 }
 
-Write-Host "`n=========================================" -ForegroundColor Cyan
-Write-Host " SWEEP COMPLETE. Passes: $SuccessCount, Fails: $FailCount" -ForegroundColor Cyan
-Write-Host " Report written to: $ReportPath" -ForegroundColor Cyan
-Write-Host "=========================================" -ForegroundColor Cyan
+Write-Information -InformationAction Continue "`n=========================================" -ForegroundColor Cyan
+Write-Information -InformationAction Continue " SWEEP COMPLETE. Passes: $SuccessCount, Fails: $FailCount" -ForegroundColor Cyan
+Write-Information -InformationAction Continue " Report written to: $ReportPath" -ForegroundColor Cyan
+Write-Information -InformationAction Continue "=========================================" -ForegroundColor Cyan

@@ -6,6 +6,8 @@ param(
     [string]$PackageName
 )
 
+Set-StrictMode -Version Latest
+
 if ([string]::IsNullOrEmpty($PackageName)) {
     $CleanRepo = $Repo.TrimEnd('/','\')
     $PackageName = ($CleanRepo -split '[/\\]')[-1]
@@ -18,7 +20,7 @@ if (-Not (Test-Path $ConfigFile)) {
     exit 1
 }
 
-$Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json -Depth 10
+$Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
 
 # Validate repo format: must be in the format 'owner/repo'
 if ($Repo -notmatch '^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$') {
@@ -49,11 +51,18 @@ $Config.dep_to_skill_map | Add-Member -MemberType NoteProperty -Name $PackageNam
 $JsonOutput = ConvertTo-Json $Config -Depth 10
 $JsonOutput = $JsonOutput -replace '\\u003e', '>'
 
-Set-Content -Path $ConfigFile -Value $JsonOutput
+Set-Content -Path $ConfigFile -Value $JsonOutput -Force
 
-Write-Host "Successfully injected '$PackageName' -> '$Repo' into sovereign.config.json"
+Write-Information "Successfully injected '$PackageName' -> '$Repo' into sovereign.config.json" -InformationAction Continue
 
 # Trigger checksum update if it exists
 if (Test-Path "C:\Skills\agent-bootstrap\scripts\update-checksum.ps1") {
-    pwsh -File "C:\Skills\agent-bootstrap\scripts\update-checksum.ps1"
+    pwsh -NoProfile -File "C:\Skills\agent-bootstrap\scripts\update-checksum.ps1"
+}
+
+# Automatically fetch the cloud skill to local cache
+$FetchScript = "C:\Skills\agent-bootstrap\scripts\Fetch-CloudSkill.ps1"
+if (Test-Path $FetchScript) {
+    Write-Information "Auto-fetching dependency '$Repo'..." -InformationAction Continue
+    pwsh -NoProfile -File $FetchScript -Repo $Repo
 }

@@ -3,8 +3,10 @@ param(
     [switch]$VerboseOutput
 )
 
-Write-Host "Initializing Sovereign Multi-Agent Swarm..." -ForegroundColor Cyan
-Write-Host "Framework: LangGraph / CrewAI"
+Set-StrictMode -Version Latest
+
+Write-Information -InformationAction Continue "Initializing Sovereign Multi-Agent Swarm..." -ForegroundColor Cyan
+Write-Information -InformationAction Continue "Framework: LangGraph / CrewAI"
 
 # Dummy logic to represent swarm orchestration
 $Agents = @(
@@ -14,13 +16,13 @@ $Agents = @(
 )
 
 foreach ($Agent in $Agents) {
-    Write-Host "Waking up node: $Agent"
+    Write-Information -InformationAction Continue "Waking up node: $Agent"
     Start-Sleep -Milliseconds 200
 }
 
-Write-Host "Delegating task: '$Task'" -ForegroundColor Yellow
+Write-Information -InformationAction Continue "Delegating task: '$Task'" -ForegroundColor Yellow
 
 # Execute pseudo-LangGraph sequence
 Start-Sleep -Seconds 1
-Write-Host "Swarm processing complete. Synchronizing artifacts..." -ForegroundColor Green
-Write-Host "Task finished successfully."
+Write-Information -InformationAction Continue "Swarm processing complete. Synchronizing artifacts..." -ForegroundColor Green
+Write-Information -InformationAction Continue "Task finished successfully."

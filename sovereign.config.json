@@ -228,6 +228,10 @@
     "smolagents": "huggingface/smolagents",
     "cline": "cline/cline",
     "dummy": "dummy/test",
-    "inferred-package": "test/inferred-package"
+    "inferred-package": "test/inferred-package",
+    "testrepo": "testorg/testrepo"
+  },
+  "sandbox": {
+    "enabled": true
   }
 }

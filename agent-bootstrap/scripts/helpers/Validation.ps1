@@ -1,4 +1,5 @@
 # C:/Skills/agent-bootstrap/scripts/helpers/Validation.ps1
+Set-StrictMode -Version Latest
 
 function Assert-SovereignPattern {
     [CmdletBinding()]

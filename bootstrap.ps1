@@ -24,7 +24,6 @@ try {
     $ResolvedProject = (Resolve-Path $ProjectPath -ErrorAction SilentlyContinue).Path
     if (-not $ResolvedProject) { $ResolvedProject = $ProjectPath }
 
-    $Version = Get-SovereignVersion -SkillsRoot $SovereignPath
     $Config = Get-SovereignConfig
     if (-not $Config) {
         throw "sovereign.config.json MISSING or CORRUPT at $SovereignPath. Cannot bootstrap."
@@ -70,7 +69,7 @@ try {
     if (Test-Path $WorkflowsDir) {
         Remove-Item $WorkflowsDir -Force -Recurse -ErrorAction SilentlyContinue
     }
-    
+
     try {
         New-Item -ItemType Junction -Path $RulesDir -Value "$TemplatesSource/rules" -ErrorAction Stop | Out-Null
         New-Item -ItemType Junction -Path $WorkflowsDir -Value "$TemplatesSource/workflows" -ErrorAction Stop | Out-Null
@@ -105,7 +104,7 @@ try {
                 if ($CurrentContent -and ($CurrentContent.Trim() -eq $ProcessedNew.Trim() -or $CurrentContent.Trim() -eq $NewContent.Trim())) {
                     $Equal = $true
                 }
-            } catch {}
+            } catch { Write-Verbose "Duplicate check failed: $_" }
             if (-not $Equal) {
                 $BackupFile = "$DestFile.bak"
                 Copy-Item $DestFile $BackupFile -Force

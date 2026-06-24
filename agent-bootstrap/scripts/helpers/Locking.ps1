@@ -1,4 +1,5 @@
 # C:/Skills/agent-bootstrap/scripts/helpers/Locking.ps1
+Set-StrictMode -Version Latest
 
 function Start-SovereignLock {
     [CmdletBinding()]
@@ -37,8 +38,7 @@ function Stop-SovereignLock {
     [CmdletBinding()]
     param(
         [string]$LockFile,
-        [System.Threading.Mutex]$Mutex = $null,
-        [System.IO.FileStream]$LockStream = $null # Kept for backwards compatibility
+        [System.Threading.Mutex]$Mutex = $null
     )
     if ($Mutex) {
         try {
@@ -46,12 +46,6 @@ function Stop-SovereignLock {
             $Mutex.Dispose()
         } catch {
             Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Failed to dispose mutex: $($_.Exception.Message)"
-        }
-    } elseif ($LockStream) {
-        try {
-            $LockStream.Dispose()
-        } catch {
-            Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Failed to dispose legacy lock stream: $($_.Exception.Message)"
         }
     }
     

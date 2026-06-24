@@ -1,4 +1,25 @@
 # C:/Skills/agent-bootstrap/scripts/helpers/Checksum.ps1
+Set-StrictMode -Version Latest
+
+function Get-SovereignFileHash {
+    param([string]$FilePath)
+    $FileBytes = [System.IO.File]::ReadAllBytes($FilePath)
+    $Sha256 = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $HashBytes = $Sha256.ComputeHash($FileBytes)
+    } finally {
+        $Sha256.Dispose()
+    }
+    return [System.BitConverter]::ToString($HashBytes).Replace("-", "").ToLower()
+}
+
+function Protect-SovereignHash {
+    param([string]$Hash)
+    Add-Type -AssemblyName System.Security
+    $HashStringBytes = [System.Text.Encoding]::UTF8.GetBytes($Hash)
+    $EncryptedBytes = [System.Security.Cryptography.ProtectedData]::Protect($HashStringBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+    return [Convert]::ToBase64String($EncryptedBytes)
+}
 
 function Update-SovereignChecksum {
     [CmdletBinding()]
@@ -15,21 +36,8 @@ function Update-SovereignChecksum {
         Set-ItemProperty -Path $HashPath -Name IsReadOnly -Value $false -ErrorAction SilentlyContinue
     }
     
-    $FileBytes = [System.IO.File]::ReadAllBytes($ConfigPath)
-    $Sha256 = [System.Security.Cryptography.SHA256]::Create()
-    try {
-        $HashBytes = $Sha256.ComputeHash($FileBytes)
-    } finally {
-        $Sha256.Dispose()
-    }
-    
-    $CurrentHash = [System.BitConverter]::ToString($HashBytes).Replace("-", "").ToLower()
-    
-    # SECURITY: Use DPAPI to encrypt the hash so it cannot be tampered with by other users/processes easily
-    Add-Type -AssemblyName System.Security
-    $HashStringBytes = [System.Text.Encoding]::UTF8.GetBytes($CurrentHash)
-    $EncryptedBytes = [System.Security.Cryptography.ProtectedData]::Protect($HashStringBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
-    $EncryptedBase64 = [Convert]::ToBase64String($EncryptedBytes)
+    $CurrentHash = Get-SovereignFileHash -FilePath $ConfigPath
+    $EncryptedBase64 = Protect-SovereignHash -Hash $CurrentHash
 
     [System.IO.File]::WriteAllText($HashPath, $EncryptedBase64)
     Set-ItemProperty -Path $HashPath -Name IsReadOnly -Value $true -ErrorAction SilentlyContinue

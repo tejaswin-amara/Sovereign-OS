@@ -14,6 +14,7 @@ $HelperFiles = @(
     "Validation.ps1"
     "OmniSearch.ps1"
     "Troubleshooting.ps1"
+    "Evolution.ps1"
 )
 
 foreach ($File in $HelperFiles) {
@@ -29,6 +30,9 @@ Export-ModuleMember -Function @(
     'Write-SovereignLog',
     'Start-SovereignLock',
     'Stop-SovereignLock',
+    'Test-SovereignDrift',
+    'Get-SovereignSkillGaps',
+    'Write-SovereignEvolutionReport',
     'Test-SovereignIntegrity',
     'Assert-ModuleCap',
     'Invoke-AtomicMove',
