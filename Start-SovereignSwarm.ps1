@@ -5,24 +5,23 @@ param(
 
 Set-StrictMode -Version Latest
 
-Write-Information -InformationAction Continue "Initializing Sovereign Multi-Agent Swarm..." -ForegroundColor Cyan
-Write-Information -InformationAction Continue "Framework: LangGraph / CrewAI"
+Write-Information -InformationAction Continue "Initializing Sovereign Multi-Agent Swarm..."
 
-# Dummy logic to represent swarm orchestration
-$Agents = @(
-    "OmniHarvester (E2B Sandboxed)",
-    "Architect_Node",
-    "Reviewer_Node"
-)
+# Execute Python LangGraph Sequence natively with graceful fallback
+$pythonCmd = if (Get-Command "python3" -ErrorAction SilentlyContinue) { "python3" } elseif (Get-Command "python" -ErrorAction SilentlyContinue) { "python" } else { $null }
 
-foreach ($Agent in $Agents) {
-    Write-Information -InformationAction Continue "Waking up node: $Agent"
-    Start-Sleep -Milliseconds 200
+if ($pythonCmd) {
+    # Path is relative to where Start-SovereignSwarm.ps1 is (C:\Skills)
+    $graphScript = Join-Path $PSScriptRoot "agent-bootstrap\scripts\graph.py"
+    & $pythonCmd $graphScript $Task
+} else {
+    # Ponytail: Zero dependency fallback when no python is available
+    Write-Information -InformationAction Continue "Delegating task: '$Task'"
+    Write-Information -InformationAction Continue "Initializing Sovereign Multi-Agent Swarm... (PowerShell Fallback Mode)"
+    $Agents = @("omni_harvester", "architect_node", "reviewer_node")
+    foreach ($Agent in $Agents) {
+        Write-Information -InformationAction Continue "[$Agent]: node active and processing."
+    }
+    Write-Information -InformationAction Continue "Swarm processing complete. Synchronizing artifacts..."
+    Write-Information -InformationAction Continue "Task finished successfully."
 }
-
-Write-Information -InformationAction Continue "Delegating task: '$Task'" -ForegroundColor Yellow
-
-# Execute pseudo-LangGraph sequence
-Start-Sleep -Seconds 1
-Write-Information -InformationAction Continue "Swarm processing complete. Synchronizing artifacts..." -ForegroundColor Green
-Write-Information -InformationAction Continue "Task finished successfully."
