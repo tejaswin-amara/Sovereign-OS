@@ -25,7 +25,14 @@ $CoreRepos = @(
     "https://github.com/apify/crawlee",
     "https://github.com/mendableai/firecrawl",
     "https://github.com/e2b-dev/E2B",
-    "https://github.com/BerriAI/litellm"
+    "https://github.com/BerriAI/litellm",
+    "https://github.com/microsoft/playwright",
+    "https://github.com/puppeteer/puppeteer",
+    "https://github.com/scrapy/scrapy",
+    "https://github.com/OpenInterpreter/open-interpreter",
+    "https://github.com/microsoft/autogen",
+    "https://github.com/SeleniumHQ/selenium",
+    "https://github.com/geekan/MetaGPT"
 )
 
 foreach ($Url in $CoreRepos) {
