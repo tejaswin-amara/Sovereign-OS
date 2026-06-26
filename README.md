@@ -20,6 +20,7 @@ Agents do not rely solely on static code. They are authorized to dynamically fet
 
 ### 2. Omni-Reach (Internet Autonomy)
 The system possesses frictionless access to the global internet. Autonomous subagents (e.g., `Omni-Execution-Operative`) utilize Exa MCP, Browser MCP, and GitHub APIs to crawl, scrape, and extract intelligence flawlessly with zero human intervention.
+- **Core Automation Engines:** Fully integrated local copies of Playwright, Puppeteer, Scrapy, Selenium, Open-Interpreter, MetaGPT, and AutoGen for programmatic web automation.
 
 ### 3. Mass Deployment Optimization
 Designed for mass IoMT deployment, Sovereign OS is optimized to the absolute limit.
