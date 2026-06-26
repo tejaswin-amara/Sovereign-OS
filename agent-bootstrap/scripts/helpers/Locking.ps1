@@ -40,9 +40,14 @@ function Start-SovereignLock {
         }
     } catch {
         if ($_.Exception.GetType().Name -eq "AbandonedMutexException") {
-            # The mutex was abandoned by another process that exited without releasing it
-            Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Recovered abandoned mutex."
-            return $mutex
+            Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Abandoned mutex detected. Rotating to new namespace to prevent deadlock..."
+            $RotatedName = $MutexName + "_Rotated_" + [guid]::NewGuid().ToString().Substring(0,8)
+            $rotatedMutex = New-Object System.Threading.Mutex($false, $RotatedName)
+            if ($rotatedMutex.WaitOne([TimeSpan]::FromSeconds($TimeoutSeconds), $false)) {
+                return $rotatedMutex
+            } else {
+                throw "LOCK_TIMEOUT: Could not acquire rotated lock."
+            }
         } else {
             throw
         }

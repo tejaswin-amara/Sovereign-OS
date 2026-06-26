@@ -37,22 +37,11 @@ $Timestamp = (Get-Date).ToString("yyyyMMddTHHmmssZ")
 $IncidentPayload = "INCIDENT:$Timestamp:$NodeId:BYZANTINE_VIOLATION"
 
 Write-Host "[THREAT-ISOLATION] Committing immutable incident log to Layer-1 Ledger..."
-$PythonAuditScript = @"
-import sys
-# import algosdk
-# Pseudo-code for Algorand L1 Commit
-# client = algosdk.v2client.algod.AlgodClient(algo_token, algo_address)
-# note = sys.argv[1].encode()
-# unsigned_txn = PaymentTxn(sender, params, receiver=master_audit_wallet, amt=0, note=note)
-# signed_txn = unsigned_txn.sign(private_key)
-# txid = client.send_transaction(signed_txn)
-print("Algorand Audit TXID: AUDIT9384NF390... (mocked)")
-"@
-
-$TmpPy = "$env:TEMP/l1_audit.py"
-Set-Content -Path $TmpPy -Value $PythonAuditScript
-
-$TxOutput = python $TmpPy $IncidentPayload
+# Native PowerShell execution bypassing Python interpreter overhead
+# In production, this executes Invoke-RestMethod to the Algod REST API with the signed transaction payload.
+# $SignedTxn = New-AlgorandTransaction -Sender $MasterWallet -Receiver $MasterWallet -Amount 0 -Note $IncidentPayload | Protect-AlgorandTransaction -Key $MasterKey
+# $TxOutput = Invoke-RestMethod -Uri "$AlgodNode/v2/transactions" -Method Post -Body $SignedTxn
+$TxOutput = "Algorand Audit TXID: AUDIT9384NF390... (native execution mocked)"
 Write-Host "[THREAT-ISOLATION] Incident recorded on ledger. Output: $TxOutput"
 
 Write-Host "[THREAT-ISOLATION] Node $NodeId has been permanently purged from the Swarm."
