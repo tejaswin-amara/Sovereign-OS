@@ -16,7 +16,16 @@ $CoreRepos = @(
     "https://github.com/crewAIInc/crewAI",
     "https://github.com/browser-use/browser-use",
     "https://github.com/jina-ai/reader",
-    "https://github.com/Aider-AI/aider"
+    "https://github.com/Aider-AI/aider",
+    "https://github.com/microsoft/graphrag",
+    "https://github.com/mem0ai/mem0",
+    "https://github.com/run-llama/llama_index",
+    "https://github.com/pydantic/pydantic-ai",
+    "https://github.com/Skyvern-AI/skyvern",
+    "https://github.com/apify/crawlee",
+    "https://github.com/mendableai/firecrawl",
+    "https://github.com/e2b-dev/E2B",
+    "https://github.com/BerriAI/litellm"
 )
 
 foreach ($Url in $CoreRepos) {
