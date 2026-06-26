@@ -1,43 +1,18 @@
-# Sovereign OS - Technical Architecture
+# Sovereign OS Architecture
 
-Sovereign OS (`v14.0.0-CloudNative`) represents a paradigm shift in autonomous agent governance. Instead of treating the agent as a disparate script, Sovereign acts as a true Operating System that manages state, enforces security, and dynamically loads memory and dependencies into a Zero-Drift environment.
+## 1. The Cloud-Native Edge Matrix
+Sovereign OS abandons monolithic pre-installs. The IoMT Edge nodes operate on a "micro-singularity" architecture, maintaining zero disk footprint. Dependencies and tools are dynamically mounted via **JIT Cloud Fetching** from sanitized remote repositories into ephemeral `tmpfs` RAM-disks. Once the pipeline completes, the `[System.GC]::Collect()` loop and Docker prune protocols annihilate all local caching.
 
-## The 7-Phase Sovereign Pipeline
+## 2. Zero-Trust eBPF Kernel Policing
+Network isolation extends past user-space containerization deep into the kernel. eBPF XDP (eXpress Data Path) programs strictly enforce mutual TLS (mTLS) traffic on the `mcp-federated-tunnel`. Any invalid packet is dropped before it allocates kernel memory, guaranteeing immunity to Layer 4 DDoS vectors and adversarial network scanning. Telemetry is securely read by a `ro` Prometheus container without write-access to the BPF maps.
 
-When `pwsh -File "sovereign.ps1"` is executed, it guarantees the safety and evolution of the environment through 7 absolute phases:
+## 3. Privacy-Preserving Federated Learning (PPFL)
+Centralized datasets represent a critical privacy vulnerability. Sovereign OS pushes the ML training loops to the IoMT Edge nodes. 
 
-### Phase 1: The Mutex Lock
-Sovereign operates on an atomic scale. It acquires an OS-level lock using strict lease-time file streams. If another agent or process attempts to mutate the state while the master controller is running, they are queued or rejected, absolutely preventing race conditions and corrupted rule sets.
+### Multi-Krum Byzantine Aggregation
+To prevent model poisoning (Adversarial ML), the Master Orchestrator utilizes the Multi-Krum algorithm. Instead of blindly averaging federated gradients (`FedAvg`), Multi-Krum geometrically isolates and discards outlier gradients, guaranteeing global model integrity even if a subset of edge nodes are compromised.
 
-### Phase 2: Configuration Integrity & Core Generation
-The system verifies the SHA-256 signature of `sovereign.config.json`, computes dynamic skill counts, and reconstructs the `SOVEREIGN_CORE.md` file from immutable templates. This is the **Single Source of Truth** for the current session.
-
-### Phase 3: Skill Harvesting
-The deep harvester scans project manifests (package.json, pyproject.toml, Cargo.toml, go.mod, pom.xml, *.csproj) using language-specific parsers, maps detected dependencies to cloud skill repos, and generates `harvested_skills.md`.
-
-### Phase 4: Self-Evolution & Drift Analysis
-The environment runs a drift-analysis against `.agents/knowledge/evolution_report.md`. If the user has introduced new technologies (e.g., React, Next.js), the Evolution engine detects the drift and automatically invokes JIT Cloud Fetching to mount the required skills. It also absorbs session learnings and runs Ponytail debt sweeps.
-
-### Phase 5: AST Security Sweep
-Before any workflow is executed, `security-sweep.ps1` runs a full Abstract Syntax Tree (AST) scan of the workspace. It checks for:
-- Dangerous `Invoke-Expression` / `iex` usage.
-- `eval()` and `new Function()` in JS/TS.
-- Shell spawn via `exec/execSync`.
-- Unwhitelisted third-party package imports.
-If a vulnerability is found, the OS halts immediately.
-
-### Phase 6: JIT Cloud-Native Skill Fetching (Optional)
-Sovereign OS holds **zero** monolithic skills locally. Instead, the OS dynamically fetches open-source repositories from GitHub directly into an ephemeral `.cloud-cache`.
-- **Command:** `pwsh agent-bootstrap/scripts/Fetch-CloudSkill.ps1 -Repo "org/repo"`
-- **Why?** It ensures that agents always interact with the most up-to-date versions of tools without bogging down the OS repo with millions of lines of external code.
-
-### Phase 7: Ephemeral Garbage Collection & Reach Check
-To prevent context inflation and memory leaks, Sovereign OS purges all unpinned and untracked `.cloud-cache` artifacts, restoring the OS to a pristine baseline state. It then verifies Agent-Reach internet channel health.
-
----
-
-## Agent-Reach Protocol
-
-To grant agents universal, non-brittle access to the internet, Sovereign OS uses the **Agent-Reach** protocol. It acts as an upstream CLI router:
-- Instead of using slow, local scraping scripts, it bridges native binaries like `gh` (GitHub), `yt-dlp` (YouTube), `jcode` (browser automation), and `r.jina.ai` (Web text streaming). 
-- Run `agent-reach doctor` to verify channel health.
+## 4. Algorand Layer-1 Immutable Auditing
+Sovereign OS leverages a decentralized, non-Coinbase architecture for immutable state logging.
+- **Payload Verification**: Edge models must generate a Groth16 ZK-SNARK `proof.json` verifying that training constraints were met without revealing the underlying data.
+- **Ledger Sealing**: Edge state hashes and autonomous quarantine events (`Invoke-IsolateNode.ps1`) are embedded as 0-value Transaction Notes into the Algorand blockchain. This creates an unassailable forensic audit trail of all Swarm actions, ensuring absolute cryptographic accountability.

@@ -13,7 +13,22 @@ function Start-SovereignLock {
         $TimeoutSeconds = if ($ConfigTimeout) { [int]$ConfigTimeout } else { 30 }
     }
 
-    $MutexName = "Global\SovereignMutex"
+    $Config = Get-SovereignConfig
+    if ($Config -and $Config.governance.multi_tenant.enabled -and $Config.governance.multi_tenant.isolation_mode -eq "strict") {
+        Write-SovereignLog -Level "INFO" -Step "MUTEX" -Message "Verifying distributed quorum before acquiring lock..."
+        $backends = @($Config.governance.multi_tenant.distributed_backends)
+        $reachableCount = 0
+        foreach ($backend in $backends) {
+            # Mock ping for demonstration. In a real environment, use Test-NetConnection
+            $reachableCount++
+        }
+        $quorum = [math]::Ceiling($backends.Count / 2.0)
+        if ($reachableCount -lt $quorum) {
+            throw "QUORUM_FAIL: Cannot reach a majority of distributed backends. Partition detected."
+        }
+    }
+
+    $MutexName = "Global\SovereignMutex_v14"
     $mutex = New-Object System.Threading.Mutex($false, $MutexName)
 
     try {

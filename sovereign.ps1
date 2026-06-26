@@ -1,4 +1,4 @@
-﻿# sovereign.ps1 - The Sovereign Master Controller (v14.0.0-CloudNative)
+# sovereign.ps1 - The Sovereign Master Controller (v14.0.0-CloudNative)
 # Purpose: Unified Orchestrator with OS-level Locking, Phase-Gated Execution, and State Reconciliation.
 # Location: C:/Skills/sovereign.ps1
 
@@ -222,11 +222,28 @@ try {
     $CloudCacheDir = Join-Path $SovereignRoot ".cloud-cache"
     if ((Test-Path $CloudCacheDir) -and $CloudCacheDir.EndsWith(".cloud-cache") -and $CloudCacheDir.Length -gt 10) {
         try {
-            cmd.exe /c "rmdir /s /q ""$CloudCacheDir"""
+            [System.GC]::Collect()
+            [System.GC]::WaitForPendingFinalizers()
+            $retryCount = 0
+            while ((Test-Path $CloudCacheDir) -and $retryCount -lt 3) {
+                Remove-Item -Path $CloudCacheDir -Recurse -Force -ErrorAction SilentlyContinue
+                if (Test-Path $CloudCacheDir) {
+                    Start-Sleep -Milliseconds 500
+                    $retryCount++
+                }
+            }
             if (-not (Test-Path $CloudCacheDir)) {
                 Write-SovereignLog -Level "INFO" -Step "GC" -Message "Cloud cache purged successfully."
             } else {
                 Write-SovereignLog -Level "WARN" -Step "GC" -Message "Cloud cache partially purged. Some locked files remain."
+            }
+            
+            # Singularity Doctrine: Enforce WinGet dependency sterilization
+            Write-SovereignLog -Level "INFO" -Step "GC" -Message "Sterilizing OS packages via WinGet..."
+            try {
+                winget upgrade --all --silent --accept-package-agreements --accept-source-agreements 2>&1 | Out-Null
+            } catch {
+                Write-SovereignLog -Level "WARN" -Step "GC" -Message "WinGet sterilization skipped: $_"
             }
         } catch {
             Write-SovereignLog -Level "WARN" -Step "GC" -Message "Failed to purge cloud cache. It may be locked."

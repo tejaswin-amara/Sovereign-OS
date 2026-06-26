@@ -28,7 +28,7 @@ try {
     $Manifest = Get-Content $ManifestPath -Raw | ConvertFrom-Json
 
     # --- LOAD LEARNINGS ---
-    $Learnings = if (Test-Path $LearningsPath) { Get-Content $LearningsPath -Raw } else { "" }
+    $Learnings = if (Test-Path $LearningsPath) { Get-Content $LearningsPath -Raw } else { "No previous learnings found." }
     $LearningLines = ([regex]::Matches($Learnings, '\|.*?\|.*?\|.*?\|.*?\|')).Count
     $RecentAhas = if ($LearningLines -gt 1) { $LearningLines - 1 } else { 0 }
 

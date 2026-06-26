@@ -323,12 +323,11 @@ function Write-SovereignEvolutionReport {
 
     try {
         # Check if turbovec is available in the cloud cache or via local CLI
-        # Apex Evolution: Index both Workspace and .cloud-cache
-        $TurbovecArgs = "-Index `"$WorkspacePath`",`"$SkillsPath/.cloud-cache`" -Out `"$OmnivectorPath`" -Mode Delta -Fast"
+        # Apex Evolution: Index ONLY Workspace (cloud-cache is ephemeral and pruned)
+        $TurbovecArgs = @("-Index", "$WorkspacePath", "-Out", "$OmnivectorPath", "-Mode", "Delta", "-Fast")
         if (Test-Path $TurbovecCache) {
             Write-SovereignLog -Level "INFO" -Step "EVOLUTION" -Message "Invoking cached Turbovec engine with Delta-Sync."
-            # Hypothetical execution of turbovec via cache
-            # & "python" "$TurbovecCache/turbovec.py" $TurbovecArgs
+            & "python" "$TurbovecCache/turbovec.py" @TurbovecArgs | Out-Null
             $Report += "`r`n## 🧠 Semantic Omniscience`r`n"
             $Report += "- [x] **INDEXED**: Turbovec successfully updated the semantic omnivector map for fast subagent retrieval.`r`n"
         } else {

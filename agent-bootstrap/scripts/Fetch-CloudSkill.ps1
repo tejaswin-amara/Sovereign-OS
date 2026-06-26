@@ -55,8 +55,13 @@ if (Test-Path $TargetPath) {
 Write-Host "[FETCH] Mounting '$RepoName' via JIT Cloud Fetch..." -ForegroundColor Cyan
 try {
     # Blobless shallow clone for lightning fast fetching with security config parameters
-    git clone -c protocol.file.allow=never -c core.hooksPath=/dev/null --filter=blob:none --depth 1 $TargetUrl $TargetPath 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) { throw "Git clone failed with exit code $LASTEXITCODE" }
+    $timeoutSeconds = 60
+    $proc = Start-Process -FilePath "git" -ArgumentList "clone -c protocol.file.allow=never -c core.hooksPath=/dev/null --filter=blob:none --depth 1 $TargetUrl $TargetPath" -PassThru -NoNewWindow
+    if (-not $proc.WaitForExit($timeoutSeconds * 1000)) {
+        $proc.Kill()
+        throw "Git clone timed out after $timeoutSeconds seconds"
+    }
+    if ($proc.ExitCode -ne 0) { throw "Git clone failed with exit code $($proc.ExitCode)" }
     
     # Immediately drop the massive .git folder to save context space
     $GitFolder = Join-Path $TargetPath ".git"

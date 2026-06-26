@@ -86,15 +86,22 @@ foreach ($File in $Files) {
             if ($AstNode -is [System.Management.Automation.Language.CommandAst]) {
                 $cmd = $AstNode.GetCommandName()
                 if ($cmd -ieq "Invoke-Expression" -or $cmd -ieq "iex") { return $true }
+                if ($cmd -ieq "Invoke-Command" -or $cmd -ieq "icm") {
+                    if ($AstNode.Extent.Text -match "-ScriptBlock\s+[\$\(]") { return $true }
+                }
             }
             if ($AstNode -is [System.Management.Automation.Language.MemberExpressionAst]) {
                 $member = $AstNode.Member.Extent.Text
-                if ($member -match "Invoke" -or $member -match "Create") {
-                    if ($AstNode.Expression.Extent.Text -match "\[scriptblock\]") { return $true }
+                if ($member -match "Invoke" -or $member -match "Create" -or $member -match "Load") {
+                    $exprText = $AstNode.Expression.Extent.Text
+                    if ($exprText -match "\[scriptblock\]" -or $exprText -match "System\.Reflection\.Assembly") { return $true }
                 }
             }
             if ($AstNode -is [System.Management.Automation.Language.StringConstantExpressionAst]) {
                 if ($AstNode.Value -match "powershell.*-e(nc|ncoded)?\s+[A-Za-z0-9+/=]+") { return $true }
+            }
+            if ($AstNode -is [System.Management.Automation.Language.TypeExpressionAst]) {
+                if ($AstNode.TypeName.FullName -match "System\.Reflection\.Assembly") { return $true }
             }
             return $false
         }, $true)

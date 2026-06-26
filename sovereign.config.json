@@ -46,6 +46,20 @@
   },
   "governance": {
     "module_cap": 32,
+    "module_caps": {
+      "network": "restrictive",
+      "filesystem": "read-only-cloud",
+      "execution_bounds": "docker-only"
+    },
+    "multi_tenant": {
+      "enabled": true,
+      "tenant_id": "HQ-Alpha",
+      "isolation_mode": "strict",
+      "distributed_backends": [
+        "tcp://office-ny.sovereign.internal:5000",
+        "tcp://office-ldn.sovereign.internal:5000"
+      ]
+    },
     "skills_count": 2,
     "_skills_count_note": "DYNAMIC - overwritten by sovereign.ps1 at runtime. Never edit manually.",
     "lock_timeout_seconds": 30,
