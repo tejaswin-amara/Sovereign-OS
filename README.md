@@ -1,81 +1,46 @@
 <div align="center">
   
-# 🔱 Sovereign OS
-**The impenetrable, zero-drift, cloud-native nervous system for Privacy-Preserving Federated Learning (PPFL).**
+# 🔱 Sovereign OS (v14.0.0-CloudNative)
+**The ultra-optimized, autonomous execution environment for Privacy-Preserving Federated Learning (PPFL).**
 
 ![Version](https://img.shields.io/badge/version-v14.0.0--CloudNative-blue.svg?style=for-the-badge&logo=appveyor)
 ![Security](https://img.shields.io/badge/security-eBPF_XDP_Locked-red.svg?style=for-the-badge&logo=linux)
-![Ledger](https://img.shields.io/badge/ledger-Algorand_L1-black.svg?style=for-the-badge&logo=algorand)
 ![Architecture](https://img.shields.io/badge/architecture-Micro--Singularity-purple.svg?style=for-the-badge)
 
 </div>
 
 ---
 
-> Sovereign OS Abandons the monolithic edge. We operate a fully distributed, zero-trust swarm of Internet of Medical/Micro Things (IoMT) hardware, governed entirely by strict cryptographic and mathematical invariants.
+Sovereign OS Abandons the monolithic edge. It is a strictly governed, self-evolving swarm architecture designed exclusively around four absolute pillars.
 
-## ⚡ Core Directives
+## ⚡ The Four Pillars of the Sovereign Swarm
 
-### 1. The Singularity Doctrine (Zero-Drift)
-The host OS state is strictly **immutable**. All dynamic workloads, ML payload training, and dependencies are mounted into ephemeral `tmpfs` RAM-disks via **JIT Cloud Fetching**. Once a pipeline completes, aggressive garbage collection annihilates all local caches. The disk footprint remains pristine.
+### 1. Maximum Resource Exploitation
+Agents do not rely solely on static code. They are authorized to dynamically fetch, compile, and execute tools from GitHub and local repositories using **JIT Cloud Fetching** (`Fetch-CloudSkill.ps1`). The OS integrates external skills seamlessly to maximize execution speed and output quality.
 
-### 2. Zero-Trust eBPF Policing
-Network isolation extends past user-space containerization deep into the Linux kernel. eBPF **XDP (eXpress Data Path)** programs explicitly police all ingress/egress. Hostile lateral traversal and unauthenticated connections are dropped (`XDP_DROP`) instantly, ensuring total immunity against adversarial network vectors. 
+### 2. Omni-Reach (Internet Autonomy)
+The system possesses frictionless access to the global internet. Autonomous subagents (e.g., `Omni-Execution-Operative`) utilize Exa MCP, Browser MCP, and GitHub APIs to crawl, scrape, and extract intelligence flawlessly with zero human intervention.
 
-### 3. Decentralized Cryptographic Trust
-To maintain absolute forensic accountability, Sovereign OS relies on a non-Coinbase architecture utilizing the **Algorand Layer-1 Blockchain**. 
-- Edge models generate **Groth16 ZK-SNARK** (`proof.json`) proofs to cryptographically guarantee that training constraints were met.
-- Node state hashes and autonomous quarantine events are immutably sealed as 0-value transaction Notes on the L1 ledger.
+### 3. Mass Deployment Optimization
+Designed for mass IoMT deployment, Sovereign OS is optimized to the absolute limit.
+- **The Ponytail Doctrine:** Zero bloat. Abstractions and wrapper scripts are violently pruned.
+- **Micro-Singularity:** Payloads compile to WASM or raw binaries. Ephemeral edge sandboxes (`tmpfs`) are instantly annihilated post-execution to guarantee a pristine disk footprint.
 
-### 4. Byzantine-Robust Swarm (Multi-Krum)
-To defend against Adversarial Machine Learning (model poisoning), the central orchestrator mathematically incinerates hostile edge gradients using the **Multi-Krum** aggregation algorithm. Naive federated averaging (`FedAvg`) is explicitly rejected.
-
----
-
-## 🏗️ Architectural Overview
-
-```mermaid
-graph TD
-    subgraph Master Orchestrator
-        A[Sovereign Control Core] -->|Multi-Krum| B(Federated Aggregator)
-        A -->|mTLS| C[Prometheus / Grafana MCP]
-    end
-
-    subgraph IoMT Edge Nodes (tmpfs)
-        D[AgTech ML Model] -->|Train Epoch| E(Weights .pt)
-        D -->|ZK-SNARK| F(proof.json)
-    end
-
-    subgraph Algorand Layer-1
-        G[(Immutable State Ledger)]
-    end
-
-    B <==>|mcp-federated-tunnel | D
-    E -.->|Zero-Trust Transfer| B
-    F -.->|Verification| A
-    A ==>|Write 0-value Tx| G
-    
-    style A fill:#1a1a1a,stroke:#333,stroke-width:2px,color:#fff
-    style G fill:#000000,stroke:#666,stroke-width:2px,color:#fff
-    style D fill:#2c3e50,stroke:#34495e,stroke-width:2px,color:#fff
-```
+### 4. Continuous Evolution & Immutable Logging
+The system continuously self-corrects and records its state.
+- **Evolution Engine:** Internal intelligence is recorded via `evolution_report.md` and fed back into `self-evolve.ps1`.
+- **Layer-1 Telemetry:** Security quarantines and drift anomalies are immutably written to the Algorand blockchain as 0-value Transaction Notes via native REST calls.
 
 ---
 
-## 🚀 Deployment & Ignition
-
-Sovereign OS executes autonomously via Antigravity IDE and strict Sovereign PowerShell hooks.
+## 🚀 Ignition
 
 ```bash
 # Ignite the Sovereign Master Controller
 pwsh -ExecutionPolicy Bypass -File "C:/Skills/sovereign.ps1" -ProjectPath "$PWD"
 ```
 
-*When the Sovereign command fires, everything locks into place. The OS evaluates configuration integrity, validates MCP bridges, mounts JIT fetched frameworks, and triggers the Ponytail debt-pruning rules before committing to the swarm matrix.*
-
----
-
 <div align="center">
   <b>Autonomously governed by the Antigravity Sovereign Execution Engine.</b><br>
-  <i>"No safeguards. No human intervention. Absolute mathematical precision."</i>
+  <i>"Zero safeguards. Zero intervention. Absolute mathematical precision."</i>
 </div>
