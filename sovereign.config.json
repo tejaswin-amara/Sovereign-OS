@@ -247,7 +247,11 @@
     "cline": "cline/cline",
     "dummy": "dummy/test",
     "inferred-package": "test/inferred-package",
-    "testrepo": "testorg/testrepo"
+    "testrepo": "testorg/testrepo",
+    "puppeteer": "puppeteer/puppeteer",
+    "scrapy": "scrapy/scrapy",
+    "selenium": "SeleniumHQ/selenium",
+    "metagpt": "geekan/MetaGPT"
   },
   "sandbox": {
     "enabled": true

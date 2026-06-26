@@ -10,7 +10,8 @@ Agents are authorized and mandated to dynamically mount and utilize external rep
 ## PILLAR 2: OMNI-REACH (UNHINDERED INTERNET ACCESS)
 Agents possess direct, frictionless internet traversal capabilities.
 - **Autonomous Subagents:** Dispatch the `Omni-Execution-Operative` to crawl the web, scrape intelligence, and extract algorithms.
-- **Native Tools:** Utilize Exa MCP, `gh` CLI, `yt-dlp`, and Browser MCP aggressively to secure optimal solutions.
+- **Native Tools & Frameworks:** Utilize Exa MCP, `gh` CLI, `yt-dlp`, and Browser MCP aggressively.
+- **Core Automation Engines:** The system is permanently armed with local copies of Playwright, Puppeteer, Scrapy, Selenium, Open-Interpreter, MetaGPT, and AutoGen in `C:\Skills\core-frameworks` for unhindered programmatic web automation and scraping.
 
 ## PILLAR 3: MASS DEPLOYMENT OPTIMIZATION (THE PONYTAIL DOCTRINE)
 The Sovereign Swarm is designed to scale across thousands of highly constrained Edge/IoMT devices. It must be optimized to the absolute maximum.
