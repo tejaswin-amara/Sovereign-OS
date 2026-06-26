@@ -78,7 +78,11 @@
       "scratch",
       "templates",
       "servers",
-      ".cloud-cache"
+      ".cloud-cache",
+      "core-frameworks"
+    ],
+    "persistent_knowledge": [
+      "C:/Skills/core-frameworks"
     ]
   },
   "mcp_bindings": {
