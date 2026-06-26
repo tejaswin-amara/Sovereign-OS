@@ -190,7 +190,7 @@ Describe "Sovereign Helpers Unit Tests" {
             
             $Mutex = Start-SovereignLock -LockFile $LockFile -TimeoutSeconds 2
             $Mutex | Should -Not -Be $null
-            $Mutex.GetType().Name | Should -Be "Mutex"
+            $Mutex.GetType().Name | Should -Be "FileStream"
             
             # Release mutex
             Stop-SovereignLock -LockFile $LockFile -Mutex $Mutex

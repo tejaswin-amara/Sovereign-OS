@@ -28,44 +28,41 @@ function Start-SovereignLock {
         }
     }
 
-    $MutexName = "Global\SovereignMutex_v14"
-    $mutex = New-Object System.Threading.Mutex($false, $MutexName)
+    $ParentDir = Split-Path $LockFile -Parent
+    if (!(Test-Path $ParentDir)) {
+        New-Item -ItemType Directory -Path $ParentDir -Force | Out-Null
+    }
 
-    try {
-        if ($mutex.WaitOne([TimeSpan]::FromSeconds($TimeoutSeconds), $false)) {
-            # Mutex acquired
-            return $mutex
-        } else {
-            throw "LOCK_TIMEOUT: Sovereign lock could not be acquired within $TimeoutSeconds seconds."
-        }
-    } catch {
-        if ($_.Exception.GetType().Name -eq "AbandonedMutexException") {
-            Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Abandoned mutex detected. Rotating to new namespace to prevent deadlock..."
-            $RotatedName = $MutexName + "_Rotated_" + [guid]::NewGuid().ToString().Substring(0,8)
-            $rotatedMutex = New-Object System.Threading.Mutex($false, $RotatedName)
-            if ($rotatedMutex.WaitOne([TimeSpan]::FromSeconds($TimeoutSeconds), $false)) {
-                return $rotatedMutex
-            } else {
-                throw "LOCK_TIMEOUT: Could not acquire rotated lock."
+    $Timeout = [TimeSpan]::FromSeconds($TimeoutSeconds)
+    $Stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+    
+    while ($Stopwatch.Elapsed -lt $Timeout -or $TimeoutSeconds -eq 0) {
+        try {
+            $FileStream = [System.IO.File]::Open($LockFile, 'OpenOrCreate', 'ReadWrite', 'None')
+            return $FileStream
+        } catch {
+            if ($TimeoutSeconds -eq 0) {
+                throw "LOCK_TIMEOUT: Sovereign lock could not be acquired immediately."
             }
-        } else {
-            throw
+            Start-Sleep -Milliseconds 200
         }
     }
+    
+    throw "LOCK_TIMEOUT: Sovereign lock could not be acquired within $TimeoutSeconds seconds."
 }
 
 function Stop-SovereignLock {
     [CmdletBinding()]
     param(
         [string]$LockFile,
-        [System.Threading.Mutex]$Mutex = $null
+        $Mutex = $null
     )
-    if ($Mutex) {
+    if ($Mutex -is [System.IO.FileStream]) {
         try {
-            $Mutex.ReleaseMutex()
+            $Mutex.Close()
             $Mutex.Dispose()
         } catch {
-            Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Failed to dispose mutex: $($_.Exception.Message)"
+            Write-SovereignLog -Level "WARN" -Step "MUTEX" -Message "Failed to dispose lock: $($_.Exception.Message)"
         }
     }
     
