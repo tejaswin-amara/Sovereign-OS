@@ -77,13 +77,23 @@ function Assert-SovereignConfigIntegrity {
     
     # DPAPI Decrypt
     try {
-        Add-Type -AssemblyName System.Security
         $EncryptedBytes = [Convert]::FromBase64String($EncryptedBase64)
-        $DecryptedBytes = [System.Security.Cryptography.ProtectedData]::Unprotect($EncryptedBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
-        $MasterHash = [System.Text.Encoding]::UTF8.GetString($DecryptedBytes).ToLower()
+        if ($IsLinux -or $IsMacOS) {
+            $MasterHash = [System.Text.Encoding]::UTF8.GetString($EncryptedBytes).ToLower()
+        } else {
+            Add-Type -AssemblyName System.Security
+            $DecryptedBytes = [System.Security.Cryptography.ProtectedData]::Unprotect($EncryptedBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+            $MasterHash = [System.Text.Encoding]::UTF8.GetString($DecryptedBytes).ToLower()
+        }
     } catch {
         # Fallback to plaintext if DPAPI fails (backwards compatibility for the first run)
-        $MasterHash = $EncryptedBase64.ToLower()
+        try {
+            # Try to decode as base64 plaintext first
+            $EncryptedBytes = [Convert]::FromBase64String($EncryptedBase64)
+            $MasterHash = [System.Text.Encoding]::UTF8.GetString($EncryptedBytes).ToLower()
+        } catch {
+            $MasterHash = $EncryptedBase64.ToLower()
+        }
     }
 
     if ($CurrentHash -ne $MasterHash) {
