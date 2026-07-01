@@ -127,7 +127,10 @@ Describe "Sovereign Helpers Unit Tests" {
         It "Should sanitize sensitive paths in log messages" {
             Set-SovereignLogContext -LogDir $script:LogDir -RunId "TEST-RUN" -CorrId "TEST-CORR"
             
-            $TestMessage = "Error occurred in C:/Skills/some-file.ps1 for user home C:/Users/Home and drive D:\Temp"
+            # Setup a dynamic mock message that matches the current environment's paths
+            $SkillsRootPath = $PSScriptRoot.Replace("\", "/").Replace("/agent-bootstrap/tests", "")
+            $UserHome = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { "C:\Users\Default" }
+            $TestMessage = "Error occurred in $SkillsRootPath/some-file.ps1 for user home $UserHome and drive D:\Temp"
             
             Write-SovereignLog -Level "INFO" -Step "TEST_SAN" -Message $TestMessage
             
@@ -138,11 +141,14 @@ Describe "Sovereign Helpers Unit Tests" {
             (Test-Path $LogFile) | Should -Be $true
             
             $LoggedEntry = Get-Content $LogFile | ConvertFrom-Json
-            $LoggedEntry.message | Should -Not -Match "C:/Skills"
-            $LoggedEntry.message | Should -Not -Match "C:/Users/Home"
+            $LoggedEntry.message | Should -Not -Match [regex]::Escape($SkillsRootPath)
+            $LoggedEntry.message | Should -Not -Match [regex]::Escape($UserHome)
             $LoggedEntry.message | Should -Not -Match "D:\\Temp"
             $LoggedEntry.message | Should -Match "<SkillsRoot>"
-            $LoggedEntry.message | Should -Match "<UserHome>"
+            # Only check UserHome redaction if a home directory actually existed/was set
+            if ($UserHome -ne "C:\Users\Default") {
+                $LoggedEntry.message | Should -Match "<UserHome>"
+            }
             $LoggedEntry.message | Should -Match "<DrivePath>"
         }
 

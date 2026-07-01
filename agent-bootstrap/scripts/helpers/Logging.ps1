@@ -44,11 +44,14 @@ function Write-SovereignLog {
     if ($SanitizedMessage) {
         $SkillsRootPath = $PSScriptRoot.Replace("\", "/").Replace("/agent-bootstrap/scripts/helpers", "")
         $SkillsRootEscaped = [regex]::Escape($SkillsRootPath)
-        $UserHomeEscaped = [regex]::Escape($env:USERPROFILE.Replace("\", "/"))
+        $UserHome = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { "" }
+        $UserHomeEscaped = if ($UserHome) { [regex]::Escape($UserHome.Replace("\", "/")) } else { "" }
         
         $TempMsg = $SanitizedMessage.Replace("\", "/")
         $TempMsg = [regex]::Replace($TempMsg, "(?i)$SkillsRootEscaped", "<SkillsRoot>")
-        $TempMsg = [regex]::Replace($TempMsg, "(?i)$UserHomeEscaped", "<UserHome>")
+        if ($UserHomeEscaped) {
+            $TempMsg = [regex]::Replace($TempMsg, "(?i)$UserHomeEscaped", "<UserHome>")
+        }
         # Fix log corruption: only redact actual windows paths, not SHA256 hashes
         $TempMsg = [regex]::Replace($TempMsg, "(?i)\b[a-z]:[/\\](?:[\w\.\-]+[/\\]?)+", "<DrivePath>")
         $SanitizedMessage = $TempMsg

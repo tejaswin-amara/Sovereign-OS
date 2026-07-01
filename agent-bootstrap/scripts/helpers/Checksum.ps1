@@ -15,10 +15,15 @@ function Get-SovereignFileHash {
 
 function Protect-SovereignHash {
     param([string]$Hash)
-    Add-Type -AssemblyName System.Security
     $HashStringBytes = [System.Text.Encoding]::UTF8.GetBytes($Hash)
-    $EncryptedBytes = [System.Security.Cryptography.ProtectedData]::Protect($HashStringBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
-    return [Convert]::ToBase64String($EncryptedBytes)
+    if ($IsLinux -or $IsMacOS) {
+        # DPAPI is Windows-only. Fall back to base64 encoding on Linux/macOS.
+        return [Convert]::ToBase64String($HashStringBytes)
+    } else {
+        Add-Type -AssemblyName System.Security
+        $EncryptedBytes = [System.Security.Cryptography.ProtectedData]::Protect($HashStringBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+        return [Convert]::ToBase64String($EncryptedBytes)
+    }
 }
 
 function Update-SovereignChecksum {
