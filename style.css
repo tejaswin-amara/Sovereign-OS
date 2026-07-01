@@ -13,6 +13,7 @@
     --accent-cyan-dim: rgba(0, 240, 255, 0.15);
     --accent-purple: #9d4edd;
     --accent-emerald: #10b981;
+    --accent-orange: #f97316;
     --warning: #f59e0b;
     
     --font-sans: 'Inter', -apple-system, sans-serif;
@@ -34,7 +35,7 @@ body {
     font-family: var(--font-sans);
     background-color: var(--bg-base);
     color: var(--text-primary);
-    line-height: 1.6;
+    line-height: 1.7;
     overflow-x: hidden;
     position: relative;
     cursor: default;
@@ -76,6 +77,14 @@ h1, h2, h3 {
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: 3.5rem;
+}
+
+h2 {
+    font-size: 2.5rem;
 }
 
 .section {
@@ -191,7 +200,7 @@ h1, h2, h3 {
 
 .btn-primary:hover {
     background: var(--accent-cyan);
-    box-shadow: 0 0 20px var(--accent-cyan-dim);
+    box-shadow: 0 0 20px var(--accent-cyan-dim), 0 0 20px var(--accent-orange);
 }
 
 .btn-secondary {
@@ -373,6 +382,50 @@ h1, h2, h3 {
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: minmax(200px, auto);
     gap: 1.5rem;
+}
+
+/* Pipeline Stepper Layout */
+.pipeline-stepper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+    padding-left: 2rem;
+}
+.pipeline-stepper::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent-cyan);
+}
+.stepper-item {
+    position: relative;
+    padding: 1.5rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    transition: transform 0.3s;
+}
+.stepper-item:hover {
+    transform: translateX(10px);
+}
+.step-number {
+    position: absolute;
+    left: -3.5rem;
+    top: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--bg-base);
+    border: 2px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
 .config-grid {
