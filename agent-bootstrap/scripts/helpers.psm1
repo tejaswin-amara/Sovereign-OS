@@ -2,6 +2,22 @@
 Set-StrictMode -Version Latest
 # Sovereign Shared Module (v14.0.0-CloudNative)
 # Purpose: Atomic operations, structured logging, mutex management, and governance enforcement.
+#
+# ── PUBLIC API (exported via Export-ModuleMember) ────────────────────────
+#   Configuration : Get-SovereignConfig, Assert-SovereignConfigIntegrity, Update-SovereignChecksum
+#   Version       : Get-SovereignVersion
+#   Logging       : Set-SovereignLogContext, Write-SovereignLog, Flush-SovereignLogs, Start-LogRotation
+#   Locking       : Start-SovereignLock, Stop-SovereignLock
+#   Governance    : Assert-ModuleCap, Get-DynamicSkillCount, Get-SovereignManifestFiles
+#   Validation    : Test-SovereignIntegrity, Assert-SovereignPattern
+#   IO            : Save-AtomicContent, Invoke-AtomicMove
+#   Evolution     : Test-SovereignDrift, Get-SovereignSkillGaps, Write-SovereignEvolutionReport
+#   Search        : Invoke-OmniSearch, Invoke-SovereignInternetDiagnostic
+#   Files         : Get-FilteredProjectFiles
+#
+# ── INTERNAL (not exported; used only within this module's helper scripts)
+#   Everything else defined in the dot-sourced files below.
+# ────────────────────────────────────────────────────────────────────────
 
 $HelperFiles = @(
     "Logging.ps1"
@@ -42,5 +58,7 @@ Export-ModuleMember -Function @(
     'Update-SovereignChecksum',
     'Get-SovereignManifestFiles',
     'Invoke-SovereignInternetDiagnostic',
-    'Invoke-OmniSearch'
+    'Invoke-OmniSearch',
+    'Get-FilteredProjectFiles',
+    'Flush-SovereignLogs'
 )

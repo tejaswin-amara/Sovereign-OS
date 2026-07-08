@@ -1,4 +1,4 @@
-# bootstrap.ps1 - Sovereign Project Initializer (v14.0.0-CloudNative)
+# bootstrap.ps1 - Sovereign Project Initializer (v15.0.0-CloudNative)
 # Purpose: Onboard any project into the Sovereign ecosystem with atomic template injection and cap enforcement.
 # Location: C:/Skills/bootstrap.ps1
 
@@ -41,16 +41,8 @@ try {
         throw "Templates directory not found at $TemplatesSource!"
     }
 
-    # Pre-flight: Module Cap Check
-    $ModuleCap = if ($Config.governance.module_cap) { [int]$Config.governance.module_cap } else { 32 }
-    $NewRulesCount = @(Get-ChildItem -LiteralPath "$TemplatesSource/rules" -Filter "*.md" -ErrorAction SilentlyContinue).Count
-    $NewWfCount = @(Get-ChildItem -LiteralPath "$TemplatesSource/workflows" -Filter "*.md" -ErrorAction SilentlyContinue).Count
-    $NewTotal = $NewRulesCount + $NewWfCount
-
-    if ($NewTotal -gt $ModuleCap) {
-        throw "MODULE_CAP_EXCEEDED: Template injection would create $NewTotal modules ($NewRulesCount rules + $NewWfCount workflows), exceeding hard cap of $ModuleCap. BLOCKING WRITE."
-    }
-    Write-SovereignLog -Level "INFO" -Step "MODCAP" -Message "Template count OK: $NewTotal/$ModuleCap ($NewRulesCount rules + $NewWfCount workflows)"
+    # Pre-flight: Module Cap Check (delegates to shared helper)
+    Assert-ModuleCap -AgentDir $TemplatesSource
 
     # Step 1: Create directory structure
     Write-SovereignLog -Level "INFO" -Step "DIRS" -Message "Creating local governance structure..."
@@ -71,9 +63,11 @@ try {
     }
 
     try {
-        New-Item -ItemType Junction -Path $RulesDir -Value "$TemplatesSource/rules" -ErrorAction Stop | Out-Null
-        New-Item -ItemType Junction -Path $WorkflowsDir -Value "$TemplatesSource/workflows" -ErrorAction Stop | Out-Null
-        Write-SovereignLog -Level "INFO" -Step "JUNCTION" -Message "Junctions established for rules and workflows."
+        $isWin = if (Get-Variable -Name "IsWindows" -ValueOnly -ErrorAction SilentlyContinue) { $true } elseif ($env:OS -eq "Windows_NT") { $true } else { $false }
+        $LinkType = if ($isWin) { "Junction" } else { "SymbolicLink" }
+        New-Item -ItemType $LinkType -Path $RulesDir -Value "$TemplatesSource/rules" -ErrorAction Stop | Out-Null
+        New-Item -ItemType $LinkType -Path $WorkflowsDir -Value "$TemplatesSource/workflows" -ErrorAction Stop | Out-Null
+        Write-SovereignLog -Level "INFO" -Step "JUNCTION" -Message "Directory links ($LinkType) established for rules and workflows."
     } catch {
         Write-SovereignLog -Level "WARN" -Step "JUNCTION" -Message "Automatic junction creation failed. Falling back to simple directory copy..."
         try {
@@ -139,7 +133,7 @@ try {
     $HarvesterScript = "$SovereignPath/agent-bootstrap/scripts/skill-harvester.ps1"
     if (Test-Path $HarvesterScript) {
         try {
-            pwsh -NoProfile -File $HarvesterScript -WorkspacePath $ResolvedProject -SyncLibrary | Out-Null
+            pwsh -NoProfile -File $HarvesterScript -WorkspacePath $ResolvedProject | Out-Null
             if ($LASTEXITCODE -ne 0) {
                 Write-SovereignLog -Level "WARN" -Step "HARVEST" -Message "Harvester failed with exit code $LASTEXITCODE"
             }

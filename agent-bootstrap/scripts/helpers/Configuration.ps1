@@ -75,14 +75,20 @@ function Assert-SovereignConfigIntegrity {
 
     $EncryptedBase64 = (Get-Content $HashPath -First 1).Trim()
     
-    # DPAPI Decrypt
-    try {
-        Add-Type -AssemblyName System.Security
-        $EncryptedBytes = [Convert]::FromBase64String($EncryptedBase64)
-        $DecryptedBytes = [System.Security.Cryptography.ProtectedData]::Unprotect($EncryptedBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
-        $MasterHash = [System.Text.Encoding]::UTF8.GetString($DecryptedBytes).ToLower()
-    } catch {
-        # Fallback to plaintext if DPAPI fails (backwards compatibility for the first run)
+    # Cross-platform DPAPI handling
+    $isWin = if (Get-Variable -Name "IsWindows" -ValueOnly -ErrorAction SilentlyContinue) { $true } elseif ($env:OS -eq "Windows_NT") { $true } else { $false }
+    if ($isWin) {
+        try {
+            $EncryptedBytes = [Convert]::FromBase64String($EncryptedBase64)
+            Add-Type -AssemblyName System.Security
+            $DecryptedBytes = [System.Security.Cryptography.ProtectedData]::Unprotect($EncryptedBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+            $MasterHash = [System.Text.Encoding]::UTF8.GetString($DecryptedBytes).ToLower()
+        } catch {
+            # Fallback for Windows if DPAPI fails or data is plaintext
+            $MasterHash = $EncryptedBase64.ToLower()
+        }
+    } else {
+        # Non-Windows: Assume plaintext hash
         $MasterHash = $EncryptedBase64.ToLower()
     }
 

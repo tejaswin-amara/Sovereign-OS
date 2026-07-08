@@ -1,4 +1,4 @@
-# Evolution.ps1 - Sovereign Evolution Helper Functions (v14.0.0-CloudNative)
+# Evolution.ps1 - Sovereign Evolution Helper Functions (v15.0.0-CloudNative)
 # Purpose: Helper functions for autonomous drift detection, report writing, and skill gap analysis.
 
 function Test-SovereignDrift {
@@ -91,48 +91,13 @@ function Get-SovereignSkillGaps {
     $SkillGaps = [System.Collections.Generic.List[string]]::new()
 
     # Check if project uses deps that map to skills not yet harvested
-    $TagToSkill = @{
-        "next"             = "vercel/next.js"
-        "react"            = "facebook/react"
-        "drizzle"          = "drizzle-team/drizzle-orm"
-        "trpc"             = "trpc/trpc"
-        "zod"              = "colinhacks/zod"
-        "hono"             = "honojs/hono"
-        "turbo"            = "vercel/turborepo"
-        "playwright"       = "microsoft/playwright"
-        "better-auth"      = "better-auth/better-auth"
-        "next-auth"        = "nextauthjs/next-auth"
-        "expo"             = "expo/expo"
-        "tanstack"         = "TanStack/query"
-        "docker"           = "docker/awesome-compose"
-        "fastify"          = "fastify/fastify"
-        "bullmq"           = "taskforcesh/bullmq"
-        "astro"            = "withastro/astro"
-        "svelte"           = "sveltejs/svelte"
-        "payload"          = "payloadcms/payload"
-        "lucia"            = "lucia-auth/lucia"
-        "fastapi"          = "tiangolo/fastapi"
-        "supabase"         = "supabase/supabase"
-        "prisma"           = "prisma/prisma"
-        "vitest"           = "vitest-dev/vitest"
-        "jest"             = "jestjs/jest"
-        "browser-use"      = "browser-use/browser-use"
-        "stagehand"        = "browserbase/stagehand"
-        "autogen"          = "microsoft/autogen"
-        "crewai"           = "crewAIInc/crewAI"
-        "langgraph"        = "langchain-ai/langgraph"
-        "llama_index"      = "run-llama/llama_index"
-        "openai"           = "openai/openai-python"
-        "anthropic"        = "anthropics/anthropic-sdk-python"
-        "redis"            = "redis/node-redis"
-        "psscriptanalyzer" = "PowerShell/PSScriptAnalyzer"
-        "tree-sitter"      = "tree-sitter/tree-sitter"
-        "crawlee"          = "apify/crawlee"
-        "firecrawl"        = "mendableai/firecrawl"
-        "exa"              = "exa-labs/exa-py"
-        "tavily"           = "tavily-ai/tavily-python"
-        "spider"           = "spider-rs/spider"
-        "jina"             = "jina-ai/reader"
+    # ponytail: single source of truth â€” read from sovereign.config.json instead of hardcoded duplicate
+    $ConfigMap = Get-SovereignConfig -KeyPath "dep_to_skill_map"
+    $TagToSkill = @{}
+    if ($ConfigMap) {
+        foreach ($prop in $ConfigMap.PSObject.Properties) {
+            $TagToSkill[$prop.Name] = $prop.Value
+        }
     }
 
     $AutoFetchRepos = @()
@@ -297,7 +262,7 @@ function Write-SovereignEvolutionReport {
         $PonytailMarkers = $Files | Select-String -Pattern "(//|#|<!--)?\s*ponytail:" -ErrorAction SilentlyContinue
     }
     
-    $Report += "`r`n## 🐴 Ponytail Debt Ledger`r`n"
+    $Report += "`r`n## ðŸ´ Ponytail Debt Ledger`r`n"
     if ($PonytailMarkers -and $PonytailMarkers.Count -gt 0) {
         $Report += "> **Warning**: The following deliberate shortcuts were injected under lazy senior dev mode.`r`n"
         $Report += "> Do not fix these unless they hit their ceiling. They are documented here to prevent rotting.`r`n`r`n"
@@ -311,35 +276,7 @@ function Write-SovereignEvolutionReport {
 
     $Report += "`r`n## Recommended Actions`r`n"
 
-    # --- 7. SEMANTIC CODEBASE INDEXING (TURBOVEC) ---
-    Write-SovereignLog -Level "INFO" -Step "EVOLUTION" -Message "Initiating Turbovec Semantic Indexing across local repos..."
-    $KnowledgeDir = Join-Path $WorkspacePath ".agents/knowledge"
-    $OmnivectorPath = Join-Path $KnowledgeDir "omnivector.index"
-    $TurbovecCache = Join-Path $SkillsPath ".cloud-cache/turbovec"
-    
-    if (-not (Test-Path $OmnivectorPath)) {
-        New-Item -Path $OmnivectorPath -ItemType File -Force | Out-Null
-    }
-
-    try {
-        # Check if turbovec is available in the cloud cache or via local CLI
-        # Apex Evolution: Index ONLY Workspace (cloud-cache is ephemeral and pruned)
-        $TurbovecArgs = @("-Index", "$WorkspacePath", "-Out", "$OmnivectorPath", "-Mode", "Delta", "-Fast")
-        if (Test-Path $TurbovecCache) {
-            Write-SovereignLog -Level "INFO" -Step "EVOLUTION" -Message "Invoking cached Turbovec engine with Delta-Sync."
-            & "python" "$TurbovecCache/turbovec.py" @TurbovecArgs | Out-Null
-            $Report += "`r`n## 🧠 Semantic Omniscience`r`n"
-            $Report += "- [x] **INDEXED**: Turbovec successfully updated the semantic omnivector map for fast subagent retrieval.`r`n"
-        } else {
-            Write-SovereignLog -Level "INFO" -Step "EVOLUTION" -Message "Turbovec not found in cache. Auto-fetching RyanCodrai/turbovec..."
-            & "$SkillsPath/agent-bootstrap/scripts/Fetch-CloudSkill.ps1" -Repo "RyanCodrai/turbovec" | Out-Null
-            $Report += "`r`n## 🧠 Semantic Omniscience`r`n"
-            $Report += "- [x] **FETCHED**: Turbovec Semantic Engine staged for next sweep.`r`n"
-        }
-    } catch {
-        Write-SovereignLog -Level "WARN" -Step "EVOLUTION" -Message "Turbovec indexing failed: $_"
-        $Report += "- [!] **WARN**: Semantic Indexing failed: $_`r`n"
-    }
+    # ponytail: Turbovec semantic indexing removed. It was a phantom feature that fetched and deleted a non-existent repo every run.
     $Report += "1. Review harvested_skills.md for newly linked expertise.`r`n"
     $Report += "2. Record any architectural wins in learnings.md.`r`n"
 

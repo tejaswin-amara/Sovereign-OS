@@ -39,7 +39,7 @@ function Invoke-SovereignInternetDiagnostic {
             $LogDir = if ($script:SovereignLogDir) { $script:SovereignLogDir } else { (Resolve-Path "$PSScriptRoot/../../../LOGS").Path }
             if (-not (Test-Path $LogDir)) { New-Item -ItemType Directory -Force -Path $LogDir | Out-Null }
             
-            $RunID = if ($script:SovereignRunId) { $script:SovereignRunId } else { [guid]::NewGuid().ToString().Substring(0,8) }
+            $RunID = if ($script:RunID) { $script:RunID } else { [guid]::NewGuid().ToString().Substring(0,8) }
             $DiagPath = Join-Path $LogDir "sovereign-internet-diagnostic-$RunID.md"
             
             $Content = "## Sovereign Auto-Diagnostic Result`n`n"

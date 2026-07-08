@@ -1,4 +1,4 @@
-﻿# sovereign-check.ps1 - Enterprise Audit Tool (v14.0.0-CloudNative)
+# sovereign-check.ps1 - Enterprise Audit Tool (v15.0.0-CloudNative)
 # Purpose: Deep integrity scanning of governance, complexity cap, and skill-sync states.
 # Each check is isolated — one failure does not crash others.
 
@@ -26,7 +26,7 @@ $ResolvedProject = (Resolve-Path $ProjectPath -ErrorAction SilentlyContinue).Pat
 if (-not $ResolvedProject) { $ResolvedProject = $ProjectPath }
 
 # Dynamic version
-$Version = "14.0.0-CloudNative"
+$Version = "15.0.0-CloudNative"
 try {
     $Version = Get-SovereignVersion -SkillsRoot $SovereignRoot
 } catch {
@@ -43,7 +43,7 @@ try {
     $sovScript = "$SovereignRoot/sovereign.ps1"
     if (Test-Path $sovScript) {
         $header = Get-Content $sovScript -Head 5 | Out-String
-        if ($header -match 'v(13|14)\.\d+\.\d+') {
+        if ($header -match 'v(13|14|15)\.\d+\.\d+') {
             Write-SovereignLog -Level "INFO" -Step "CTRL" -Message "Controller version aligned: $($Matches[0])"
         } else {
             Write-SovereignLog -Level "WARN" -Step "CTRL" -Message "Controller version unknown"

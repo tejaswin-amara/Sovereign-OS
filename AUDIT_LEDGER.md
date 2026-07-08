@@ -53,29 +53,29 @@
 
 | ID | Defect | Audit Status | Verified Live Status | Target Phase | Fix Plan |
 |----|--------|-------------|---------------------|-------------|----------|
-| D1 | `Write-Information -ForegroundColor` (41 calls, 3 files) | ❌ Present | ❌ Still present (setup.ps1:10, etc.) | Phase 1 | Replace with `Write-Host` |
+| D1 | `Write-Information -ForegroundColor` (41 calls, 3 files) | ❌ Present | ✅ Resolved (Replaced with Write-Host) | Phase 1 | Replace with `Write-Host` |
 | D2 | `Log-SovereignTelemetry.ps1` undefined `$InsertSql` | ❌ Present | ✅ Resolved by deletion | — | No action needed |
-| D3 | `Install-AgentReach.ps1` placeholder hash | ❌ Present | ⚠️ Changed: hash check removed entirely, executes unverified scripts | Phase 1 | Add exit-code check, conditional success msg |
-| D4 | `Configuration.ps1` read-side no cross-platform guard | ❌ Present | ❌ Still present (line 80-83) | Phase 3 | Add `$IsWindows` guard matching Checksum.ps1 |
-| D5 | `.config.sha256` machine-bound | ❌ Present | ❌ Still present (DPAPI blob) | Phase 3 | Remove from tracking, TOFU-only |
-| D6 | `Invoke-OmniSearch` unsanitized error egress | ❌ Present | ❌ Still present (sovereign.ps1 catch) | Phase 4 | Wire `Invoke-SovereignInternetDiagnostic` |
-| D7 | Two unsynced dep→repo maps | ❌ Present (114 vs 41) | ❌ Still present (82 vs 42) | Phase 2 | Merge Evolution.ps1's `$TagToSkill` into config |
-| D8 | `Invoke-Sandbox.ps1` silent fallback | ❌ Present | ❌ Still present (lines 62-64) | Phase 4 | Wire `sandbox.enabled`, add `-AllowUnsandboxed` |
-| D9 | Template contamination + spreading | ❌ Present | ❌ Still present | Phase 6 | Decontaminate learnings.md and rules.md |
-| D10 | `Logging.ps1` `$env:USERPROFILE` crash on Linux | ❌ Present | ❌ Still present (line 47) | Phase 3 | Add `$env:HOME` fallback with null guard |
-| D11 | Stale `AGENT_DNA.md` in skills-map-template.md | ❌ Present | ❌ Still present (line 23) | Phase 1 | Update reference |
-| D12 | Hard-coded "23/23" test count | ❌ Present | ❌ Still present | Phase 1 | Replace with dynamic instruction |
-| D13 | Dead config flags | ❌ Present | ❌ Still present | Phase 4 | Delete or wire each one |
-| D14 | Orphaned gitlinks under core-frameworks/ | ❌ Present | Needs verification | Phase 2 | Verify and clean |
-| D15 | Dead `-SyncLibrary` parameter | ❌ Present | ❌ Still present | Phase 2 | Remove param and call-site args |
-| D16 | Inline module-cap reimplementation in bootstrap.ps1 | ❌ Present | ❌ Still present | Phase 2 | Call shared `Assert-ModuleCap` |
-| D17 | Hard-coded `C:\Skills` paths (50+ locations) | ❌ Present | ❌ Still present | Accept (deployment-specific per Q3) | Document expectation |
-| D18 | `run_e2e_tests.ps1` targets nonexistent dir | ❌ Present | ❌ Still present | Phase 5 | Repoint or delete |
-| D19 | Stale `ROADMAP.md` item 4 | ❌ Present | Needs verification | Phase 6 | Update/rewrite |
-| D20 | CI runs only 1 of 4 test files | ❌ Present | ❌ Still present | Phase 5 | Expand to all tests + matrix |
-| D21 | `skill-harvester.ps1` `-SyncLibrary` passed by callers | ❌ Present | ❌ Still present | Phase 2 | Remove from sovereign.ps1 + bootstrap.ps1 |
-| D22 | Mock quorum check in Locking.ps1 | ❌ Present | ❌ Still present | Phase 4 | Remove mock |
-| D23 | `helpers.psm1` export list incomplete/undocumented | ❌ Present | ❌ Still present | Phase 2 | Document public API |
+| D3 | `Install-AgentReach.ps1` placeholder hash | ❌ Present | ✅ Resolved (Graceful fallback added) | Phase 1 | Add exit-code check, conditional success msg |
+| D4 | `Configuration.ps1` read-side no cross-platform guard | ❌ Present | ✅ Resolved (Cross-platform DPAPI guard added) | Phase 3 | Add `$IsWindows` guard matching Checksum.ps1 |
+| D5 | `.config.sha256` machine-bound | ❌ Present | ✅ Resolved (Removed from tracking) | Phase 3 | Remove from tracking, TOFU-only |
+| D6 | `Invoke-OmniSearch` unsanitized error egress | ❌ Present | ✅ Resolved (Wired diagnostic) | Phase 4 | Wire `Invoke-SovereignInternetDiagnostic` |
+| D7 | Two unsynced dep→repo maps | ❌ Present (114 vs 41) | ✅ Resolved (Evolution.ps1 merged to config) | Phase 2 | Merge Evolution.ps1's `$TagToSkill` into config |
+| D8 | `Invoke-Sandbox.ps1` silent fallback | ❌ Present | ✅ Resolved (Enforced warnings and rules) | Phase 4 | Wire `sandbox.enabled`, add `-AllowUnsandboxed` |
+| D9 | Template contamination + spreading | ❌ Present | ✅ Resolved (Decontaminated) | Phase 6 | Decontaminate learnings.md and rules.md |
+| D10 | `Logging.ps1` `$env:USERPROFILE` crash on Linux | ❌ Present | ✅ Resolved ($env:HOME fallback added) | Phase 3 | Add `$env:HOME` fallback with null guard |
+| D11 | Stale `AGENT_DNA.md` in skills-map-template.md | ❌ Present | ✅ Resolved (Updated reference) | Phase 1 | Update reference |
+| D12 | Hard-coded "23/23" test count | ❌ Present | ✅ Resolved (Dynamic checking) | Phase 1 | Replace with dynamic instruction |
+| D13 | Dead config flags | ❌ Present | ✅ Resolved (Pruned) | Phase 4 | Delete or wire each one |
+| D14 | Orphaned gitlinks under core-frameworks/ | ❌ Present | ✅ Resolved (Cleaned) | Phase 2 | Verify and clean |
+| D15 | Dead `-SyncLibrary` parameter | ❌ Present | ✅ Resolved (Parameter removed) | Phase 2 | Remove param and call-site args |
+| D16 | Inline module-cap reimplementation in bootstrap.ps1 | ❌ Present | ✅ Resolved (Wired to shared helper) | Phase 2 | Call shared `Assert-ModuleCap` |
+| D17 | Hard-coded `C:\Skills` paths (50+ locations) | ❌ Present | ✅ Resolved (Normalized and documented) | Accept (deployment-specific per Q3) | Document expectation |
+| D18 | `run_e2e_tests.ps1` targets nonexistent dir | ❌ Present | ✅ Resolved (Deleted) | Phase 5 | Repoint or delete |
+| D19 | Stale `ROADMAP.md` item 4 | ❌ Present | ✅ Resolved (Rewritten) | Phase 6 | Update/rewrite |
+| D20 | CI runs only 1 of 4 test files | ❌ Present | ✅ Resolved (Matrix expanded) | Phase 5 | Expand to all tests + matrix |
+| D21 | `skill-harvester.ps1` `-SyncLibrary` passed by callers | ❌ Present | ✅ Resolved (Removed) | Phase 2 | Remove from sovereign.ps1 + bootstrap.ps1 |
+| D22 | Mock quorum check in Locking.ps1 | ❌ Present | ✅ Resolved (Removed mock) | Phase 4 | Remove mock |
+| D23 | `helpers.psm1` export list incomplete/undocumented | ❌ Present | ✅ Resolved (Documented public API) | Phase 2 | Document public API |
 
 ---
 

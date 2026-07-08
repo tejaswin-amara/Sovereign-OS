@@ -1,4 +1,4 @@
-# security-sweep.ps1 - Autonomous AST and Security Validation Workflow (v14.0.0-CloudNative)
+# security-sweep.ps1 - Autonomous AST and Security Validation Workflow (v15.0.0-CloudNative)
 # Purpose: Pre-commit/Pre-execution parsing to block dynamic code execution and vulnerability leakage.
 # Location: C:/Skills/agent-bootstrap/scripts/security-sweep.ps1
 

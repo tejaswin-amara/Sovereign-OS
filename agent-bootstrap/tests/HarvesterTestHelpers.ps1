@@ -117,10 +117,15 @@ dependencies {
 
     # Create a junction inside junction_dir pointing to itself (infinite recursion test)
     $junctionLink = Join-Path $junctionDir "self_loop"
-    Write-Information -InformationAction Continue "Creating directory junction from $junctionLink to $junctionDir"
-    # Call cmd.exe to run mklink
-    $cmdOutput = cmd.exe /c mklink /j "$junctionLink" "$junctionDir" 2>&1
-    Write-Information -InformationAction Continue "mklink output: $cmdOutput"
+    Write-Information -InformationAction Continue "Creating directory link from $junctionLink to $junctionDir"
+    # Create cross-platform link
+    $isWin = if (Get-Variable -Name "IsWindows" -ValueOnly -ErrorAction SilentlyContinue) { $true } elseif ($env:OS -eq "Windows_NT") { $true } else { $false }
+    if ($isWin) {
+        $cmdOutput = cmd.exe /c mklink /j "$junctionLink" "$junctionDir" 2>&1
+    } else {
+        $cmdOutput = ln -s "$junctionDir" "$junctionLink" 2>&1
+    }
+    Write-Information -InformationAction Continue "link output: $cmdOutput"
 }
 
 function Assert-Contains {

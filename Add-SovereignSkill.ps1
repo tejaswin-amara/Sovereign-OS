@@ -13,7 +13,8 @@ if ([string]::IsNullOrEmpty($PackageName)) {
     $PackageName = ($CleanRepo -split '[/\\]')[-1]
 }
 
-$ConfigFile = "C:\Skills\sovereign.config.json"
+$SovereignPath = (Resolve-Path "$PSScriptRoot").Path
+$ConfigFile = Join-Path $SovereignPath "sovereign.config.json"
 
 if (-Not (Test-Path $ConfigFile)) {
     Write-Error "Config file not found: $ConfigFile"
@@ -56,12 +57,13 @@ Set-Content -Path $ConfigFile -Value $JsonOutput -Force
 Write-Information "Successfully injected '$PackageName' -> '$Repo' into sovereign.config.json" -InformationAction Continue
 
 # Trigger checksum update if it exists
-if (Test-Path "C:\Skills\agent-bootstrap\scripts\update-checksum.ps1") {
-    pwsh -NoProfile -File "C:\Skills\agent-bootstrap\scripts\update-checksum.ps1"
+$ChecksumScript = Join-Path $SovereignPath "agent-bootstrap\scripts\update-checksum.ps1"
+if (Test-Path $ChecksumScript) {
+    pwsh -NoProfile -File $ChecksumScript
 }
 
 # Automatically fetch the cloud skill to local cache
-$FetchScript = "C:\Skills\agent-bootstrap\scripts\Fetch-CloudSkill.ps1"
+$FetchScript = Join-Path $SovereignPath "agent-bootstrap\scripts\Fetch-CloudSkill.ps1"
 if (Test-Path $FetchScript) {
     Write-Information "Auto-fetching dependency '$Repo'..." -InformationAction Continue
     pwsh -NoProfile -File $FetchScript -Repo $Repo

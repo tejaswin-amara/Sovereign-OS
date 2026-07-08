@@ -44,13 +44,16 @@ function Write-SovereignLog {
     if ($SanitizedMessage) {
         $SkillsRootPath = $PSScriptRoot.Replace("\", "/").Replace("/agent-bootstrap/scripts/helpers", "")
         $SkillsRootEscaped = [regex]::Escape($SkillsRootPath)
-        $UserHomeEscaped = [regex]::Escape($env:USERPROFILE.Replace("\", "/"))
+        $UserHome = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { "" }
+        $UserHomeEscaped = if ($UserHome) { [regex]::Escape($UserHome.Replace("\", "/")) } else { "" }
         
         $TempMsg = $SanitizedMessage.Replace("\", "/")
         $TempMsg = [regex]::Replace($TempMsg, "(?i)$SkillsRootEscaped", "<SkillsRoot>")
-        $TempMsg = [regex]::Replace($TempMsg, "(?i)$UserHomeEscaped", "<UserHome>")
-        # Fix log corruption: only redact actual windows paths, not SHA256 hashes
-        $TempMsg = [regex]::Replace($TempMsg, "(?i)\b[a-z]:[/\\](?:[\w\.\-]+[/\\]?)+", "<DrivePath>")
+        if ($UserHomeEscaped) {
+            $TempMsg = [regex]::Replace($TempMsg, "(?i)$UserHomeEscaped", "<UserHome>")
+        }
+        # Redact actual windows drive paths (e.g., C:/foo) but not SHA256 hashes
+        $TempMsg = [regex]::Replace($TempMsg, "(?i)(?<![0-9a-fA-F])[a-zA-Z]:[/\\\\](?:[\w\.\-]+[/\\\\]?)+", "<DrivePath>")
         $SanitizedMessage = $TempMsg
     }
 

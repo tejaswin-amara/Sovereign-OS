@@ -1,3 +1,6 @@
+# HONESTY HEADER: This script mocks a distributed multi-agent swarm. There is no actual LangGraph
+# swarm backing this. It solely prints a fixed simulation message to satisfy upstream checks.
+
 param(
     [string]$Task = "Default Swarm Objective",
     [switch]$VerboseOutput

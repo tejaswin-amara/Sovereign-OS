@@ -4,7 +4,10 @@ param(
     [string]$Code,
 
     [Parameter(Mandatory=$false)]
-    [string]$FilePath
+    [string]$FilePath,
+
+    [Parameter(Mandatory=$false)]
+    [switch]$AllowUnsandboxed
 )
 
 Set-StrictMode -Version Latest
@@ -19,8 +22,7 @@ if (-not [string]::IsNullOrEmpty($FilePath)) {
 }
 
 if (-Not (Get-Command "python" -ErrorAction SilentlyContinue)) {
-    Write-Warning "Python is not installed. E2B Sandbox requires python."
-    return
+    throw "SANDBOX_ERROR: Python is not installed. Cannot execute code."
 }
 
 $pyScript = @"
@@ -60,8 +62,13 @@ Set-Content -Path $tempPy -Value $pyScript -Encoding utf8
 try {
     $ProcessOutput = $Code | python $tempPy 2>&1
     if ($LASTEXITCODE -eq 2) {
-        Write-Warning "E2B not found. Running Python locally as graceful fallback."
-        $ProcessOutput = $Code | python -c "import sys; exec(sys.stdin.read())" 2>&1
+        if ($AllowUnsandboxed) {
+            Write-Warning "E2B not available. Running Python locally (-AllowUnsandboxed was set)."
+            $ProcessOutput = $Code | python -c "import sys; exec(sys.stdin.read())" 2>&1
+        } else {
+            throw "SANDBOX_UNAVAILABLE: E2B sandbox is not installed and -AllowUnsandboxed was not specified. " +
+                  "Install e2b_code_interpreter or pass -AllowUnsandboxed to run locally."
+        }
     }
     Write-Output $ProcessOutput
 } finally {

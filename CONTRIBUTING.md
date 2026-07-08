@@ -14,7 +14,7 @@ Before submitting a PR, you **must** run the local Pester verification suite to 
 ```powershell
 Invoke-Pester -Path "agent-bootstrap/tests"
 ```
-Ensure all 23 tests pass with exactly 0 failures.
+Ensure all tests pass with exactly 0 failures.
 
 ## Security Sweeps
 We take zero-trust security seriously. Ensure your code does not violate the AST module cap or break the atomic Mutex locks. Run:

@@ -4,7 +4,7 @@ A clear and concise description of what the PR accomplishes and why it's necessa
 ## Sovereign Architecture Verification
 - [ ] I have read the `CONTRIBUTING.md` guidelines.
 - [ ] I have run `pwsh -ExecutionPolicy Bypass -File "sovereign-check.ps1"` and received **0 vulnerabilities**.
-- [ ] I have run the Pester suite (`Invoke-Pester -Path "agent-bootstrap/tests"`) and achieved **23/23 Passes**.
+- [ ] I have run the Pester suite (`Invoke-Pester -Path "agent-bootstrap/tests"`) and achieved **all tests passing, 0 failures**.
 - [ ] My code adheres to `Set-StrictMode -Version Latest`.
 
 ## Type of change

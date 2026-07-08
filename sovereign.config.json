@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/tejaswin-amara/schema/main/config-v14.0.0.json",
-  "version": "14.0.0-CloudNative",
+  "version": "15.0.0-CloudNative",
   "name": "Sovereign Skills Library",
   "core_axioms": [
     "ponytail",
@@ -21,8 +21,7 @@
       "eval\\(",
       "exec\\("
     ],
-    "max_skill_name_length": 50,
-    "require_signature": true
+    "max_skill_name_length": 50
   },
   "paths": {
     "skills_root": "C:/Skills",
@@ -42,15 +41,14 @@
     "fetch_cloud_skill": "agent-bootstrap/scripts/Fetch-CloudSkill.ps1",
     "self_evolve": "agent-bootstrap/scripts/self-evolve.ps1",
     "update_checksum": "agent-bootstrap/scripts/update-checksum.ps1",
-    "helpers": "agent-bootstrap/scripts/helpers.psm1"
+    "helpers": "agent-bootstrap/scripts/helpers.psm1",
+    "invoke_jules": "agent-bootstrap/scripts/Invoke-JulesSession.ps1",
+    "wait_jules": "agent-bootstrap/scripts/Wait-JulesSession.ps1",
+    "install_jules_cli": "agent-bootstrap/scripts/Install-JulesCLI.ps1",
+    "webhook_jules": "agent-bootstrap/scripts/Start-JulesWebhookListener.ps1"
   },
   "governance": {
     "module_cap": 32,
-    "module_caps": {
-      "network": "restrictive",
-      "filesystem": "read-only-cloud",
-      "execution_bounds": "docker-only"
-    },
     "multi_tenant": {
       "enabled": true,
       "tenant_id": "HQ-Alpha",
@@ -60,7 +58,7 @@
         "tcp://office-ldn.sovereign.internal:5000"
       ]
     },
-    "skills_count": 2,
+    "skills_count": 7,
     "_skills_count_note": "DYNAMIC - overwritten by sovereign.ps1 at runtime. Never edit manually.",
     "lock_timeout_seconds": 30,
     "lock_lease_timeout_seconds": 600,
@@ -73,45 +71,25 @@
       ".agents",
       ".archive-v1.0",
       ".quarantine",
+      ".cloud-cache",
+      ".agent-reach-venv",
+      ".venv",
+      "__pycache__",
       "agent-bootstrap",
+      "core-frameworks",
       "LOGS",
+      "node_modules",
       "scratch",
       "templates",
       "servers",
-      ".cloud-cache",
-      "core-frameworks"
+      "skills",
+      "dist",
+      "build",
+      ".next"
     ],
     "persistent_knowledge": [
       "C:/Skills/core-frameworks"
     ]
-  },
-  "mcp_bindings": {
-    "allowed": [
-      "browsermcp",
-      "StitchMCP",
-      "Kluster-Verify-Code",
-      "android-management-api",
-      "chrome-devtools-mcp",
-      "fetch",
-      "figma",
-      "filesystem",
-      "firebase-mcp-server",
-      "github",
-      "github-mcp-server",
-      "google-compute-engine",
-      "google-developer-knowledge",
-      "mcp-knowledge-graph",
-      "memory",
-      "puppeteer",
-      "sequential-thinking",
-      "tavily",
-      "exa"
-    ],
-    "forbidden": [
-      "mcp-toolbox-for-databases",
-      "*"
-    ],
-    "_note": "Only listed MCPs may be invoked. All others are denied."
   },
   "harvester": {
     "scan_subdirs_on_no_root_manifest": true,
@@ -245,13 +223,16 @@
     "open-interpreter": "OpenInterpreter/open-interpreter",
     "smolagents": "huggingface/smolagents",
     "cline": "cline/cline",
-    "dummy": "dummy/test",
-    "inferred-package": "test/inferred-package",
-    "testrepo": "testorg/testrepo",
     "puppeteer": "puppeteer/puppeteer",
     "scrapy": "scrapy/scrapy",
     "selenium": "SeleniumHQ/selenium",
-    "metagpt": "geekan/MetaGPT"
+    "metagpt": "geekan/MetaGPT",
+    "jules": "google/jules",
+    "next-auth": "nextauthjs/next-auth",
+    "tanstack": "TanStack/query",
+    "docker": "docker/awesome-compose",
+    "psscriptanalyzer": "PowerShell/PSScriptAnalyzer",
+    "tree-sitter": "tree-sitter/tree-sitter"
   },
   "sandbox": {
     "enabled": true

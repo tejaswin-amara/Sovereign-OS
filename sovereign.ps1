@@ -1,4 +1,4 @@
-# sovereign.ps1 - The Sovereign Master Controller (v14.0.0-CloudNative)
+# sovereign.ps1 - The Sovereign Master Controller (v15.0.0-CloudNative)
 # Purpose: Unified Orchestrator with OS-level Locking, Phase-Gated Execution, and State Reconciliation.
 # Location: C:/Skills/sovereign.ps1
 
@@ -96,12 +96,12 @@ $Mutex = $null
 
 try {
     $ExecutionStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-    # Lock acquisition INSIDE try block — guarantees finally cleanup
+    # Lock acquisition INSIDE try block â€” guarantees finally cleanup
     $Mutex = Start-SovereignLock -LockFile $LockFile -TimeoutSeconds 30
     Write-SovereignLog -Level "INFO" -Step "MUTEX" -Message "OS-Level Lock Acquired."
 
     # ------------------------------------------------------------------
-    # PHASE 1: INIT — Dynamic Skill Count & Config Update [CRITICAL]
+    # PHASE 1: INIT â€” Dynamic Skill Count & Config Update [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "INIT" -Message "Computing dynamic skill count."
 
@@ -113,14 +113,18 @@ try {
     Write-SovereignLog -Level "INFO" -Step "INIT" -Message "Dynamic skill count: $DynamicCount"
 
     if ($UpdateLibrary -and (Test-Path "$SovereignRoot/.git")) {
-        try {
-            Push-Location $SovereignRoot
-            $GitOut = git pull --quiet --no-verify 2>&1
-            if ($LASTEXITCODE -ne 0) {
-                Write-SovereignLog -Level "WARN" -Step "INIT" -Message "git pull failed: $GitOut"
+        if (Get-Command git -ErrorAction SilentlyContinue) {
+            try {
+                Push-Location $SovereignRoot
+                $GitOut = git pull --quiet --no-verify 2>&1
+                if ($LASTEXITCODE -ne 0) {
+                    Write-SovereignLog -Level "WARN" -Step "INIT" -Message "git pull failed: $GitOut"
+                }
+            } finally {
+                Pop-Location
             }
-        } finally {
-            Pop-Location
+        } else {
+             Write-SovereignLog -Level "WARN" -Step "INIT" -Message "git is not installed, skipping UpdateLibrary."
         }
     }
 
@@ -140,7 +144,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 2: CORE_GEN — Generate SOVEREIGN_CORE.md from template [CRITICAL]
+    # PHASE 2: CORE_GEN â€” Generate SOVEREIGN_CORE.md from template [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "CORE_GEN" -Message "Generating SOVEREIGN_CORE.md from template."
 
@@ -160,19 +164,19 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 3: HARVEST — Skill Harvester [CRITICAL]
+    # PHASE 3: HARVEST â€” Skill Harvester [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "HARVEST" -Message "Running skill harvester."
     $HarvesterScript = "$SovereignRoot/agent-bootstrap/scripts/skill-harvester.ps1"
     if (Test-Path $HarvesterScript) {
-        pwsh -NoProfile -File $HarvesterScript -WorkspacePath $ResolvedProject -SyncLibrary | Out-Null
+        pwsh -NoProfile -File $HarvesterScript -WorkspacePath $ResolvedProject | Out-Null
         if ($LASTEXITCODE -ne 0) {
             throw "CRITICAL_PHASE_FAILURE: Harvester failed with exit code $LASTEXITCODE. Skill ingestion incomplete. Aborting pipeline."
         }
     }
 
     # ------------------------------------------------------------------
-    # PHASE 4: EVOLVE — Drift Analysis [CRITICAL]
+    # PHASE 4: EVOLVE â€” Drift Analysis [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "EVOLUTION" -Message "Running drift analysis."
     $EvolveScript = "$SovereignRoot/agent-bootstrap/scripts/self-evolve.ps1"
@@ -184,7 +188,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 5: SWEEP — Security Sweep [CRITICAL]
+    # PHASE 5: SWEEP â€” Security Sweep [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "SECURITY_SWEEP" -Message "Running security sweep."
     $SweepScript = "$SovereignRoot/agent-bootstrap/scripts/security-sweep.ps1"
@@ -196,7 +200,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 6 (OPTIONAL): FETCH — Cloud-Native JIT Skill Ingestion [NON-CRITICAL]
+    # PHASE 6 (OPTIONAL): FETCH â€” Cloud-Native JIT Skill Ingestion [NON-CRITICAL]
     # ------------------------------------------------------------------
     if (-not [string]::IsNullOrWhiteSpace($FetchURL)) {
         Write-SovereignLog -Level "INFO" -Step "FETCH" -Message "Triggering Cloud-Native JIT fetch for: $FetchURL"
@@ -216,7 +220,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 6.5: GC — Cloud Cache Garbage Collection [CRITICAL]
+    # PHASE 6.5: GC â€” Cloud Cache Garbage Collection [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "GC" -Message "Running Garbage Collection on ephemeral .cloud-cache..."
     $CloudCacheDir = Join-Path $SovereignRoot ".cloud-cache"
@@ -238,13 +242,7 @@ try {
                 Write-SovereignLog -Level "WARN" -Step "GC" -Message "Cloud cache partially purged. Some locked files remain."
             }
             
-            # Singularity Doctrine: Enforce WinGet dependency sterilization
-            Write-SovereignLog -Level "INFO" -Step "GC" -Message "Sterilizing OS packages via WinGet..."
-            try {
-                winget upgrade --all --silent --accept-package-agreements --accept-source-agreements 2>&1 | Out-Null
-            } catch {
-                Write-SovereignLog -Level "WARN" -Step "GC" -Message "WinGet sterilization skipped: $_"
-            }
+            # ponytail: WinGet sterilization removed. It's a YAGNI feature that blocks the global mutex for minutes.
         } catch {
             Write-SovereignLog -Level "WARN" -Step "GC" -Message "Failed to purge cloud cache. It may be locked."
             $PhaseFailures += "GC_FAIL"
@@ -252,7 +250,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 7: REACH — Internet Access Health Check [NON-CRITICAL]
+    # PHASE 7: REACH â€” Internet Access Health Check [NON-CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "REACH" -Message "Checking Internet Reach status..."
     $AgentReachVenv = Join-Path $env:USERPROFILE ".agent-reach-venv"
@@ -280,15 +278,13 @@ try {
     Write-SovereignLog -Level "ERROR" -Step "EXECUTION" -Message "Fatal error: $ErrMsg"
     
     # Autonomous Internet Routing for fatal errors
-    Write-SovereignLog -Level "INFO" -Step "OMNISEARCH" -Message "Attempting autonomous internet routing to resolve: $ErrMsg"
-    $Solution = Invoke-OmniSearch -Query "PowerShell $ErrMsg" -Mode "Web" -MaxResults 2
-    if ($Solution) {
-        Write-SovereignLog -Level "INFO" -Step "OMNISEARCH" -Message "OmniSearch retrieved potential solutions. Logged to agent telemetry."
-    }
+    Invoke-SovereignInternetDiagnostic -ErrorMessage $ErrMsg
     
     exit 1
 } finally {
-    # Guaranteed lock cleanup — Mutex is always released
+    # Flush any remaining batched log entries before cleanup
+    Flush-SovereignLogs
+    # Guaranteed lock cleanup â€” Mutex is always released
     if ($Mutex) {
         Stop-SovereignLock -LockFile $LockFile -Mutex $Mutex
         Write-SovereignLog -Level "INFO" -Step "MUTEX" -Message "Lock released."
@@ -297,13 +293,8 @@ try {
     if ($null -ne $ExecutionStopwatch) {
         $ExecutionStopwatch.Stop()
         $ElapsedMs = $ExecutionStopwatch.ElapsedMilliseconds
-        $EstimatedCost = ($ElapsedMs / 1000) * 0.00001 # Minimal heuristic cost
-        
-        Write-SovereignLog -Level "INFO" -Step "TELEMETRY" -Message "Execution finished in $ElapsedMs ms. Pushing to telemetry store."
-        $TelemetryScript = "$SovereignRoot/Log-SovereignTelemetry.ps1"
-        if (Test-Path $TelemetryScript) {
-            & $TelemetryScript -AgentId "Sovereign-Master" -PromptTokens 0 -CompletionTokens 0 -EstimatedCost $EstimatedCost
-        }
+        # ponytail: Telemetry facade removed (was logging 0 tokens and an arbitrary cost heuristic).
+        Write-SovereignLog -Level "INFO" -Step "TELEMETRY" -Message "Execution finished in $ElapsedMs ms."
     }
 }
 

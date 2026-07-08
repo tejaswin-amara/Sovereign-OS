@@ -20,7 +20,7 @@ This document maps the **[Project Name]** technology stack to the corresponding 
 
 | Standard | Repository | Application |
 |---|---|---|
-| **Agent DNA** | `AGENT_DNA.md` | Zero-Intervention, Autonomy, Library-First reasoning |
+| **Sovereign Core** | `SOVEREIGN_CORE.md` | Governing directives, autonomy, library-first reasoning |
 | **Rules Library** | `awesome-rules/` | Project-specific behavioral calibration |
 
 ---

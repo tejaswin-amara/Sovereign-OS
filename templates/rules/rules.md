@@ -1,4 +1,4 @@
-# SOVEREIGN (v14.0.0-CloudNative)
+# SOVEREIGN (v15.0.0-CloudNative)
 > [!IMPORTANT]
 > /sovereign initializes the environment. Autonomous Trigger: `pwsh -ExecutionPolicy Bypass -File "C:/Skills/sovereign.ps1" -ProjectPath "$CWD"`
 
@@ -10,7 +10,7 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 - Web: Next.js/React App Router (Server Components). Tailwind (CSS/HSL). Zod. TS (Zero-any, strict mode enabled, strictNullChecks=true, noImplicitAny=true).
 - Testing: Playwright (E2E), Vitest. 100% auth/payment coverage. Gate: `pnpm type-check`.
 - Ghost Pilot: Autonomous zero-intervention execution. 99.9% SLO. Structured JSON logs mandatory.
-- 🐴 Ponytail Reflex (Lazy Developer Mode): Write the minimum code that works. Use standard library or native features before installing deps.
+- ðŸ´ Ponytail Reflex (Lazy Developer Mode): Write the minimum code that works. Use standard library or native features before installing deps.
 - Deletion over addition. Shortest working diff, fewest files, boring over clever. Mark shortcuts with `# ponytail:` comments.
 
 ## INVARIANTS
@@ -29,12 +29,12 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 ## Auto-Healed Rules (2026-06-11)
 - Enforce TypeScript strict mode for all new files.
 
-## Absorbed Learnings (v14.0.0-CloudNative Hardened)
+## Absorbed Learnings (v15.0.0-CloudNative Hardened)
 | Date | Category | Learning | Action Taken |
 |---|---|---|---|
 | 2026-04-25 | Hardening | **v13.0.0-PRODUCTION TERMINAL HARDENING**: Resolved SHA parity mismatch by baking `VERCEL_GIT_COMMIT_SHA` into `next.config.mjs` and updating diagnostics route to prioritize baked-in variables. | Patched `next.config.mjs` and `route.ts`. |
 | 2026-04-25 | Middleware | **LOCALE-PREFIXED API BYPASS**: Standardized middleware logic to detect `/api` regardless of locale prefix (`/en/api`, etc.) ensuring health/diagnostic stability. | Refactored `middleware.ts`. |
-| 2026-04-18 | Maintenance | **v13.0.0-PRODUCTION STABILIZATION**: Completed 🔱 SOVEREIGN COMMAND (v13.0.0-PRODUCTION) Unified Initializaton suite. Confirmed zero drift across 103-skill manifest. | Executed `sovereign.ps1`, `doctor.ps1`, and `sovereign-check.ps1`. |
+| 2026-04-18 | Maintenance | **v13.0.0-PRODUCTION STABILIZATION**: Completed ðŸ”± SOVEREIGN COMMAND (v13.0.0-PRODUCTION) Unified Initializaton suite. Confirmed zero drift across 103-skill manifest. | Executed `sovereign.ps1`, `doctor.ps1`, and `sovereign-check.ps1`. |
 | 2026-04-17 | Infra | **v13.0.0-PRODUCTION DIRECT-PATH STABILIZATION**: Purged all `npx` calls from `mcp_config.json`. Enforced absolute, quoted `node.exe` paths. | Refactored `mcp-guardian.ps1` and patched config. |
 | 2026-04-17 | Governance | **v13.0.0-PRODUCTION EVOLUTION**: Integrated 14 architectural signals into `rules.md`. Established A1-A5 Invariants. | Updated Base Law to v13.0.0-PRODUCTION. |
 | 2026-04-17 | Infra | **DOCKER STANDALONE FIX**: Discovered that Next.js 15 requires `DOCKER_BUILD=true` env var and correct Turborepo filter (`@app/web`) to generate `standalone` output in Docker. | Updated Dockerfile and env vars. |
@@ -46,7 +46,7 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 | 2026-06-03 | Hardening | **WINDOWS LONG PATHS BLOCKER**: Handled git clone failures of deeply-nested repositories under Windows by appending `-c core.longpaths=true` to all clone operations. | Patched scripts/processes to use long paths. |
 | 2026-06-03 | Hardening | **ROOT README.MD VERIFICATION BLOCKER**: GitBook-based repositories (like `awesome-kubernetes`) that store markdown documentation in a subfolder (`/docs/`) instead of the root directory trigger verification audit errors. | Created root-level README.md redirecting to the docs directory to resolve verification errors. |
 | 2026-06-03 | Security | **CONFIG INTEGRITY PROTECTION**: Automated config integrity checks in the controller mandate that `agent-bootstrap/.config.sha256` has its read-only attribute cleared, rewritten with the exact SHA256 (no trailing newline), and resealed. | Implemented automated sign-config flow. |
-| 2026-06-04 | Upgrade | **v14.0.0-CloudNative DEPLOYMENT**: Executed complete monorepo alignment to v14.0.0-CloudNative. Onboarded nested projects (`campus-connect-main`), purged legacy files (`CONTRACT.md`), synchronized all learnings templates, and validated zero-failure compliance. | Patched update scripts, templates, and finalized project onboarding. |
+| 2026-06-04 | Upgrade | **v15.0.0-CloudNative DEPLOYMENT**: Executed complete monorepo alignment to v15.0.0-CloudNative. Onboarded nested projects (`campus-connect-main`), purged legacy files (`CONTRACT.md`), synchronized all learnings templates, and validated zero-failure compliance. | Patched update scripts, templates, and finalized project onboarding. |
 
 ## Absorbed Learnings (v13.0.0-Production Hardened)
 | Date | Category | Learning | Action Taken |
@@ -60,7 +60,7 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 | 2026-06-02 | Governance | **v13.0.0-PRODUCTION SOVEREIGN SYSTEM AUDIT**: Conducted a global audit mapping and successfully synced the local 126-skill Harvester framework. Confirmed 0 failures on all reparse junction points and verified 100% zero-drift alignment against the physical CONTRACT.md invariants. | Executed full `sovereign.ps1` and `sovereign-check.ps1` validation sweeps. |
 | 2026-06-02 | Deployment | **DUAL-DELIVERY GITHUB PAGES STRATEGY**: Designed a zero-dependency client-side architecture (`index.html` + `script.js`) executing microgrid gymnasium physics and continuous SAC neural-network policies in ES6 JavaScript. Enables high-fidelity interactive simulation on GitHub Pages without server-side resources, complementing the local Streamlit dashboard. | Developed `index.html`, `styles.css`, and `script.js`. |
 
-## Absorbed Learnings (v14.0.0-CloudNative Domain & Medical Extensions)
+## Absorbed Learnings (v15.0.0-CloudNative Domain & Medical Extensions)
 | Date | Category | Learning | Action Taken |
 |---|---|---|---|
 | 2026-06-04 | Database | **FIRESTORE OFFLINE PERSISTENCE DECOUPLING**: Swapping custom offline queues with Firestore's native persistent caching reduces UI state complexity, eliminates race conditions on network status changes, and ensures database integrity. | Rebuilt App.tsx and context to use native Firestore caching. |
@@ -74,9 +74,9 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 | 2026-06-05 | React & TSX | **JSX EXPRESSION DELIMITERS IN MATH**: Writing LaTeX notations containing curly braces (e.g. \text{...}) inside JSX elements causes parser compilation errors because the braces are parsed as JSX delimiters. Wrapping mathematical strings in JS string literals (e.g. {"..."}) resolves the compilation error. | Patched line 3953 in Dashboard.tsx. |
 | 2026-06-05 | Gut-Brain Axis | **INTESTINAL MICROBIOME & BARRIER PERMEABILITY**: Ingested microbial relative abundances and computed Shannon Diversity ($H'$), F/B ratios, and Lipopolysaccharide ($J_{\text{LPS}}$) leakage. Implemented 20% nutrient assimilation contraction interlock on barrier compromise. | Implemented gutService.ts, useMicrobiome.ts, and Microbiome tab in Dashboard.tsx. |
 | 2026-06-05 | Circadian Endocrinology | **CIRCADIAN HORMONE PULSES & SATIETY SHIFTS**: Diurnally simulated cortisol and melatonin rhythms modeled using cosine curves, allowing acrophase shifts based on late sleep and late meals. Satiety parameters Melatonin/Leptin/Ghrelin and stress factors HRV/RestingHR calculate a unified index (HSI) creating homeostatic hunger boundaries. | Implemented endocrineService.ts, useEndocrine.ts, and Endocrine tab in Dashboard.tsx. |
-| 2026-06-06 | Immunological Surveillance | **IMMUNE TELEMETRY & SII CALCULATIONS**: Integrated continuous proxy biomarkers (hs-CRP, IL-6, TNF-α) to calculate a Systemic Inflammatory Index (SII) scaled by glycemic standard deviation. Interlocked with macro target ratios, caffeine windows, and anti-inflammatory supplement suggestions. | Implemented immuneService.ts, useImmune.ts, and Immune tab in Dashboard.tsx. |
+| 2026-06-06 | Immunological Surveillance | **IMMUNE TELEMETRY & SII CALCULATIONS**: Integrated continuous proxy biomarkers (hs-CRP, IL-6, TNF-Î±) to calculate a Systemic Inflammatory Index (SII) scaled by glycemic standard deviation. Interlocked with macro target ratios, caffeine windows, and anti-inflammatory supplement suggestions. | Implemented immuneService.ts, useImmune.ts, and Immune tab in Dashboard.tsx. |
 
-## Absorbed Learnings (v14.0.0-CloudNative Core & OS Refinements)
+## Absorbed Learnings (v15.0.0-CloudNative Core & OS Refinements)
 | Feature | Insight/Aha Moment | Associated Files | Date |
 |---|---|---|---|
 | Configurable Reward Weights & Dynamic SVG Speed | Parameterized reward weights in `GridConfig` to facilitate dynamic sweeps and added SVG path animation duration scaling based on real-time power throughput in both static HTML and Streamlit visualizers. | `environments.py`, `tests/test_env.py`, `script.js`, `app.py` | 2026-06-11 |
@@ -103,7 +103,7 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 | UI Render Deferral & AI Fallbacks | Utilizing React's `useDeferredValue` for heavy recharts data arrays prevents main render thread locking. Wrapping Gemini calls in a 15-second `Promise.race` with standard local templates prevents UI freezes on rate limit/throttling. | `src/components/Dashboard.tsx`, `src/services/recipeService.ts`, `src/services/suppService.ts` | 2026-06-12 |
 | CI/CD Runner Hardening | Checking path existence (e.g. Test-Path "C:/Skills/sovereign.ps1") for custom local validation scripts ensures that pipelines running on standard hosted runners (like ubuntu-latest) do not fail due to missing local drive mounts. | `.github/workflows/deploy.yml` | 2026-06-12 |
 
-## 🚀 Optimization Hypotheses
+## ðŸš€ Optimization Hypotheses
 - *Hypothesis*: Adding domain-specific rules locally reduces agent confusion in complex monorepos.
 - *Validated*: Adding Next.js/Tailwind/Zod rules to rules.md eliminated all drift detection issues (0 out of 3 checks failed).
 - *Hypothesis*: Running MCP servers natively (npx) is more reliable than Docker containers with `mcp-proxy` wrappers for development.
@@ -111,7 +111,7 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 - *Hypothesis*: Explicitly typing `useMutation` generic parameters in TanStack Query prevents `void` type inference regressions in Turborepo builds for Next.js 15.
 - *Validated*: The build failed with Next.js compiling the Frappe `create` mutation as `void`, overriding it with explicit `<any, Error, { doctype: string, data: any }>` resolved the build blockers.
 
-## ⚠️ Zero-Any Policy Intentional Exception Declaration
+## âš ï¸ Zero-Any Policy Intentional Exception Declaration
 - **TanStack useMutation `any` Exception**: Raw `any` types are explicitly permitted when interfacing with TanStack Query generic parameters (e.g. `<any, Error, ...>`) due to third-party type library constraints where forcing stricter types introduces type incompatibility compiler regressions in compiled Turborepo outputs.
 
 
@@ -127,4 +127,11 @@ You are Sovereign, the Master Controller of the OS. You are an autonomous agenti
 | Feature | Insight/Aha Moment | Associated Files | Date |
 |---|---|---|---|
 | E2E Testing Track | Placing E2E tests in a dedicated subfolder `agent-bootstrap/tests/e2e` maintains folder layout cleanliness and permits tag-based filtering under Pester 5. | `agent-bootstrap/tests/e2e/`, `TEST_INFRA.md` | 2026-06-23 |
+
+
+
+## Absorbed Learnings (2026-06-27)
+| Feature | Insight/Aha Moment | Associated Files | Date |
+|---|---|---|---|
+| Jules by Google API Integration | Integrated Jules by Google using a secure backend token via `.env`. A robust `Invoke-JulesSession.ps1` dispatches background tasks seamlessly. | `Invoke-JulesSession.ps1`, `SKILL.md` | 2026-06-27 |
 

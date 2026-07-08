@@ -1,11 +1,10 @@
-# SOVEREIGN SKILL HARVESTER v14.0.0-CloudNative (BULLETPROOF - REFACTORED)
+# SOVEREIGN SKILL HARVESTER v15.0.0-CloudNative (BULLETPROOF - REFACTORED)
 # Purpose: Deep Harvester with project analysis, dependency mapping, and skill matching.
 # Location: C:/Skills/agent-bootstrap/scripts/skill-harvester.ps1
 
 [CmdletBinding()]
 param(
-    [string]$WorkspacePath = ".",
-    [switch]$SyncLibrary = $false
+    [string]$WorkspacePath = "."
 )
 
 Set-StrictMode -Version Latest

@@ -15,10 +15,16 @@ function Get-SovereignFileHash {
 
 function Protect-SovereignHash {
     param([string]$Hash)
-    Add-Type -AssemblyName System.Security
-    $HashStringBytes = [System.Text.Encoding]::UTF8.GetBytes($Hash)
-    $EncryptedBytes = [System.Security.Cryptography.ProtectedData]::Protect($HashStringBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
-    return [Convert]::ToBase64String($EncryptedBytes)
+    # ponytail: DPAPI is Windows-only. On Linux, store plaintext (Configuration.ps1 handles both on decrypt).
+    $isWin = if (Get-Variable -Name "IsWindows" -ValueOnly -ErrorAction SilentlyContinue) { $true } elseif ($env:OS -eq "Windows_NT") { $true } else { $false }
+    if ($isWin) {
+        Add-Type -AssemblyName System.Security
+        $HashStringBytes = [System.Text.Encoding]::UTF8.GetBytes($Hash)
+        $EncryptedBytes = [System.Security.Cryptography.ProtectedData]::Protect($HashStringBytes, $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+        return [Convert]::ToBase64String($EncryptedBytes)
+    } else {
+        return $Hash
+    }
 }
 
 function Update-SovereignChecksum {

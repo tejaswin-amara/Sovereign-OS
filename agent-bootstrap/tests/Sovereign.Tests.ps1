@@ -1,4 +1,4 @@
-# Sovereign Enterprise Test Suite (v14.0.0-CloudNative)
+# Sovereign Enterprise Test Suite (v15.0.0-CloudNative)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
@@ -15,14 +15,14 @@ Describe "Sovereign Helpers" {
         It "Should correctly load sovereign.config.json" {
             $config = Get-SovereignConfig
             $config | Should -Not -BeNullOrEmpty
-            $config.version | Should -Match "14.0.0-CloudNative"
+            $config.version | Should -Match "15.0.0-CloudNative"
         }
     }
 
     Context "Version Resolution" {
         It "Should resolve the VERSION file" {
             $version = Get-SovereignVersion -SkillsRoot $script:SovereignRoot
-            $version | Should -Match "14.0.0-CloudNative"
+            $version | Should -Match "15.0.0-CloudNative"
         }
     }
 

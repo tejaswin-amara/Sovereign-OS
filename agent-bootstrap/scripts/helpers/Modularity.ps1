@@ -48,10 +48,12 @@ function Get-DynamicSkillCount {
         [Parameter(Mandatory=$true)]
         [string[]]$ExcludedDirs
     )
-    $AllDirs = Get-ChildItem -Path $SkillsRoot -Directory |
+    # ponytail: skills live under $SkillsRoot/skills/. Count subdirs containing SKILL.md.
+    $SkillsDir = Join-Path $SkillsRoot "skills"
+    if (-not (Test-Path $SkillsDir)) { return 0 }
+    $AllDirs = Get-ChildItem -Path $SkillsDir -Directory |
         Where-Object { $_.Name -notmatch '^\.' } |
-        Where-Object { $_.Name -notmatch '^_' } |
-        Where-Object { $_.Name -notin $ExcludedDirs }
+        Where-Object { Test-Path (Join-Path $_.FullName "SKILL.md") }
     return @($AllDirs).Count
 }
 
@@ -103,4 +105,49 @@ function Get-SovereignManifestFiles {
     }
     
     return $Files
+}
+
+function Get-FilteredProjectFiles {
+    # ponytail: single shared file walker replacing 3 duplicate implementations.
+    # Upgrade path: if this becomes a bottleneck, switch to [System.IO.Directory]::EnumerateFiles with parallel processing.
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$RootPath,
+        [Parameter(Mandatory=$false)]
+        [string[]]$Extensions = @(".ps1", ".psm1", ".js", ".ts", ".tsx", ".jsx", ".md", ".py"),
+        [Parameter(Mandatory=$false)]
+        [string[]]$ExcludeDirs = @()
+    )
+    
+    if (-not $ExcludeDirs -or $ExcludeDirs.Count -eq 0) {
+        $ConfigExclude = Get-SovereignConfig -KeyPath "governance.harvester_excluded_dirs"
+        $ExcludeDirs = if ($ConfigExclude) { @($ConfigExclude) } else { @(".git", "node_modules", "LOGS") }
+    }
+    
+    $Files = [System.Collections.Generic.List[string]]::new()
+    $ExcludeSet = [System.Collections.Generic.HashSet[string]]::new([string[]]$ExcludeDirs, [System.StringComparer]::OrdinalIgnoreCase)
+    
+    $Walker = {
+        param([string]$CurrentPath)
+        try {
+            foreach ($Dir in [System.IO.Directory]::EnumerateDirectories($CurrentPath)) {
+                $DirName = [System.IO.Path]::GetFileName($Dir)
+                if (-not $ExcludeSet.Contains($DirName) -and $DirName -notmatch '^\.' ) {
+                    $DirInfo = [System.IO.DirectoryInfo]::new($Dir)
+                    if (-not $DirInfo.LinkTarget) {
+                        & $Walker -CurrentPath $Dir
+                    }
+                }
+            }
+            foreach ($File in [System.IO.Directory]::EnumerateFiles($CurrentPath)) {
+                $Ext = [System.IO.Path]::GetExtension($File).ToLower()
+                if ($Ext -in $Extensions) {
+                    $Files.Add($File)
+                }
+            }
+        } catch {}
+    }
+    & $Walker -CurrentPath $RootPath
+    return ,$Files
 }

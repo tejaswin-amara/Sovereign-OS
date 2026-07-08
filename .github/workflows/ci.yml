@@ -8,7 +8,10 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
     - uses: actions/checkout@v4
     
@@ -24,4 +27,13 @@ jobs:
     - name: Run Sovereign Tests
       shell: pwsh
       run: |
-        Invoke-Pester -Path agent-bootstrap/tests/Helpers.Tests.ps1 -Output Detailed
+        $Tests = @(
+            "agent-bootstrap/tests/Helpers.Tests.ps1",
+            "agent-bootstrap/tests/RemediationVerify.Tests.ps1"
+        )
+        Invoke-Pester -Path $Tests -Output Detailed
+        
+    - name: Run Harvester Empirical Tests
+      shell: pwsh
+      run: |
+        ./run_harvester_tests.ps1

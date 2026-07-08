@@ -25,7 +25,7 @@ Describe "Sovereign Helpers Unit Tests" {
 
     Context "Validation Helper (Validation.ps1)" {
         It "Should return true when string matches pattern" {
-            Assert-SovereignPattern -InputString "v14.0.0-CloudNative" -Pattern '^v\d+\.\d+\.\d+' | Should -Be $true
+            Assert-SovereignPattern -InputString "v15.0.0-CloudNative" -Pattern '^v\d+\.\d+\.\d+' | Should -Be $true
         }
 
         It "Should -Throw PATTERN_MISMATCH when string does not match pattern" {

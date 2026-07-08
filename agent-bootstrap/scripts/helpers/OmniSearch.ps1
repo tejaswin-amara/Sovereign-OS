@@ -16,7 +16,9 @@ function Invoke-OmniSearch {
     )
 
     $SovereignRoot = (Resolve-Path "$PSScriptRoot/../../..").Path
-    $AgentReachExe = Join-Path $env:USERPROFILE ".agent-reach-venv/Scripts/agent-reach.exe"
+    $VenvSubDir = if ($IsWindows -or $env:OS -eq "Windows_NT") { "Scripts" } else { "bin" }
+    $ExeName = if ($IsWindows -or $env:OS -eq "Windows_NT") { "agent-reach.exe" } else { "agent-reach" }
+    $AgentReachExe = Join-Path $env:USERPROFILE ".agent-reach-venv/$VenvSubDir/$ExeName"
     
     if (-not (Test-Path $AgentReachExe)) {
         Write-SovereignLog -Level "WARN" -Step "OMNISEARCH" -Message "AgentReach not installed. Falling back to simple curl."
@@ -38,18 +40,21 @@ function Invoke-OmniSearch {
         Write-SovereignLog -Level "INFO" -Step "OMNISEARCH" -Message "Executing OmniSearch [$Mode]: $Query"
         
         $Result = ""
+        # ponytail: escape query to prevent command injection via backticks or $()
+        $SafeQuery = $Query -replace '[`$]', ''
         switch ($Mode) {
             "Web" {
-                # Exa web search via AgentReach
-                $Result = & $AgentReachExe run "exa search `"$Query`" --num $MaxResults" 2>&1 | Out-String
+                $Result = & $AgentReachExe run "exa search `"$SafeQuery`" --num $MaxResults" 2>&1 | Out-String
             }
             "Code" {
-                # Exa code search
-                $Result = & $AgentReachExe run "exa search code `"$Query`" --num $MaxResults" 2>&1 | Out-String
+                $Result = & $AgentReachExe run "exa search code `"$SafeQuery`" --num $MaxResults" 2>&1 | Out-String
             }
             "GitHub" {
-                # GitHub CLI native lookup
-                $Result = gh search repos $Query --limit $MaxResults | Out-String
+                if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
+                    Write-SovereignLog -Level "WARN" -Step "OMNISEARCH" -Message "gh CLI not found. Skipping GitHub search."
+                    return $null
+                }
+                $Result = gh search repos $SafeQuery --limit $MaxResults | Out-String
             }
         }
         

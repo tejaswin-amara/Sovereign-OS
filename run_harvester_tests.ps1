@@ -151,7 +151,12 @@ try {
     $junctionLink = Join-Path $FixtureRoot "junction_dir\self_loop"
     if (Test-Path -LiteralPath $junctionLink) {
         Write-Host "Removing directory junction link: $junctionLink"
-        cmd.exe /c rmdir "$junctionLink"
+        $isWin = if (Get-Variable -Name "IsWindows" -ValueOnly -ErrorAction SilentlyContinue) { $true } elseif ($env:OS -eq "Windows_NT") { $true } else { $false }
+        if ($isWin) {
+            cmd.exe /c rmdir "$junctionLink"
+        } else {
+            Remove-Item -LiteralPath $junctionLink -Force
+        }
     }
 
 } catch {

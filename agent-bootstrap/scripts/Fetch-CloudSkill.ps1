@@ -7,6 +7,10 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
+if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+    throw "git is not installed or not on PATH. Cannot fetch cloud skills."
+}
+
 $SovereignPath = (Resolve-Path "$PSScriptRoot/../..").Path
 Import-Module "$SovereignPath/agent-bootstrap/scripts/helpers.psm1" -Force -DisableNameChecking
 
