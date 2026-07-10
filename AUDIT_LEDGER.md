@@ -60,13 +60,13 @@
 | D5 | `.config.sha256` machine-bound | ❌ Present | ✅ Resolved (Removed from tracking) | Phase 3 | Remove from tracking, TOFU-only |
 | D6 | `Invoke-OmniSearch` unsanitized error egress | ❌ Present | ✅ Resolved (Wired diagnostic) | Phase 4 | Wire `Invoke-SovereignInternetDiagnostic` |
 | D7 | Two unsynced dep→repo maps | ❌ Present (114 vs 41) | ✅ Resolved (Evolution.ps1 merged to config) | Phase 2 | Merge Evolution.ps1's `$TagToSkill` into config |
-| D8 | `Invoke-Sandbox.ps1` silent fallback | ❌ Present | ✅ Resolved (Enforced warnings and rules) | Phase 4 | Wire `sandbox.enabled`, add `-AllowUnsandboxed` |
+| D8 | `Invoke-Sandbox.ps1` silent fallback | ❌ Present | ✅ Resolved (Wired `sandbox.enabled`, default true. Grep confirmed.) | Phase 4 | Wire `sandbox.enabled`, add `-AllowUnsandboxed` |
 | D9 | Template contamination + spreading | ❌ Present | ✅ Resolved (Decontaminated) | Phase 6 | Decontaminate learnings.md and rules.md |
-| D10 | `Logging.ps1` `$env:USERPROFILE` crash on Linux | ❌ Present | ✅ Resolved ($env:HOME fallback added) | Phase 3 | Add `$env:HOME` fallback with null guard |
+| D10 | `$env:USERPROFILE` crash on Linux | ❌ Present | ✅ Resolved (Cross-repo `grep -rn "\$env:USERPROFILE"` confirms 0 unhandled instances. Files updated with fallback) | Phase 3 | Add `$env:HOME` fallback with null guard |
 | D11 | Stale `AGENT_DNA.md` in skills-map-template.md | ❌ Present | ✅ Resolved (Updated reference) | Phase 1 | Update reference |
 | D12 | Hard-coded "23/23" test count | ❌ Present | ✅ Resolved (Dynamic checking) | Phase 1 | Replace with dynamic instruction |
-| D13 | Dead config flags | ❌ Present | ✅ Resolved (Pruned) | Phase 4 | Delete or wire each one |
-| D14 | Orphaned gitlinks under core-frameworks/ | ❌ Present | ✅ Resolved (Cleaned) | Phase 2 | Verify and clean |
+| D13 | Dead config flags | ❌ Present | ✅ Resolved (Pruned `multi_tenant`, restored `mcp_bindings` as advisory. Grep confirmed no orphans) | Phase 4 | Delete or wire each one |
+| D14 | Orphaned gitlinks under core-frameworks/ | ❌ Present | ✅ Resolved (`git rm --cached` executed on aider, browser-use, crewAI, langgraph, reader) | Phase 2 | Verify and clean |
 | D15 | Dead `-SyncLibrary` parameter | ❌ Present | ✅ Resolved (Parameter removed) | Phase 2 | Remove param and call-site args |
 | D16 | Inline module-cap reimplementation in bootstrap.ps1 | ❌ Present | ✅ Resolved (Wired to shared helper) | Phase 2 | Call shared `Assert-ModuleCap` |
 | D17 | Hard-coded `C:\Skills` paths (50+ locations) | ❌ Present | ✅ Resolved (Normalized and documented) | Accept (deployment-specific per Q3) | Document expectation |

@@ -41,8 +41,12 @@ if (-not $ExcludedDirs) {
     $ExcludedDirs = @(".git", ".archive-v1.0", "agent-bootstrap", "LOGS", "G0DM0D3", "GodMode", "goose", "templates", "scratch", ".quarantine", "servers") 
 }
 
-$Folders = Get-ChildItem -LiteralPath $SovereignRoot -Directory | 
-           Where-Object { $_.Name -notin $ExcludedDirs -and $_.Name -notmatch "^\." -and $_.Name -notmatch "^_" }
+$SkillsDir = Join-Path $SovereignRoot "skills"
+$Folders = @()
+if (Test-Path $SkillsDir) {
+    $Folders = Get-ChildItem -LiteralPath $SkillsDir -Directory | 
+               Where-Object { $_.Name -notin $ExcludedDirs -and $_.Name -notmatch "^\." -and $_.Name -notmatch "^_" -and (Test-Path (Join-Path $_.FullName "SKILL.md")) }
+}
 
 $GlobalLibrary = @{}
 foreach ($Folder in $Folders) {

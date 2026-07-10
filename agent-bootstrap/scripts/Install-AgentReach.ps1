@@ -36,7 +36,9 @@ if (-not $PythonCmd) {
 # -------------------------------------------------------------------------
 # 2. CREATE ISOLATED VENV
 # -------------------------------------------------------------------------
-$VenvDir = Join-Path $env:USERPROFILE ".agent-reach-venv"
+$UserHome = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { "" }
+if (-not $UserHome) { throw "Cannot determine user home directory." }
+$VenvDir = Join-Path $UserHome ".agent-reach-venv"
 $VenvSubDir = if ($IsWindows -or $env:OS -eq "Windows_NT") { "Scripts" } else { "bin" }
 $VenvActivate = Join-Path $VenvDir "$VenvSubDir/Activate.ps1"
 

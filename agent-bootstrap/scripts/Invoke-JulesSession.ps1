@@ -10,7 +10,8 @@ param(
     [string]$Title = "Sovereign OS Task"
 )
 
-$envFile = "C:\Skills\.env"
+$SovereignRoot = (Resolve-Path "$PSScriptRoot/../..").Path
+$envFile = Join-Path $SovereignRoot ".env"
 $apiKey = $null
 
 if (Test-Path $envFile) {

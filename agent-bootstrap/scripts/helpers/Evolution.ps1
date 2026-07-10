@@ -91,7 +91,7 @@ function Get-SovereignSkillGaps {
     $SkillGaps = [System.Collections.Generic.List[string]]::new()
 
     # Check if project uses deps that map to skills not yet harvested
-    # ponytail: single source of truth â€” read from sovereign.config.json instead of hardcoded duplicate
+    # ponytail: single source of truth — read from sovereign.config.json instead of hardcoded duplicate
     $ConfigMap = Get-SovereignConfig -KeyPath "dep_to_skill_map"
     $TagToSkill = @{}
     if ($ConfigMap) {

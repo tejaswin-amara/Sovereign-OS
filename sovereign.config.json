@@ -49,15 +49,7 @@
   },
   "governance": {
     "module_cap": 32,
-    "multi_tenant": {
-      "enabled": true,
-      "tenant_id": "HQ-Alpha",
-      "isolation_mode": "strict",
-      "distributed_backends": [
-        "tcp://office-ny.sovereign.internal:5000",
-        "tcp://office-ldn.sovereign.internal:5000"
-      ]
-    },
+
     "skills_count": 7,
     "_skills_count_note": "DYNAMIC - overwritten by sovereign.ps1 at runtime. Never edit manually.",
     "lock_timeout_seconds": 30,
@@ -89,7 +81,15 @@
     ],
     "persistent_knowledge": [
       "C:/Skills/core-frameworks"
-    ]
+    ],
+    "mcp_bindings": {
+      "_note": "Advisory only - read by LLMs to determine capabilities, not enforced by Sovereign core scripts",
+      "servers": [
+        "fetch",
+        "puppeteer",
+        "filesystem"
+      ]
+    }
   },
   "harvester": {
     "scan_subdirs_on_no_root_manifest": true,

@@ -18,7 +18,8 @@ function Invoke-OmniSearch {
     $SovereignRoot = (Resolve-Path "$PSScriptRoot/../../..").Path
     $VenvSubDir = if ($IsWindows -or $env:OS -eq "Windows_NT") { "Scripts" } else { "bin" }
     $ExeName = if ($IsWindows -or $env:OS -eq "Windows_NT") { "agent-reach.exe" } else { "agent-reach" }
-    $AgentReachExe = Join-Path $env:USERPROFILE ".agent-reach-venv/$VenvSubDir/$ExeName"
+    $UserHome = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { "" }
+    $AgentReachExe = if ($UserHome) { Join-Path $UserHome ".agent-reach-venv/$VenvSubDir/$ExeName" } else { "" }
     
     if (-not (Test-Path $AgentReachExe)) {
         Write-SovereignLog -Level "WARN" -Step "OMNISEARCH" -Message "AgentReach not installed. Falling back to simple curl."

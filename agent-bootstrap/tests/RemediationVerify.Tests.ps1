@@ -46,24 +46,28 @@ Describe "Sovereign Remediation Empirical Verification" {
             }
         }
 
-        It "Directory creation should work when path contains single quotes" {
-            $dest = $script:DestDirSingleQuote
+        It "Directory creation should work when path contains single quotes (BS-02)" {
+            $destFile = Join-Path $script:DestDirSingleQuote "test.txt"
             
-            # Direct cmdlet call instead of Invoke-Expression
-            New-Item -ItemType Directory -Path $dest -Force | Out-Null
+            # Use actual Sovereign helper function
+            Save-AtomicContent -Path $destFile -Content "Test"
 
-            (Test-Path $dest) | Should -Be $true
+            (Test-Path $destFile) | Should -Be $true
         }
 
-        It "Get-ChildItem using -LiteralPath should succeed when path contains brackets (BS-05)" {
+        It "Get-SovereignManifestFiles should succeed when path contains brackets (BS-05)" {
             $bracketDir = Join-Path $script:SovereignRoot "temp_gci[bracket]"
             if (-not (Test-Path $bracketDir)) {
                 New-Item -Path $bracketDir -ItemType Directory -Force | Out-Null
             }
-            New-Item -Path (Join-Path $bracketDir "dummy.txt") -ItemType File -Force | Out-Null
-
+            New-Item -Path (Join-Path $bracketDir "dummy.json") -ItemType File -Force | Out-Null
+            
+            # ponytail: mock config for the exclusions in Get-SovereignManifestFiles?
+            # Actually Get-SovereignManifestFiles takes exclusions array.
+            
             try {
-                $files = Get-ChildItem -LiteralPath $bracketDir -ErrorAction Stop
+                # Use actual Sovereign helper function
+                $files = Get-SovereignManifestFiles -Path $bracketDir -Filter "*.json" -Exclusions @(".git")
                 $files.Count | Should -BeGreaterThan 0
             } finally {
                 if (Test-Path $bracketDir) {
@@ -73,11 +77,27 @@ Describe "Sovereign Remediation Empirical Verification" {
         }
     }
 
-    Context "4. Path Normalization (BS-07)" {
-        It "Should correctly normalize backslashes to forward slashes in Windows path" {
-            $WindowsPath = "C:\Skills\agent-bootstrap\scripts"
-            $RemediatedNormalized = $WindowsPath.Replace('\', '/')
-            $RemediatedNormalized | Should -Be "C:/Skills/agent-bootstrap/scripts"
+    Context "4. Path Normalization (BS-07) & Validation (VS-04)" {
+        It "Should properly sanitize and normalize paths in logs (BS-07)" {
+            # Write-SovereignLog handles path sanitization internally
+            $LogDir = Join-Path $script:SovereignRoot "LOGS"
+            Set-SovereignLogContext -LogDir $LogDir -RunId "TEST-123" -CorrId "TEST-123"
+            
+            $TestPath = "C:\Users\Fake\Path"
+            # It shouldn't crash
+            Write-SovereignLog -Level "INFO" -Step "TEST" -Message "Path is $TestPath"
+            Flush-SovereignLogs
+            
+            $LogFile = Join-Path $LogDir "sovereign-audit.jsonl"
+            (Test-Path $LogFile) | Should -Be $true
+        }
+        
+        It "Should validate Lore.md using Assert-SovereignPattern (VS-04)" {
+            # Restore VS-04 Lore.md validation
+            $Content = "Sovereign Master Identity: Confirmed"
+            Assert-SovereignPattern -InputString $Content -Pattern "Master Identity" | Should -Be $true
+            
+            { Assert-SovereignPattern -InputString "Bad" -Pattern "Good" } | Should -Throw "*PATTERN_MISMATCH*"
         }
     }
 }

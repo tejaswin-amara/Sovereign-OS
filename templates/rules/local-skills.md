@@ -6,8 +6,8 @@
 3. Check `C:\Skills\.cloud-cache\` for actively mounted skills. The cache is automatically garbage-collected on every `/sovereign` run.
 4. @using-superpowers: Mount the required skill repository and load its `SKILL.md` or `README.md` before taking action.
 5. **Internet Reach**: Agent-Reach gives the agent direct access to the internet.
-   - Web: `curl https://r.jina.ai/{URL}` â€” reads any webpage as clean markdown
-   - YouTube: `yt-dlp --write-sub --skip-download {URL}` â€” extract subtitles
+   - Web: `curl https://r.jina.ai/{URL}` — reads any webpage as clean markdown
+   - YouTube: `yt-dlp --write-sub --skip-download {URL}` — extract subtitles
    - GitHub: `gh repo view org/repo`, `gh search repos {query}`
    - Search: Exa MCP semantic search (free, no API key)
    - RSS: `agent-reach` feedparser

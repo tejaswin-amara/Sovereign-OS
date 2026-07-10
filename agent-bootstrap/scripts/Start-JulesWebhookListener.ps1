@@ -4,6 +4,21 @@ param(
     [int]$Port = 5050
 )
 
+$SovereignRoot = (Resolve-Path "$PSScriptRoot/../..").Path
+$envFile = Join-Path $SovereignRoot ".env"
+$webhookSecret = $null
+if (Test-Path $envFile) {
+    foreach ($line in (Get-Content $envFile)) {
+        if ($line -match "^WEBHOOK_SECRET=(.+)$") {
+            $webhookSecret = $matches[1]
+            break
+        }
+    }
+}
+if (-not $webhookSecret) {
+    $webhookSecret = $env:WEBHOOK_SECRET
+}
+
 # Start a lightweight HttpListener
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add("http://localhost:$Port/")
@@ -26,6 +41,25 @@ try {
             $reader = New-Object System.IO.StreamReader($request.InputStream, $request.ContentEncoding)
             $body = $reader.ReadToEnd()
             
+            if ($webhookSecret) {
+                $signatureHeader = $request.Headers["X-Hub-Signature-256"]
+                if (-not $signatureHeader) {
+                    Write-Warning "Missing X-Hub-Signature-256 header."
+                    $response.StatusCode = 401
+                    $response.Close()
+                    continue
+                }
+                $hmac = [System.Security.Cryptography.HMACSHA256]::new([System.Text.Encoding]::UTF8.GetBytes($webhookSecret))
+                $hash = $hmac.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($body))
+                $hashString = "sha256=" + ([BitConverter]::ToString($hash) -replace '-', '').ToLower()
+                if ($hashString -ne $signatureHeader) {
+                    Write-Warning "Invalid webhook signature."
+                    $response.StatusCode = 401
+                    $response.Close()
+                    continue
+                }
+            }
+            
             try {
                 $json = $body | ConvertFrom-Json
                 
@@ -34,9 +68,11 @@ try {
                     $prUser = $json.pull_request.user.login
                     if ($prUser -match "jules") {
                         Write-Host "Detected PR from Jules! Invoking security-sweep.ps1..."
+                        $SweepScript = Join-Path $PSScriptRoot "security-sweep.ps1"
                         Start-Job -ScriptBlock {
-                            pwsh -File C:/Skills/agent-bootstrap/scripts/security-sweep.ps1
-                        }
+                            param($scriptPath)
+                            pwsh -File $scriptPath
+                        } -ArgumentList $SweepScript
                     }
                 }
             } catch {

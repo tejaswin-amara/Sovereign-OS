@@ -96,12 +96,12 @@ $Mutex = $null
 
 try {
     $ExecutionStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-    # Lock acquisition INSIDE try block â€” guarantees finally cleanup
+    # Lock acquisition INSIDE try block — guarantees finally cleanup
     $Mutex = Start-SovereignLock -LockFile $LockFile -TimeoutSeconds 30
     Write-SovereignLog -Level "INFO" -Step "MUTEX" -Message "OS-Level Lock Acquired."
 
     # ------------------------------------------------------------------
-    # PHASE 1: INIT â€” Dynamic Skill Count & Config Update [CRITICAL]
+    # PHASE 1: INIT — Dynamic Skill Count & Config Update [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "INIT" -Message "Computing dynamic skill count."
 
@@ -144,7 +144,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 2: CORE_GEN â€” Generate SOVEREIGN_CORE.md from template [CRITICAL]
+    # PHASE 2: CORE_GEN — Generate SOVEREIGN_CORE.md from template [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "CORE_GEN" -Message "Generating SOVEREIGN_CORE.md from template."
 
@@ -164,7 +164,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 3: HARVEST â€” Skill Harvester [CRITICAL]
+    # PHASE 3: HARVEST — Skill Harvester [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "HARVEST" -Message "Running skill harvester."
     $HarvesterScript = "$SovereignRoot/agent-bootstrap/scripts/skill-harvester.ps1"
@@ -176,7 +176,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 4: EVOLVE â€” Drift Analysis [CRITICAL]
+    # PHASE 4: EVOLVE — Drift Analysis [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "EVOLUTION" -Message "Running drift analysis."
     $EvolveScript = "$SovereignRoot/agent-bootstrap/scripts/self-evolve.ps1"
@@ -188,7 +188,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 5: SWEEP â€” Security Sweep [CRITICAL]
+    # PHASE 5: SWEEP — Security Sweep [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "SECURITY_SWEEP" -Message "Running security sweep."
     $SweepScript = "$SovereignRoot/agent-bootstrap/scripts/security-sweep.ps1"
@@ -200,7 +200,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 6 (OPTIONAL): FETCH â€” Cloud-Native JIT Skill Ingestion [NON-CRITICAL]
+    # PHASE 6 (OPTIONAL): FETCH — Cloud-Native JIT Skill Ingestion [NON-CRITICAL]
     # ------------------------------------------------------------------
     if (-not [string]::IsNullOrWhiteSpace($FetchURL)) {
         Write-SovereignLog -Level "INFO" -Step "FETCH" -Message "Triggering Cloud-Native JIT fetch for: $FetchURL"
@@ -220,7 +220,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 6.5: GC â€” Cloud Cache Garbage Collection [CRITICAL]
+    # PHASE 6.5: GC — Cloud Cache Garbage Collection [CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "GC" -Message "Running Garbage Collection on ephemeral .cloud-cache..."
     $CloudCacheDir = Join-Path $SovereignRoot ".cloud-cache"
@@ -250,12 +250,13 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PHASE 7: REACH â€” Internet Access Health Check [NON-CRITICAL]
+    # PHASE 7: REACH — Internet Access Health Check [NON-CRITICAL]
     # ------------------------------------------------------------------
     Write-SovereignLog -Level "INFO" -Step "REACH" -Message "Checking Internet Reach status..."
-    $AgentReachVenv = Join-Path $env:USERPROFILE ".agent-reach-venv"
-    $AgentReachExe = Join-Path $AgentReachVenv "Scripts\agent-reach.exe"
-    if (Test-Path $AgentReachExe) {
+    $UserHome = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { "" }
+    $AgentReachVenv = if ($UserHome) { Join-Path $UserHome ".agent-reach-venv" } else { "" }
+    $AgentReachExe = if ($AgentReachVenv) { Join-Path $AgentReachVenv "Scripts\agent-reach.exe" } else { "" }
+    if ($AgentReachExe -and (Test-Path $AgentReachExe)) {
         try {
             $DoctorOutput = & $AgentReachExe doctor 2>&1 | Out-String
             Write-SovereignLog -Level "INFO" -Step "REACH" -Message "Agent-Reach is installed. Doctor output logged."
@@ -284,7 +285,7 @@ try {
 } finally {
     # Flush any remaining batched log entries before cleanup
     Flush-SovereignLogs
-    # Guaranteed lock cleanup â€” Mutex is always released
+    # Guaranteed lock cleanup — Mutex is always released
     if ($Mutex) {
         Stop-SovereignLock -LockFile $LockFile -Mutex $Mutex
         Write-SovereignLog -Level "INFO" -Step "MUTEX" -Message "Lock released."

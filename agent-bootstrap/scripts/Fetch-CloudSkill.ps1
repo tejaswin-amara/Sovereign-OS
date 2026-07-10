@@ -28,7 +28,7 @@ $RepoName = $RepoParts[-1]
 $TargetUrl = "https://github.com/$CleanRepo"
 
 $ConfigCache = Get-SovereignConfig -KeyPath "governance.cloud_cache_dir"
-$CacheDir = if ($ConfigCache) { $ConfigCache } else { "C:\Skills\.cloud-cache" }
+$CacheDir = if ($ConfigCache) { $ConfigCache } else { Join-Path $SovereignPath ".cloud-cache" }
 $TargetPath = Join-Path $CacheDir $RepoName
 
 if (-not (Test-Path $CacheDir)) {

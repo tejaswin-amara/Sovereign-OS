@@ -21,6 +21,20 @@ if (-not [string]::IsNullOrEmpty($FilePath)) {
     $Code = Get-Content -Path $FilePath -Raw
 }
 
+$SandboxEnabled = Get-SovereignConfig -KeyPath "sandbox.enabled"
+if ($null -eq $SandboxEnabled) { $SandboxEnabled = $true }
+
+if (-not $SandboxEnabled) {
+    if ($AllowUnsandboxed) {
+        Write-Warning "Sandbox is disabled globally. Running Python locally."
+        $ProcessOutput = $Code | python -c "import sys; exec(sys.stdin.read())" 2>&1
+        Write-Output $ProcessOutput
+        return
+    } else {
+        throw "SANDBOX_DISABLED: sandbox.enabled is false in config, but -AllowUnsandboxed was not passed. Refusing to run locally."
+    }
+}
+
 if (-Not (Get-Command "python" -ErrorAction SilentlyContinue)) {
     throw "SANDBOX_ERROR: Python is not installed. Cannot execute code."
 }
