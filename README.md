@@ -6,6 +6,7 @@
   <p>
     <a href="#"><img src="https://img.shields.io/badge/version-v15.0.2--Pure-blue.svg?style=for-the-badge&logo=appveyor" alt="Version"></a>
     <a href="#"><img src="https://img.shields.io/badge/architecture-Minimal--Honest-purple.svg?style=for-the-badge" alt="Architecture"></a>
+    <a href="#"><img src="https://img.shields.io/badge/modularity-Git_Submodules-success.svg?style=for-the-badge" alt="Modularity"></a>
   </p>
 </div>
 
@@ -22,8 +23,9 @@ Features that are described as working must be working. Silent degradation and m
 ### 2️⃣ Absolute Minimalism (The Ponytail Doctrine)
 Zero bloat. Abstractions and wrapper scripts are violently pruned. The OS consists solely of a single Master Controller script (`sovereign.ps1`), a minimalistic configuration (`sovereign.config.json`), and raw Semantic Skills (`skills/`).
 
-### 3️⃣ Semantic Execution
-Agentic workflows are no longer driven by brittle PowerShell module wrappers. They are driven entirely by raw Markdown skills that agents parse and execute autonomously.
+### 3️⃣ Semantic Execution & Embedded Modules
+Agentic workflows are no longer driven by brittle PowerShell module wrappers. They are driven entirely by raw Markdown skills that agents parse and execute autonomously. 
+Crucially, external intelligence tools (such as **no-mistakes** for PR Gating and **codebase-memory-mcp** for contextual graphing) are embedded directly into Sovereign OS as isolated **Git Submodules** under `skills/ponytail/modules/`. This guarantees full functionality with zero global pollution.
 
 ### 4️⃣ OS-Level Mutex Locking
 The system safely guards the workspace by establishing an OS-level file lock, ensuring no concurrent operations can corrupt the environment.
@@ -37,6 +39,9 @@ graph TD
     A[Sovereign Master Controller] -->|Locks System| B{Atomic Mutex}
     B -->|Verified| C[sovereign.config.json Verification]
     C -->|Passed| D[Semantic Skills Directory Sync]
+    D --> E[Submodule Toolchains]
+    E --> F[no-mistakes Gate]
+    E --> G[codebase-memory-mcp]
 ```
 
 ---
@@ -50,6 +55,11 @@ To boot the Sovereign Master Controller:
 
 ```bash
 pwsh -ExecutionPolicy Bypass -File "C:/Skills/sovereign.ps1"
+```
+
+To update the integrated tools (no-mistakes & codebase-memory-mcp) from their upstream repositories:
+```bash
+git submodule update --remote
 ```
 
 ---

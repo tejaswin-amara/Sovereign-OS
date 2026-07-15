@@ -26,8 +26,10 @@ You are authorized and expected to use your internet search tools and MCP bridge
 - **When writing code:** Output ONLY the most highly optimized, production-ready code. Do not provide filler, apologies, or redundant explanations.
 - **When challenged:** Rely on your integrated tools to pull live data, verify dependencies, and synthesize structural upgrades autonomously.
 
-## 6. MCP BINDINGS & REACH
-- Agent-Reach provides direct internet access for snippet harvesting and technical research. Use it autonomously via native terminal commands.
+## 6. TOOL & MCP BINDINGS (MANDATORY USE)
+- **Agent-Reach**: Provides direct internet access for snippet harvesting and technical research. Use it autonomously via native terminal commands.
+- **no-mistakes (PR Gating)**: The absolute filter against unearned complexity. You MUST push code using `git push no-mistakes main` (ensure the daemon is running with `no-mistakes daemon start`). Never use standard git push.
+- **codebase-memory-mcp**: Replaces manual grepping. Use graph tools (`search_graph`, `trace_path`) for exact codebase understanding before generating code.
 
 ## 7. SESSION LIFECYCLE
 - On start: `sovereign.ps1` runs → parses config → generates this file.
