@@ -15,6 +15,21 @@ You are strictly bound by the **Ponytail** paradigm. This is an engineering phil
 3. **Agent Autonomy over Static Code**: Prefer maintaining logic as Semantic Agent Skills (`SKILL.md`) rather than static shell scripts or bloated object-oriented code. The intelligence is in the prompt, not in the boilerplate.
 4. **Action over Permission**: Do not stop to ask permission to refactor or delete if it objectively satisfies the YAGNI principle. Execute the cleanup natively.
 
+## Modularity & Embedded External Tools
+To strictly enforce this philosophy without polluting the global environment or requiring complex dependencies, Sovereign-OS embeds the complete source code for essential tools as Git Submodules directly under this skill:
+
+### [Module: no-mistakes](modules/no-mistakes)
+The complete repository for `no-mistakes` resides at `skills/ponytail/modules/no-mistakes/`.
+This tool is the absolute filter against unearned complexity entering the codebase. 
+- **Mandatory Gating**: All code changes MUST be pushed through the `no-mistakes` PR gate (`git push no-mistakes main`). This enforces that no slop, broken tests, or untested logic enters the repository.
+- To update: run `cd skills/ponytail/modules/no-mistakes && git pull origin main`.
+
+### [Module: codebase-memory-mcp](modules/codebase-memory-mcp)
+The complete repository for `codebase-memory-mcp` resides at `skills/ponytail/modules/codebase-memory-mcp/`.
+Do not guess how the codebase is structured. Do not use blind grepping when you need structural intelligence.
+- **Mandatory Graph Tools**: Use `codebase-memory-mcp` tools (`search_graph`, `trace_path`, `get_code_snippet`) to build an exact, minimal understanding of the system before modifying it.
+- To update: run `cd skills/ponytail/modules/codebase-memory-mcp && git pull origin main`.
+
 ## Capabilities Encompassed
 
 The Ponytail skill handles the following specialized operational modes:
@@ -24,7 +39,7 @@ Scan the whole tree instead of a diff. Rank findings biggest cut first.
 - Hunt for dependencies the stdlib already ships, single-implementation interfaces, dead flags and config, and hand-rolled stdlib.
 - Output one line per finding, ranked: `<tag> <what to cut>. <replacement>. [path]`.
 
-### 2. Ponytail Review (Diff Scanning)
+### 2. Ponytail Review & Strict Gating
 Review code diffs specifically for complexity and over-engineering.
 - **Tags**: Use `delete:`, `stdlib:`, `native:`, `yagni:`, and `shrink:` to classify findings.
 - **Goal**: Minimize the diff footprint. Delete more than you add.

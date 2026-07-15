@@ -1,0 +1,6 @@
+[submodule "skills/ponytail/modules/no-mistakes"]
+	path = skills/ponytail/modules/no-mistakes
+	url = https://github.com/kunchenguid/no-mistakes.git
+[submodule "skills/ponytail/modules/codebase-memory-mcp"]
+	path = skills/ponytail/modules/codebase-memory-mcp
+	url = https://github.com/DeusData/codebase-memory-mcp.git
