@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sovereign OS | Documentation</title>
+    <title>Sovereign OS | Complete Documentation</title>
     <meta name="description" content="A personal automation framework that governs how AI coding agents operate across workspaces.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -11,13 +11,12 @@
     <style>
         :root {
             --bg-color: #050505;
-            --sidebar-bg: rgba(20, 20, 20, 0.8);
             --text-main: #f0f0f0;
             --text-muted: #888;
             --accent-primary: #6c5ce7;
             --accent-secondary: #a29bfe;
+            --glass-bg: rgba(20, 20, 20, 0.4);
             --glass-border: rgba(255, 255, 255, 0.05);
-            --content-bg: rgba(10, 10, 10, 0.6);
         }
 
         * {
@@ -30,9 +29,8 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         /* Ambient Background */
@@ -40,322 +38,395 @@
             position: fixed;
             top: 0;
             left: 50%;
+            transform: translateX(-50%);
             width: 100vw;
             height: 100vh;
-            background: radial-gradient(circle at 50% 0%, rgba(108, 92, 231, 0.15) 0%, rgba(5,5,5,0) 60%);
-            z-index: 0;
+            background: radial-gradient(ellipse at 50% -20%, rgba(108, 92, 231, 0.15) 0%, rgba(5,5,5,0) 70%);
+            z-index: -1;
             pointer-events: none;
         }
 
-        /* Layout */
-        .app-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
+        /* Header Hero */
+        .hero {
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
-            padding: 2rem 0;
-            overflow-y: auto;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
         }
 
-        .sidebar-header {
-            padding: 0 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .sidebar-header h2 {
-            font-size: 1.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #fff 0%, #a29bfe 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-        
         .badge {
             display: inline-block;
-            padding: 0.2rem 0.6rem;
+            padding: 0.4rem 1rem;
             background: rgba(108, 92, 231, 0.15);
             border: 1px solid rgba(108, 92, 231, 0.3);
             color: var(--accent-secondary);
             border-radius: 50px;
-            font-size: 0.7rem;
+            font-size: 0.85rem;
             font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            animation: fadeInDown 1s ease forwards;
         }
 
-        .nav-list {
-            list-style: none;
-            padding: 0 1rem;
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #fff 0%, #a29bfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s 0.2s ease forwards;
         }
 
-        .nav-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-link {
-            display: block;
-            padding: 0.8rem 1rem;
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
             color: var(--text-muted);
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            cursor: pointer;
+            font-size: 2rem;
+            opacity: 0;
+            animation: bounce 2s infinite, fadeIn 1s 1s forwards;
         }
 
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
         }
 
-        .nav-link.active {
-            background: rgba(108, 92, 231, 0.15);
-            color: var(--accent-secondary);
-            border: 1px solid rgba(108, 92, 231, 0.2);
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 4rem;
-            background: var(--content-bg);
-            scroll-behavior: smooth;
-        }
-
-        .content-wrapper {
-            max-width: 800px;
+        /* Document Sections */
+        .container {
+            max-width: 900px;
             margin: 0 auto;
-            animation: fadeIn 0.5s ease;
+            padding: 2rem;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .doc-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 4rem;
+            margin-bottom: 6rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            
+            /* Initial state for scroll animation */
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .doc-section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Markdown Styling */
         .markdown-body {
             color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.7;
+            line-height: 1.8;
+            font-size: 1.1rem;
         }
         
         .markdown-body h1, .markdown-body h2, .markdown-body h3 {
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1.2rem;
+            font-weight: 800;
             color: #fff;
+            letter-spacing: -0.02em;
         }
 
         .markdown-body h1 {
-            font-size: 2.5rem;
-            padding-bottom: 0.5rem;
+            font-size: 3rem;
+            padding-bottom: 1rem;
             border-bottom: 1px solid var(--glass-border);
+            background: linear-gradient(90deg, #fff, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .markdown-body h2 { font-size: 1.8rem; }
+        .markdown-body h2 { font-size: 2rem; }
+        .markdown-body h3 { font-size: 1.5rem; color: var(--accent-secondary); }
         
-        .markdown-body p { margin-bottom: 1.2rem; }
+        .markdown-body p { margin-bottom: 1.5rem; color: #ccc; }
         
         .markdown-body a {
             color: var(--accent-secondary);
             text-decoration: none;
+            border-bottom: 1px dashed var(--accent-secondary);
+            transition: all 0.2s ease;
         }
         
-        .markdown-body a:hover { text-decoration: underline; }
+        .markdown-body a:hover {
+            color: #fff;
+            border-bottom-style: solid;
+        }
 
         .markdown-body code {
             font-family: 'JetBrains Mono', monospace;
             background: rgba(255,255,255,0.08);
             padding: 0.2em 0.4em;
-            border-radius: 4px;
-            font-size: 0.9em;
+            border-radius: 6px;
+            font-size: 0.85em;
+            color: #a29bfe;
         }
 
         .markdown-body pre {
             background: #0a0a0a;
             border: 1px solid #222;
-            border-radius: 8px;
-            padding: 1rem;
+            border-radius: 12px;
+            padding: 1.5rem;
             overflow-x: auto;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .markdown-body pre code {
             background: none;
             padding: 0;
             color: #d4d4d4;
+            font-size: 0.9em;
         }
 
         .markdown-body blockquote {
             border-left: 4px solid var(--accent-primary);
-            padding-left: 1rem;
+            padding-left: 1.5rem;
             margin-left: 0;
             color: var(--text-muted);
             background: rgba(108, 92, 231, 0.05);
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
         }
 
         .markdown-body ul, .markdown-body ol {
             padding-left: 2rem;
             margin-bottom: 1.5rem;
+            color: #ccc;
         }
 
         .markdown-body li { margin-bottom: 0.5rem; }
-
-        .markdown-body hr {
-            border: 0;
-            height: 1px;
-            background: var(--glass-border);
-            margin: 2rem 0;
-        }
         
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        .markdown-body th, .markdown-body td {
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            text-align: left;
+        }
+        .markdown-body th { background: rgba(255,255,255,0.03); color: #fff; }
+
+        /* Floating Nav Dots */
+        .nav-dots {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dot:hover { background: rgba(255,255,255,0.5); transform: scale(1.2); }
+        .dot.active { background: var(--accent-primary); box-shadow: 0 0 10px var(--accent-primary); transform: scale(1.3); }
+
+        .dot-tooltip {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            border: 1px solid var(--glass-border);
+        }
+
+        .dot:hover .dot-tooltip { opacity: 1; }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
         /* Loader */
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+        }
         .loader {
-            display: none;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border: 3px solid rgba(255,255,255,0.1);
             border-radius: 50%;
             border-top-color: var(--accent-primary);
             animation: spin 1s ease-in-out infinite;
-            margin: 100px auto;
         }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="ambient-glow"></div>
     
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Sovereign OS</h2>
-                <div class="badge">v15.0.2-Pure</div>
-            </div>
-            <ul class="nav-list" id="nav-list">
-                <!-- Navigation inserted by JS -->
-            </ul>
-        </aside>
+    <div class="nav-dots" id="navDots"></div>
 
-        <main class="main-content">
-            <div id="loader" class="loader"></div>
-            <div class="content-wrapper">
-                <div id="content" class="markdown-body">
-                    <!-- Markdown rendered here -->
-                </div>
-            </div>
-        </main>
+    <div class="hero">
+        <div class="badge">Sovereign OS v15.0.2-Pure</div>
+        <h1>The Sovereign Manuscript</h1>
+        <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 600px; line-height: 1.6; opacity: 0; animation: fadeInUp 1s 0.4s ease forwards;">
+            The complete unadulterated documentation suite.<br>Scroll to explore the architecture, ledgers, and philosophy.
+        </p>
+        <div class="scroll-indicator">↓</div>
+    </div>
+
+    <div class="container" id="docContainer">
+        <div class="loader-container" id="mainLoader"><div class="loader"></div></div>
     </div>
 
     <script>
         const REPO_RAW_BASE = 'https://raw.githubusercontent.com/tejaswin-amara/Sovereign-OS/main/';
         
         const documents = [
-            { id: 'readme', path: 'README.md', title: 'Home / Overview' },
+            { id: 'readme', path: 'README.md', title: 'Overview' },
             { id: 'core', path: 'SOVEREIGN_CORE.md', title: 'Sovereign Core' },
             { id: 'audit', path: 'AUDIT_LEDGER.md', title: 'Audit Ledger' },
             { id: 'mistakes', path: 'MISTAKES_LEDGER.md', title: 'Mistakes Ledger' },
-            { id: 'ponytail', path: 'skills/ponytail/SKILL.md', title: 'Skill: Ponytail' },
-            { id: 'omni', path: 'skills/omni-discovery/SKILL.md', title: 'Skill: Omni Discovery' }
+            { id: 'ponytail', path: 'skills/ponytail/SKILL.md', title: 'Ponytail Philosophy' }
         ];
 
-        const navList = document.getElementById('nav-list');
-        const contentDiv = document.getElementById('content');
-        const loader = document.getElementById('loader');
+        const container = document.getElementById('docContainer');
+        const navDots = document.getElementById('navDots');
+        const loader = document.getElementById('mainLoader');
 
-        // Initialize Navigation
-        function initNav() {
-            documents.forEach(doc => {
-                const li = document.createElement('li');
-                li.className = 'nav-item';
-                
-                const a = document.createElement('a');
-                a.className = 'nav-link';
-                a.textContent = doc.title;
-                a.dataset.id = doc.id;
-                
-                a.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    loadDocument(doc.id);
-                });
-                
-                li.appendChild(a);
-                navList.appendChild(li);
-            });
-        }
+        marked.setOptions({ gfm: true, breaks: true });
 
-        // Load a specific document
-        async function loadDocument(docId) {
-            // Update URL hash
-            window.location.hash = docId;
-            
-            // Update Active State
-            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-            const activeLink = document.querySelector(`.nav-link[data-id="${docId}"]`);
-            if(activeLink) activeLink.classList.add('active');
-
-            const docConfig = documents.find(d => d.id === docId) || documents[0];
-            
-            contentDiv.innerHTML = '';
-            loader.style.display = 'block';
-
+        async function fetchAllDocuments() {
             try {
-                const response = await fetch(REPO_RAW_BASE + docConfig.path);
-                if (!response.ok) throw new Error('Failed to fetch document');
+                // Fetch all documents in parallel
+                const fetchPromises = documents.map(doc => 
+                    fetch(REPO_RAW_BASE + doc.path).then(res => {
+                        if (!res.ok) throw new Error(`Failed to fetch ${doc.path}`);
+                        return res.text();
+                    })
+                );
                 
-                const markdown = await response.text();
+                const markdownTexts = await Promise.all(fetchPromises);
                 
-                // Configure marked to handle Github Flavored Markdown
-                marked.setOptions({
-                    gfm: true,
-                    breaks: true
+                // Hide loader
+                loader.style.display = 'none';
+
+                // Build UI
+                markdownTexts.forEach((markdown, index) => {
+                    const docConfig = documents[index];
+                    
+                    // Create Section
+                    const section = document.createElement('section');
+                    section.className = 'doc-section';
+                    section.id = `section-${index}`;
+                    
+                    const safeHtml = DOMPurify.sanitize(marked.parse(markdown));
+                    section.innerHTML = `<div class="markdown-body">${safeHtml}</div>`;
+                    
+                    container.appendChild(section);
+
+                    // Create Dot Nav
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    dot.dataset.target = `section-${index}`;
+                    if(index === 0) dot.classList.add('active');
+                    
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'dot-tooltip';
+                    tooltip.textContent = docConfig.title;
+                    
+                    dot.appendChild(tooltip);
+                    
+                    dot.addEventListener('click', () => {
+                        section.scrollIntoView({ behavior: 'smooth' });
+                    });
+                    
+                    navDots.appendChild(dot);
                 });
 
-                const rawHtml = marked.parse(markdown);
-                const safeHtml = DOMPurify.sanitize(rawHtml);
-                
-                contentDiv.innerHTML = safeHtml;
-                
-                // Re-trigger fade animation
-                contentDiv.parentElement.style.animation = 'none';
-                contentDiv.parentElement.offsetHeight; /* trigger reflow */
-                contentDiv.parentElement.style.animation = null;
+                // Initialize Scroll Observer for animations and active dots
+                initScrollObserver();
                 
             } catch (error) {
-                contentDiv.innerHTML = `
-                    <div style="color: #ff5f56; padding: 2rem; background: rgba(255,95,86,0.1); border-radius: 8px;">
-                        <h2>Error loading document</h2>
-                        <p>${error.message}</p>
-                    </div>`;
-            } finally {
-                loader.style.display = 'none';
+                loader.innerHTML = `<div style="color: #ff5f56; text-align: center;">Error loading manuscript: ${error.message}</div>`;
             }
         }
 
-        // Initialization
-        window.addEventListener('DOMContentLoaded', () => {
-            initNav();
-            
-            // Read hash from URL to load initial page, or default to readme
-            const hash = window.location.hash.replace('#', '');
-            const initialDoc = documents.find(d => d.id === hash) ? hash : 'readme';
-            loadDocument(initialDoc);
-        });
+        function initScrollObserver() {
+            const sections = document.querySelectorAll('.doc-section');
+            const dots = document.querySelectorAll('.dot');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 // Trigger when 15% visible
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Add visible class for animation
+                        entry.target.classList.add('visible');
+                        
+                        // Update active dot based on scroll
+                        // A bit more logic needed to perfectly track the topmost visible section,
+                        // but intersecting works well for simple scrolling
+                        const id = entry.target.id;
+                        dots.forEach(d => {
+                            if(d.dataset.target === id) d.classList.add('active');
+                            else d.classList.remove('active');
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchAllDocuments);
     </script>
 </body>
 </html>
