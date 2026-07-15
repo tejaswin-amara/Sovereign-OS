@@ -105,19 +105,35 @@
 
         /* Document Sections */
         .container {
-            max-width: 900px;
+            width: 95vw;
+            max-width: 2400px;
             margin: 0 auto;
             padding: 2rem;
+            column-count: 1;
+            column-gap: 3rem;
+        }
+
+        @media (min-width: 1400px) {
+            .container {
+                column-count: 2;
+            }
+        }
+
+        @media (min-width: 2200px) {
+            .container {
+                column-count: 3;
+            }
         }
 
         .doc-section {
+            break-inside: avoid;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 4rem;
-            margin-bottom: 6rem;
+            margin-bottom: 3rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             
             /* Initial state for scroll animation */
