@@ -26,7 +26,7 @@
 | C11 | Self-evolution / drift detection | ✅ REAL | `Evolution.ps1` | Real keyword matching + auto-append to rules.md | Keep as-is |
 | C12 | Turbovec semantic indexing | 🟡 PARTIAL | `Evolution.ps1` | Real invocation of external tool, contingent on JIT-fetch | Keep (honest in docs) |
 | C13 | Docker container definitions | ✅ REAL (infra) | `Dockerfile`, `docker-compose.yml` | Buildable; Ollama wired but never called | Fix: document honestly |
-| C14 | E2B sandbox | 🟠 SILENT DEGRADE | `Invoke-Sandbox.ps1` | Falls back to unsandboxed exec() silently | Fix: wire sandbox.enabled |
+| C14 | E2B sandbox | 🟠 SILENT DEGRADE | `Invoke-E2BSandbox.ps1` | Falls back to unsandboxed exec() silently | Fix: wire sandbox.enabled |
 | C15 | LangGraph swarm | 🟡 STUB BODIES | `graph.py`, `Start-SovereignSwarm.ps1` | Real StateGraph, stub node bodies | Fix: add honest header |
 | C16 | Pre-commit ponytail hook | 🟠 STUB | `pre-commit-ponytail.ps1` | Filename-pattern regex only | Keep (honest in docs) |
 | C17 | Jules integration | 🆕 NEW | `Install-JulesCLI.ps1`, `Invoke-JulesSession.ps1`, `Start-JulesWebhookListener.ps1`, `Wait-JulesSession.ps1` | New since audit; needs review | Audit + document |
@@ -60,7 +60,7 @@
 | D5 | `.config.sha256` machine-bound | ❌ Present | ✅ Resolved (Removed from tracking) | Phase 3 | Remove from tracking, TOFU-only |
 | D6 | `Invoke-OmniSearch` unsanitized error egress | ❌ Present | ✅ Resolved (Wired diagnostic) | Phase 4 | Wire `Invoke-SovereignInternetDiagnostic` |
 | D7 | Two unsynced dep→repo maps | ❌ Present (114 vs 41) | ✅ Resolved (Evolution.ps1 merged to config) | Phase 2 | Merge Evolution.ps1's `$TagToSkill` into config |
-| D8 | `Invoke-Sandbox.ps1` silent fallback | ❌ Present | ✅ Resolved (Wired `sandbox.enabled`, default true. Grep confirmed.) | Phase 4 | Wire `sandbox.enabled`, add `-AllowUnsandboxed` |
+| D8 | `Invoke-E2BSandbox.ps1` silent fallback | ❌ Present | ✅ Resolved (Wired `sandbox.enabled`, default true. Grep confirmed.) | Phase 4 | Wire `sandbox.enabled`, add `-AllowUnsandboxed` |
 | D9 | Template contamination + spreading | ❌ Present | ✅ Resolved (Decontaminated) | Phase 6 | Decontaminate learnings.md and rules.md |
 | D10 | `$env:USERPROFILE` crash on Linux | ❌ Present | ✅ Resolved (Cross-repo `grep -rn "\$env:USERPROFILE"` confirms 0 unhandled instances. Files updated with fallback) | Phase 3 | Add `$env:HOME` fallback with null guard |
 | D11 | Stale `AGENT_DNA.md` in skills-map-template.md | ❌ Present | ✅ Resolved (Updated reference) | Phase 1 | Update reference |

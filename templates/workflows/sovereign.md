@@ -1,5 +1,0 @@
-# Sovereign Master (v15.0.0-CloudNative)
-Trigger: /sovereign
-1. Run: `pwsh -ExecutionPolicy Bypass -File "C:/Skills/sovereign.ps1" -ProjectPath "$CWD"`
-2. Read: `C:/Skills/SOVEREIGN_CORE.md`.
-3. Confirm: `âœ… SOVEREIGN v15.0.0-CloudNative ONLINE`

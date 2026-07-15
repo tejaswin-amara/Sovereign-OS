@@ -1,12 +1,7 @@
 # Sovereign OS Runtime Directories
-.cloud-cache/
-.agents/
-.agent-reach-venv/
 .sovereign.lock
 LOGS/
 scratch/
-temp_gci\[bracket\]/
-test_report.md
 
 # Standard Ignore
 node_modules/
@@ -14,6 +9,3 @@ node_modules/
 __pycache__/
 *.log
 .env
-servers/
-core-frameworks/
-agent-bootstrap/.config.sha256
