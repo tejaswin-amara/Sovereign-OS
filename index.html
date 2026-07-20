@@ -3,20 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sovereign OS | Complete Documentation</title>
-    <meta name="description" content="A personal automation framework that governs how AI coding agents operate across workspaces.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Sovereign-OS Documentation (Open Design Bento UI)</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
         :root {
-            --bg-color: #050505;
-            --text-main: #f0f0f0;
-            --text-muted: #888;
-            --accent-primary: #6c5ce7;
-            --accent-secondary: #a29bfe;
-            --glass-bg: rgba(20, 20, 20, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.05);
+            /* Open Design Tokens from MASTER.md */
+            --color-primary: #1E293B;
+            --color-on-primary: #FFFFFF;
+            --color-secondary: #334155;
+            --color-accent: #22C55E;
+            --color-background: #0F172A;
+            --color-foreground: #F8FAFC;
+            --color-muted: #272F42;
+            --color-border: #475569;
+            --color-destructive: #EF4444;
+            --color-ring: #1E293B;
+            
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
+            
+            --font-heading: 'JetBrains Mono', monospace;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            
+            /* Additional Variables for Bento Grid */
+            --toc-width: 320px;
+            --panel-max-width: 1000px; /* reading width constraint */
         }
 
         * {
@@ -26,410 +53,473 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        /* Ambient Background */
-        .ambient-glow {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100vw;
+            background-color: var(--color-background);
+            color: var(--color-foreground);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            display: flex;
             height: 100vh;
-            background: radial-gradient(ellipse at 50% -20%, rgba(108, 92, 231, 0.15) 0%, rgba(5,5,5,0) 70%);
-            z-index: -1;
-            pointer-events: none;
+            overflow: hidden; /* App-like feel, scrollable within zones */
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            color: var(--color-on-primary);
+            margin-top: 2em;
+            margin-bottom: 1em;
+            font-weight: 600;
+        }
+        
+        h1 { font-size: 2.25rem; margin-top: 0; color: var(--color-accent); }
+        h2 { font-size: 1.875rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.5rem; }
+        
+        p, ul, ol, blockquote, pre {
+            margin-bottom: 1.5em;
+        }
+        
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: opacity 200ms ease;
+        }
+        
+        a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
         }
 
-        /* Header Hero */
-        .hero {
+        /* Sidebar (TOC) */
+        #sidebar {
+            width: var(--toc-width);
+            min-width: var(--toc-width);
+            height: 100%;
+            background-color: var(--color-background);
+            border-right: 1px solid var(--color-border);
+            padding: var(--space-xl);
+            overflow-y: auto;
+            flex-shrink: 0;
             display: flex;
             flex-direction: column;
+            gap: var(--space-md);
+            z-index: 10;
+        }
+
+        .brand-header {
+            display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 4rem 2rem 2rem 2rem;
-            position: relative;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.4rem 1rem;
-            background: rgba(108, 92, 231, 0.15);
-            border: 1px solid rgba(108, 92, 231, 0.3);
-            color: var(--accent-secondary);
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            animation: fadeInDown 1s ease forwards;
-        }
-
-        .hero h1 {
-            font-size: 5rem;
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            background: linear-gradient(135deg, #fff 0%, #a29bfe 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s 0.2s ease forwards;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-            color: var(--text-muted);
-            font-size: 2rem;
-            opacity: 0;
-            animation: bounce 2s infinite, fadeIn 1s 1s forwards;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-            40% { transform: translateY(-20px) translateX(-50%); }
-            60% { transform: translateY(-10px) translateX(-50%); }
-        }
-
-        /* Document Sections */
-        .container {
-            width: 95vw;
-            max-width: 2000px; /* Cap width to prevent ultra-stretched text on massive screens */
-            margin: 0 auto;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
-            gap: 2.5rem;
-            align-items: start; /* Prevent cards from stretching to match row height */
-        }
-
-        .doc-section {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.4);
-            
-            /* Initial state for scroll animation */
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .doc-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Markdown Styling */
-        .markdown-body {
-            color: var(--text-main);
-            line-height: 1.8;
-            font-size: 1.1rem;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--color-foreground);
         }
         
-        .markdown-body h1, .markdown-body h2, .markdown-body h3 {
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: -0.02em;
+        .brand-header i {
+            color: var(--color-accent);
         }
 
-        .markdown-body h1 {
-            font-size: 2.2rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--glass-border);
-            background: linear-gradient(90deg, #fff, #a29bfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .markdown-body h2 { font-size: 1.8rem; }
-        .markdown-body h3 { font-size: 1.4rem; color: var(--accent-secondary); }
-        
-        .markdown-body p { margin-bottom: 1.2rem; color: #ccc; }
-        
-        .markdown-body a {
-            color: var(--accent-secondary);
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
+            color: var(--color-foreground);
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 200ms ease;
             text-decoration: none;
-            border-bottom: 1px dashed var(--accent-secondary);
-            transition: all 0.2s ease;
+            border-left: 2px solid transparent;
+        }
+
+        .toc-link i[data-lucide] {
+            width: 18px;
+            height: 18px;
+            opacity: 0.7;
+            transition: opacity 200ms ease;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            background-color: var(--color-primary);
+            color: var(--color-on-primary);
+            text-decoration: none;
+            transform: translateX(4px);
+            border-left-color: var(--color-accent);
         }
         
-        .markdown-body a:hover {
-            color: #fff;
-            border-bottom-style: solid;
+        .toc-link:hover i[data-lucide], .toc-link.active i[data-lucide] {
+            opacity: 1;
+            color: var(--color-accent);
+        }
+
+        /* Main Content Area */
+        #main-content {
+            flex-grow: 1;
+            height: 100%;
+            overflow-y: auto;
+            padding: var(--space-2xl);
+            scroll-behavior: smooth;
+        }
+        
+        /* Bento Grid Wrapper */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
+            gap: var(--space-2xl);
+            align-items: start;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Dashboard Panel / Card */
+        .bento-panel {
+            background-color: var(--color-primary);
+            border-radius: 16px;
+            padding: var(--space-3xl);
+            box-shadow: var(--shadow-md);
+            transition: all 300ms ease;
+            border: 1px solid var(--color-muted);
+            /* Max width constraint for readability */
+            max-width: var(--panel-max-width);
+            margin: 0 auto;
+            width: 100%;
+            
+            /* Open Design animation properties */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUpIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .bento-panel:hover {
+            box-shadow: var(--shadow-xl);
+            border-color: var(--color-border);
+        }
+
+        @keyframes fadeUpIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Markdown Elements Styling */
+        .markdown-body {
+            font-size: 1.05rem;
+            color: var(--color-foreground);
+        }
+        
+        .markdown-body pre {
+            background-color: var(--color-background);
+            padding: var(--space-lg);
+            border-radius: 12px;
+            overflow-x: auto;
+            border: 1px solid var(--color-border);
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .markdown-body code {
-            font-family: 'JetBrains Mono', monospace;
-            background: rgba(255,255,255,0.08);
+            background-color: var(--color-background);
             padding: 0.2em 0.4em;
-            border-radius: 6px;
-            font-size: 0.85em;
-            color: #a29bfe;
-        }
-
-        .markdown-body pre {
-            background: #0a0a0a;
-            border: 1px solid #222;
-            border-radius: 8px;
-            padding: 1rem;
-            overflow-x: auto;
-            margin-bottom: 1.2rem;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .markdown-body pre code {
-            background: none;
-            padding: 0;
-            color: #d4d4d4;
+            border-radius: 4px;
+            font-family: var(--font-heading);
             font-size: 0.9em;
+            color: var(--color-accent); 
+        }
+        
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
         }
 
         .markdown-body blockquote {
-            border-left: 4px solid var(--accent-primary);
-            padding-left: 1rem;
+            border-left: 4px solid var(--color-accent);
+            padding-left: var(--space-lg);
             margin-left: 0;
-            color: var(--text-muted);
-            background: rgba(108, 92, 231, 0.05);
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
+            color: #94A3B8;
             font-style: italic;
+            background-color: rgba(34, 197, 94, 0.05); /* accent with opacity */
+            padding: var(--space-lg);
+            border-radius: 0 12px 12px 0;
         }
 
-        .markdown-body ul, .markdown-body ol {
-            padding-left: 1.5rem;
-            margin-bottom: 1rem;
-            color: #ccc;
-        }
-
-        .markdown-body li { margin-bottom: 0.5rem; }
-        
         .markdown-body table {
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: var(--space-lg);
+            background-color: var(--color-background);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-border);
         }
+
         .markdown-body th, .markdown-body td {
-            border: 1px solid var(--glass-border);
-            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            border-right: 1px solid var(--color-border);
+            padding: var(--space-md) var(--space-lg);
             text-align: left;
         }
-        .markdown-body th { background: rgba(255,255,255,0.03); color: #fff; }
 
-        /* Floating Nav Dots */
-        .nav-dots {
-            position: fixed;
-            right: 2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 100;
+        .markdown-body th:last-child, .markdown-body td:last-child {
+            border-right: none;
+        }
+        
+        .markdown-body tr:last-child td {
+            border-bottom: none;
         }
 
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
+        .markdown-body th {
+            background-color: var(--color-secondary);
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--color-on-primary);
+        }
+        
+        .markdown-body img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            margin: var(--space-lg) 0;
+            border: 1px solid var(--color-border);
         }
 
-        .dot:hover { background: rgba(255,255,255,0.5); transform: scale(1.2); }
-        .dot.active { background: var(--accent-primary); box-shadow: 0 0 10px var(--accent-primary); transform: scale(1.3); }
-
-        .dot-tooltip {
-            position: absolute;
-            right: 25px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.8);
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            white-space: nowrap;
+        /* Header link anchors */
+        .header-anchor {
+            float: left;
+            margin-left: -20px;
+            padding-right: 4px;
             opacity: 0;
-            pointer-events: none;
+            text-decoration: none;
+            color: var(--color-muted);
             transition: opacity 0.2s;
-            border: 1px solid var(--glass-border);
         }
-
-        .dot:hover .dot-tooltip { opacity: 1; }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        h1:hover .header-anchor, 
+        h2:hover .header-anchor, 
+        h3:hover .header-anchor {
+            opacity: 1;
         }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+                overflow: auto; 
+            }
+            #sidebar {
+                width: 100%;
+                height: auto;
+                min-height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                padding: var(--space-md);
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: var(--space-sm);
+            }
+            .brand-header { margin-bottom: 0; margin-right: var(--space-md); }
+            #main-content {
+                height: auto;
+                overflow: visible;
+                padding: var(--space-md);
+            }
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            .bento-panel {
+                padding: var(--space-xl);
+            }
         }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* Loader */
-        .loader-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 50vh;
-        }
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-radius: 50%;
-            border-top-color: var(--accent-primary);
-            animation: spin 1s ease-in-out infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="ambient-glow"></div>
+    <nav id="sidebar">
+        <div class="brand-header">
+            <i data-lucide="terminal-square"></i>
+            Sovereign-OS
+        </div>
+        <div id="toc-container">
+            <!-- Dynamic TOC links will go here -->
+        </div>
+    </nav>
     
-    <div class="nav-dots" id="navDots"></div>
-
-    <div class="hero">
-        <div class="badge">Sovereign OS v15.0.2-Pure</div>
-        <h1>The Sovereign Manuscript</h1>
-        <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 600px; line-height: 1.6; opacity: 0; animation: fadeInUp 1s 0.4s ease forwards;">
-            The complete unadulterated documentation suite.<br>Scroll to explore the architecture, ledgers, and philosophy.
-        </p>
-        <div class="scroll-indicator">↓</div>
-    </div>
-
-    <div class="container" id="docContainer">
-        <div class="loader-container" id="mainLoader"><div class="loader"></div></div>
-    </div>
+    <main id="main-content">
+        <div class="bento-grid" id="documents-container">
+            <!-- Dynamic Panels will go here -->
+        </div>
+    </main>
 
     <script>
-        const REPO_RAW_BASE = 'https://raw.githubusercontent.com/tejaswin-amara/Sovereign-OS/main/';
+        // Initialize Lucide icons
+        lucide.createIcons();
         
-        const documents = [
-            { id: 'readme', path: 'README.md', title: 'Overview' },
-            { id: 'core', path: 'SOVEREIGN_CORE.md', title: 'Sovereign Core' },
-            { id: 'audit', path: 'AUDIT_LEDGER.md', title: 'Audit Ledger' },
-            { id: 'mistakes', path: 'MISTAKES_LEDGER.md', title: 'Mistakes Ledger' },
-            { id: 'ponytail', path: 'skills/ponytail/SKILL.md', title: 'Ponytail Philosophy' }
+        // Setup Marked options (for github flavored markdown, tables, etc)
+        marked.setOptions({
+            gfm: true,
+            breaks: true,
+            headerIds: true,
+        });
+
+        // Add a global spin animation to CSS for loading states
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .lucide-spin {
+                animation: spin 2s linear infinite;
+            }
+            .loading-text {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                color: var(--color-accent);
+                font-family: var(--font-heading);
+            }
+        `;
+        document.head.appendChild(style);
+
+        const DOCUMENTS = [
+            { 
+                id: 'readme', 
+                title: 'Introduction', 
+                icon: 'book-open', 
+                path: 'skills/ponytail/README.md' 
+            },
+            { 
+                id: 'skill', 
+                title: 'Architecture & Rules', 
+                icon: 'cpu', 
+                path: 'skills/ponytail/SKILL.md' 
+            },
+            { 
+                id: 'module-no-mistakes', 
+                title: 'No-Mistakes Framework', 
+                icon: 'shield-check', 
+                path: 'skills/ponytail/modules/no-mistakes/README.md' 
+            },
+            { 
+                id: 'module-codebase-memory', 
+                title: 'Codebase Memory MCP', 
+                icon: 'network', 
+                path: 'skills/ponytail/modules/codebase-memory-mcp/README.md' 
+            }
         ];
 
-        const container = document.getElementById('docContainer');
-        const navDots = document.getElementById('navDots');
-        const loader = document.getElementById('mainLoader');
-
-        marked.setOptions({ gfm: true, breaks: true });
-
-        async function fetchAllDocuments() {
+        async function fetchMarkdown(path) {
             try {
-                // Fetch all documents in parallel
-                const fetchPromises = documents.map(doc => 
-                    fetch(REPO_RAW_BASE + doc.path).then(res => {
-                        if (!res.ok) throw new Error(`Failed to fetch ${doc.path}`);
-                        return res.text();
-                    })
-                );
-                
-                const markdownTexts = await Promise.all(fetchPromises);
-                
-                // Hide loader
-                loader.style.display = 'none';
-
-                // Build UI
-                markdownTexts.forEach((markdown, index) => {
-                    const docConfig = documents[index];
-                    
-                    // Create Section
-                    const section = document.createElement('section');
-                    section.className = 'doc-section';
-                    section.id = `section-${index}`;
-                    
-                    const safeHtml = DOMPurify.sanitize(marked.parse(markdown));
-                    section.innerHTML = `<div class="markdown-body">${safeHtml}</div>`;
-                    
-                    container.appendChild(section);
-
-                    // Create Dot Nav
-                    const dot = document.createElement('div');
-                    dot.className = 'dot';
-                    dot.dataset.target = `section-${index}`;
-                    if(index === 0) dot.classList.add('active');
-                    
-                    const tooltip = document.createElement('div');
-                    tooltip.className = 'dot-tooltip';
-                    tooltip.textContent = docConfig.title;
-                    
-                    dot.appendChild(tooltip);
-                    
-                    dot.addEventListener('click', () => {
-                        section.scrollIntoView({ behavior: 'smooth' });
-                    });
-                    
-                    navDots.appendChild(dot);
-                });
-
-                // Initialize Scroll Observer for animations and active dots
-                initScrollObserver();
-                
+                // Ensure correct relative paths, since index.html is in C:\Skills
+                const response = await fetch(path);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.text();
             } catch (error) {
-                loader.innerHTML = `<div style="color: #ff5f56; text-align: center;">Error loading manuscript: ${error.message}</div>`;
+                console.error(`Error fetching ${path}:`, error);
+                return `> **Error loading document**: \`${path}\`\n\n${error.message}`;
             }
         }
 
-        function initScrollObserver() {
-            const sections = document.querySelectorAll('.doc-section');
-            const dots = document.querySelectorAll('.dot');
+        async function renderDocuments() {
+            const tocContainer = document.getElementById('toc-container');
+            const docsContainer = document.getElementById('documents-container');
+            
+            for (let i = 0; i < DOCUMENTS.length; i++) {
+                const doc = DOCUMENTS[i];
+                
+                // Add TOC item
+                const tocItem = document.createElement('a');
+                tocItem.className = 'toc-link';
+                tocItem.href = `#panel-${doc.id}`;
+                tocItem.innerHTML = `<i data-lucide="${doc.icon}"></i> <span>${doc.title}</span>`;
+                
+                // Add IntersectionObserver click handler for TOC
+                tocItem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById(`panel-${doc.id}`).scrollIntoView({ behavior: 'smooth' });
+                    // manual active class update just for instant feedback
+                    document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+                    tocItem.classList.add('active');
+                });
+                tocContainer.appendChild(tocItem);
+                
+                // Create Panel
+                const panel = document.createElement('article');
+                panel.className = 'bento-panel';
+                panel.id = `panel-${doc.id}`;
+                
+                // Add animation delay for stagger
+                panel.style.animationDelay = `${i * 0.15}s`;
 
+                // Add loading state
+                panel.innerHTML = `<div class="markdown-body">
+                    <h3 class="loading-text">
+                        <i data-lucide="loader-2" class="lucide-spin"></i> Loading ${doc.title}...
+                    </h3>
+                </div>`;
+                docsContainer.appendChild(panel);
+            }
+            
+            // Render icons for loaders first
+            lucide.createIcons();
+            
+            // Setup observer right away
+            setupScrollSpy();
+            
+            // Now load content (can do in parallel for speed)
+            await Promise.all(DOCUMENTS.map(async (doc) => {
+                const mdContent = await fetchMarkdown(doc.path);
+                const htmlContent = marked.parse(mdContent);
+                const cleanHtml = DOMPurify.sanitize(htmlContent);
+                
+                const panel = document.getElementById(`panel-${doc.id}`);
+                panel.innerHTML = `<div class="markdown-body">${cleanHtml}</div>`;
+            }));
+            
+            // One final icon pass for any icons inside the markdown
+            lucide.createIcons();
+        }
+
+        function setupScrollSpy() {
+            const panels = document.querySelectorAll('.bento-panel');
+            const tocLinks = document.querySelectorAll('.toc-link');
+            
+            // Set up a scroll observer to highlight the TOC based on what panel is mostly in view
             const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.15 // Trigger when 15% visible
+                root: document.getElementById('main-content'),
+                rootMargin: '-10% 0px -80% 0px', // triggers when top of panel hits 10% from top
+                threshold: 0
             };
-
+            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Add visible class for animation
-                        entry.target.classList.add('visible');
-                        
-                        // Update active dot based on scroll
-                        // A bit more logic needed to perfectly track the topmost visible section,
-                        // but intersecting works well for simple scrolling
                         const id = entry.target.id;
-                        dots.forEach(d => {
-                            if(d.dataset.target === id) d.classList.add('active');
-                            else d.classList.remove('active');
+                        tocLinks.forEach(link => {
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            } else {
+                                link.classList.remove('active');
+                            }
                         });
                     }
                 });
             }, observerOptions);
-
-            sections.forEach(section => observer.observe(section));
+            
+            panels.forEach(panel => observer.observe(panel));
         }
 
-        window.addEventListener('DOMContentLoaded', fetchAllDocuments);
+        // Run
+        renderDocuments();
     </script>
 </body>
 </html>

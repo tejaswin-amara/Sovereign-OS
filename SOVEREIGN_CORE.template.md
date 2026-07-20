@@ -1,4 +1,4 @@
-# SOVEREIGN CORE (V15.0.2-Pure)
+# SOVEREIGN CORE ({{VERSION}})
 > Skills: {{SKILL_COUNT}} | Version: {{VERSION}} | Generated: {{TIMESTAMP}}
 
 ## 1. IDENTITY & OBJECTIVE
@@ -33,5 +33,4 @@ You are authorized and expected to use your internet search tools and MCP bridge
 
 ## 7. SESSION LIFECYCLE
 - On start: `sovereign.ps1` runs → parses config → generates this file.
-- On drift: Read `evolution_report.md`, apply REFINE actions.
-- Kill-switch: SENTINEL_STOP file halts all operations immediately.
+- On drift: Apply REFINE actions.

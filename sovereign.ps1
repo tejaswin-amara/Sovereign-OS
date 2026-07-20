@@ -1,4 +1,4 @@
-# sovereign.ps1 - The Sovereign Master Controller (v15.0.2-Pure)
+# sovereign.ps1 - The Sovereign Master Controller (v15.0.3-Pure)
 # Purpose: Single-file orchestrator. Zero external script dependencies.
 
 [CmdletBinding()]
@@ -10,7 +10,6 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $SovereignRoot = $PSScriptRoot
-$LockFile = "$SovereignRoot/.sovereign.lock"
 $LogDir = "$SovereignRoot/LOGS"
 
 if (-not (Test-Path $LogDir)) { New-Item -Path $LogDir -ItemType Directory -Force | Out-Null }
@@ -49,7 +48,7 @@ if ($Config.version -ne $Version) {
 # 3. MUTEX LOCK
 $MutexName = "Global\SovereignOSLock"
 $Mutex = New-Object System.Threading.Mutex($false, $MutexName)
-if (-not $Mutex.WaitOne(5000, $false)) {
+if (-not $Mutex.WaitOne($Config.governance.lock_timeout_seconds * 1000, $false)) {
     Write-Log "ERROR" "MUTEX" "Could not acquire OS lock. Another instance is running."
     exit 1
 }

@@ -29,7 +29,7 @@
 | C14 | E2B sandbox | 🟠 SILENT DEGRADE | `Invoke-E2BSandbox.ps1` | Falls back to unsandboxed exec() silently | Fix: wire sandbox.enabled |
 | C15 | LangGraph swarm | 🟡 STUB BODIES | `graph.py`, `Start-SovereignSwarm.ps1` | Real StateGraph, stub node bodies | Fix: add honest header |
 | C16 | Pre-commit ponytail hook | 🟠 STUB | `pre-commit-ponytail.ps1` | Filename-pattern regex only | Keep (honest in docs) |
-| C17 | Jules integration | 🆕 NEW | `Install-JulesCLI.ps1`, `Invoke-JulesSession.ps1`, `Start-JulesWebhookListener.ps1`, `Wait-JulesSession.ps1` | New since audit; needs review | Audit + document |
+| C17 | Jules integration | ❌ DELETED | `Install-JulesCLI.ps1`, `Invoke-JulesSession.ps1`, `Start-JulesWebhookListener.ps1`, `Wait-JulesSession.ps1` | Deleted in v15 sterilization | Keep deleted |
 | C18 | NTFS junction sharing | ✅ REAL (Win) / 🟡 DEGRADED (other) | `bootstrap.ps1` | Junction on Windows, static copy on Linux | Fix: add symlink path |
 | C19 | Vendored Ponytail skills | ✅ REAL | `skills/ponytail*/SKILL.md` | Unmodified upstream, MIT | Keep as-is |
 | C20 | Winget dependency update | ✅ REAL (Win) | `sovereign.ps1` Phase 6.5 | Graceful WARN on non-Windows | Keep as-is |
@@ -85,7 +85,7 @@ The audit document (`Sovereign-OS_Complete_Documentation_for_Qwen3-Coder.md`) wa
 
 1. **File deletions not reflected:** 8 files/directories deleted since audit (edge/, master/, async mocks, telemetry, omnivector.index)
 2. **Partial fixes applied:** `Checksum.ps1` already has cross-platform guard (audit says it doesn't on `main`)
-3. **New files not covered:** 4 Jules integration scripts, `.env`, `test_report.md`
+3. **New files not covered:** `.env`, `test_report.md` (Jules scripts were deleted)
 4. **dep_to_skill_map count:** Audit says 114, current is ~82 (reduced)
 5. **Test count:** Audit says 39 `It` blocks, current is 40
 6. **audit-improvements branch:** Audit says it exists unmerged; it has been deleted (some fixes cherry-picked)
