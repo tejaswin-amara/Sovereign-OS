@@ -1,6 +1,6 @@
 {
     "$schema":  "https://raw.githubusercontent.com/tejaswin-amara/schema/main/config-v15.0.0.json",
-    "version":  "15.0.2-Pure",
+    "version":  "15.0.3-Pure",
     "name":  "Sovereign Core Config",
     "core_axioms":  [
                         "ponytail",
@@ -25,13 +25,12 @@
                   "core_file":  "SOVEREIGN_CORE.md",
                   "core_template":  "SOVEREIGN_CORE.template.md",
                   "version_file":  "VERSION",
-                  "logs_dir":  "LOGS",
-                  "lock_file":  ".sovereign.lock"
+                  "logs_dir":  "LOGS"
               },
     "governance":  {
                        "skills_count":  3,
                        "_skills_count_note":  "DYNAMIC - overwritten by sovereign.ps1 at runtime. Never edit manually.",
-                       "lock_timeout_seconds":  30,
+                       "lock_timeout_seconds":  5,
                        "log_retention_days":  7,
                        "log_max_size_mb":  10,
                        "harvester_excluded_dirs":  [

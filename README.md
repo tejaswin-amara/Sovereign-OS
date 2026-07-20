@@ -1,10 +1,10 @@
 <div align="center">
 
-  <h1>🔱 Sovereign OS <span style="color: #6C5CE7;">v15.0.2-Pure</span></h1>
+  <h1>🔱 Sovereign OS <span style="color: #6C5CE7;">v15.0.3-Pure</span></h1>
   <p><strong>A personal PowerShell automation framework that governs how AI coding agents operate across workspaces.</strong></p>
 
   <p>
-    <a href="#"><img src="https://img.shields.io/badge/version-v15.0.2--Pure-blue.svg?style=for-the-badge&logo=appveyor" alt="Version"></a>
+    <a href="#"><img src="https://img.shields.io/badge/version-v15.0.3--Pure-blue.svg?style=for-the-badge&logo=appveyor" alt="Version"></a>
     <a href="#"><img src="https://img.shields.io/badge/architecture-Minimal--Honest-purple.svg?style=for-the-badge" alt="Architecture"></a>
     <a href="#"><img src="https://img.shields.io/badge/modularity-Git_Submodules-success.svg?style=for-the-badge" alt="Modularity"></a>
   </p>
@@ -13,7 +13,7 @@
 ---
 
 > [!NOTE]
-> **Sovereign OS has been sterilized.** The v15.0.2 release executes the ultimate Ponytail doctrine. The system has been reduced to an absolute minimum of components. There is zero unearned complexity.
+> **Sovereign OS has been sterilized.** The v15.0.3 release executes the ultimate Ponytail doctrine. The system has been reduced to an absolute minimum of components. There is zero unearned complexity.
 
 ## ⚡ The Four Pillars of Sovereign OS
 
