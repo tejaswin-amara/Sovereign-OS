@@ -38,7 +38,7 @@
                                     }
                    },
     "governance":  {
-                       "skills_count":  0,
+                       "skills_count":  2,
                        "_skills_count_note":  "DYNAMIC â€” overwritten by sovereign.ps1 at runtime.",
                        "lock_timeout_seconds":  5,
                        "log_retention_days":  7,
