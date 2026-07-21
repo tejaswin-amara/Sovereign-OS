@@ -64,8 +64,16 @@ try {
     $DynamicModuleCount = @(Get-ChildItem -Path $ModulesDir -Directory).Count
     Write-Log "INFO" "INIT" "Dynamic skill count: $DynamicSkillCount, Module count: $DynamicModuleCount"
     
+    $SaveNeeded = $false
     if ($Config.governance.skills_count -ne $DynamicSkillCount) {
         $Config.governance.skills_count = $DynamicSkillCount
+        $SaveNeeded = $true
+    }
+    if ($null -ne $Config.governance.modules_count -and $Config.governance.modules_count -ne $DynamicModuleCount) {
+        $Config.governance.modules_count = $DynamicModuleCount
+        $SaveNeeded = $true
+    }
+    if ($SaveNeeded) {
         Save-Atomic -Path $ConfigPath -Content ($Config | ConvertTo-Json -Depth 10)
     }
 
