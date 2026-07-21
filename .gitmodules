@@ -1,6 +1,13 @@
-[submodule "skills/ponytail/modules/no-mistakes"]
-	path = skills/ponytail/modules/no-mistakes
+# gitmodules
+[submodule "skills/agent-reach"]
+	path = skills/agent-reach
+	url = https://github.com/Panniantong/Agent-Reach.git
+[submodule "modules/no-mistakes"]
+	path = modules/no-mistakes
 	url = https://github.com/kunchenguid/no-mistakes.git
-[submodule "skills/ponytail/modules/codebase-memory-mcp"]
-	path = skills/ponytail/modules/codebase-memory-mcp
+[submodule "modules/codebase-memory-mcp"]
+	path = modules/codebase-memory-mcp
 	url = https://github.com/DeusData/codebase-memory-mcp.git
+[submodule "skills/ponytail"]
+	path = skills/ponytail
+	url = https://github.com/DietrichGebert/ponytail.git

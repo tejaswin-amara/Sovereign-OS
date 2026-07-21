@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "sovereign-core": {
-      "command": "pwsh",
-      "args": ["-ExecutionPolicy", "Bypass", "-File", "C:/Skills/sovereign.ps1"]
-    }
-  },
-  "globalSystemPrompt": "You are connected to Sovereign OS. You must read C:/Skills/SOVEREIGN_CORE.md before assisting the user. You have access to a directory of semantic skills located in C:/Skills/skills/."
-}

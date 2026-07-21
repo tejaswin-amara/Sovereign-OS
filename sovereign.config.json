@@ -1,46 +1,47 @@
-{
-    "$schema":  "https://raw.githubusercontent.com/tejaswin-amara/schema/main/config-v15.0.0.json",
-    "version":  "15.0.3-Pure",
+﻿{
+    "version":  "16.0.0-Scratch",
     "name":  "Sovereign Core Config",
     "core_axioms":  [
                         "ponytail",
                         "ponytail-audit",
                         "ponytail-debt"
                     ],
-    "description":  "Unified configuration for the Sovereign Master Controller. Single source of truth.",
-    "security_policy":  {
-                            "allow_pattern":  "^[a-zA-Z0-9_-]{2,50}$",
-                            "deny_patterns":  [
-                                                  "\\.\\./",
-                                                  "^/",
-                                                  "\\\\",
-                                                  "\\$\\(",
-                                                  "eval\\(",
-                                                  "exec\\("
-                                              ],
-                            "max_skill_name_length":  50
-                        },
+    "description":  "Single source of truth for the Sovereign Master Controller (V16 Pristine).",
     "paths":  {
                   "skills_root":  "C:/Skills",
                   "core_file":  "SOVEREIGN_CORE.md",
                   "core_template":  "SOVEREIGN_CORE.template.md",
                   "version_file":  "VERSION",
-                  "logs_dir":  "LOGS"
+                  "logs_dir":  "LOGS",
+                  "asset_registry":  "ASSET_REGISTRY.md"
               },
+    "submodules":  {
+                       "no-mistakes":  {
+                                           "path":  "modules/no-mistakes",
+                                           "upstream":  "https://github.com/kunchenguid/no-mistakes.git",
+                                           "purpose":  "PR gating and mechanical fixing"
+                                       },
+                       "codebase-memory-mcp":  {
+                                                   "path":  "modules/codebase-memory-mcp",
+                                                   "upstream":  "https://github.com/DeusData/codebase-memory-mcp.git",
+                                                   "purpose":  "MCP knowledge graph server"
+                                               },
+                       "agent-reach":  {
+                                           "path":  "skills/agent-reach",
+                                           "upstream":  "https://github.com/Panniantong/Agent-Reach.git",
+                                           "purpose":  "Internet access router"
+                                       },
+                       "ponytail":  {
+                                        "path":  "skills/ponytail",
+                                        "upstream":  "https://github.com/DietrichGebert/ponytail.git",
+                                        "purpose":  "Minimal-code philosophy skill"
+                                    }
+                   },
     "governance":  {
-                       "skills_count":  3,
-                       "_skills_count_note":  "DYNAMIC - overwritten by sovereign.ps1 at runtime. Never edit manually.",
+                       "skills_count":  0,
+                       "_skills_count_note":  "DYNAMIC â€” overwritten by sovereign.ps1 at runtime.",
                        "lock_timeout_seconds":  5,
                        "log_retention_days":  7,
-                       "log_max_size_mb":  10,
-                       "harvester_excluded_dirs":  [
-                                                       ".git",
-                                                       ".agents",
-                                                       ".cloud-cache",
-                                                       ".agent-reach-venv",
-                                                       ".venv",
-                                                       "LOGS",
-                                                       "skills"
-                                                   ]
+                       "log_max_size_mb":  10
                    }
 }

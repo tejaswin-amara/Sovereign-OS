@@ -1,5 +1,5 @@
-# sovereign.ps1 - The Sovereign Master Controller (v15.0.3-Pure)
-# Purpose: Single-file orchestrator. Zero external script dependencies.
+# sovereign.ps1 - The Sovereign Master Controller (v16.0.0-Scratch)
+# Purpose: Single-file orchestrator. Zero unearned complexity.
 
 [CmdletBinding()]
 param(
@@ -10,17 +10,15 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $SovereignRoot = $PSScriptRoot
-$LogDir = "$SovereignRoot/LOGS"
-
-if (-not (Test-Path $LogDir)) { New-Item -Path $LogDir -ItemType Directory -Force | Out-Null }
-$RunID = [guid]::NewGuid().ToString().Substring(0,8)
 
 function Write-Log {
     param([string]$Level, [string]$Step, [string]$Message)
     $Timestamp = Get-Date -Format "HH:mm:ss"
     $Line = "[$Timestamp] [$Level] [$Step] $Message"
     Write-Host $Line
-    Add-Content -Path "$LogDir/sovereign-$([datetime]::Now.ToString('yyyyMMdd')).log" -Value $Line
+    if ($LogDir) {
+        Add-Content -Path "$LogDir/sovereign-$([datetime]::Now.ToString('yyyyMMdd')).log" -Value $Line
+    }
 }
 
 function Save-Atomic {
@@ -33,19 +31,16 @@ function Save-Atomic {
 # 1. READ CONFIG
 $ConfigPath = "$SovereignRoot/sovereign.config.json"
 if (-not (Test-Path $ConfigPath)) {
-    Write-Log "ERROR" "INIT" "Config missing."
+    Write-Log "ERROR" "INIT" "Config missing at $ConfigPath."
     exit 1
 }
 $Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
 
-# 2. VERSION CHECK
-$Version = Get-Content "$SovereignRoot/VERSION" -Raw
-$Version = $Version.Trim()
-if ($Config.version -ne $Version) {
-    Write-Log "WARN" "INIT" "Version drift. Config has $($Config.version), aligning to $Version."
-}
+# Initialize LogDir after config read
+$LogDir = Join-Path $SovereignRoot $Config.paths.logs_dir
+if (-not (Test-Path $LogDir)) { New-Item -Path $LogDir -ItemType Directory -Force | Out-Null }
 
-# 3. MUTEX LOCK
+# 2. MUTEX LOCK
 $MutexName = "Global\SovereignOSLock"
 $Mutex = New-Object System.Threading.Mutex($false, $MutexName)
 if (-not $Mutex.WaitOne($Config.governance.lock_timeout_seconds * 1000, $false)) {
@@ -57,30 +52,21 @@ try {
     $ExecutionStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
     Write-Log "INFO" "MUTEX" "OS-Level Lock Acquired."
 
-    # 4. SKILL COUNT
-    $DynamicCount = (Get-ChildItem -Path "$SovereignRoot/skills" -Directory).Count
-    Write-Log "INFO" "INIT" "Dynamic skill count: $DynamicCount"
+    # 3. VERIFY CORE STRUCTURE
+    $SkillsDir = Join-Path $SovereignRoot "skills"
+    $ModulesDir = Join-Path $SovereignRoot "modules"
     
-    if ($Config.governance.skills_count -ne $DynamicCount) {
-        $Config.governance.skills_count = $DynamicCount
+    if (-not (Test-Path $SkillsDir)) { New-Item -Path $SkillsDir -ItemType Directory | Out-Null }
+    if (-not (Test-Path $ModulesDir)) { New-Item -Path $ModulesDir -ItemType Directory | Out-Null }
+
+    # 4. SKILL & MODULE COUNT
+    $DynamicSkillCount = @(Get-ChildItem -Path $SkillsDir -Directory).Count
+    $DynamicModuleCount = @(Get-ChildItem -Path $ModulesDir -Directory).Count
+    Write-Log "INFO" "INIT" "Dynamic skill count: $DynamicSkillCount, Module count: $DynamicModuleCount"
+    
+    if ($Config.governance.skills_count -ne $DynamicSkillCount) {
+        $Config.governance.skills_count = $DynamicSkillCount
         Save-Atomic -Path $ConfigPath -Content ($Config | ConvertTo-Json -Depth 10)
-    }
-
-    # 5. GENERATE CORE MD
-    $TemplatePath = "$SovereignRoot/SOVEREIGN_CORE.template.md"
-    $CoreOutputPath = "$SovereignRoot/SOVEREIGN_CORE.md"
-    if (Test-Path $TemplatePath) {
-        $TemplateContent = Get-Content $TemplatePath -Raw
-        $Timestamp = Get-Date -Format "o"
-        $CoreContent = $TemplateContent -replace '\{\{SKILL_COUNT\}\}', $DynamicCount -replace '\{\{VERSION\}\}', $Version -replace '\{\{TIMESTAMP\}\}', $Timestamp
-        Save-Atomic -Path $CoreOutputPath -Content $CoreContent
-        Write-Log "INFO" "CORE_GEN" "Generated SOVEREIGN_CORE.md"
-    }
-
-    # 6. GC CLOUD CACHE
-    $CloudCacheDir = "$SovereignRoot/.cloud-cache"
-    if (Test-Path $CloudCacheDir) {
-        Remove-Item -Path $CloudCacheDir -Recurse -Force -ErrorAction SilentlyContinue
     }
 
     Write-Log "INFO" "COMPLETE" "ALL PHASES PASSED"
