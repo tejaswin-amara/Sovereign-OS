@@ -1,32 +1,26 @@
-# Project: Sovereign-OS V16 Phase 2 Audit & Verification
+# Project: Sovereign-OS V16 Phase 3 Exhaustive Deep Audit & Remediation
 
 ## Architecture & Scope
 - System Root: `C:\Skills`
-- Core Controller: `sovereign.ps1`, `sovereign.config.json`
-- Module 1: `modules/sovereign-cli` (Go CLI: Cobra, Viper, Zap, `cmd/root.go`, `go.mod`)
-- Module 2: `modules/sovereign-ui` (Next.js App Router: `src/app/page.tsx`, `components.json`, `package.json`, TailwindCSS, Shadcn-UI)
-- Module 3: `modules/no-mistakes` (Go CLI, daemon, trusted config boundary)
-- Governance Assets: `ASSET_REGISTRY.md`, `AUDIT_LEDGER.md`, `MISTAKES_LEDGER.md`, `AGENTS.md`
+- Core Launcher: `sovereign.ps1`, `sovereign.config.json`
+- Module 1: `modules/no-mistakes` (Go CLI app, daemon locking, hook path resolution, security trust boundary)
+- Module 2: `modules/sovereign-cli` (Go CLI: Cobra, Viper, Zap)
+- Module 3: `modules/sovereign-ui` (Next.js App Router, Tailwind v3, Shadcn UI)
+- Module 4: `modules/codebase-memory-mcp` (Codebase knowledge graph MCP server)
+- Skills: `skills/agent-reach`, `skills/ponytail`
+- Governance Assets: `ASSET_REGISTRY.md`, `AUDIT_LEDGER.md`, `MISTAKES_LEDGER.md`, `README.md`, `AGENTS.md`
 
-## Phase 2 Milestones
+## Phase 3 Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| P2-M1 | Deep Sovereign-CLI Audit | Verify `cmd/root.go` uses Cobra, Viper, Zap per `AUDIT_LEDGER.md`; verify `go.mod` structure & dependencies | None | IN_PROGRESS |
-| P2-M2 | Deep Sovereign-UI Audit | Verify Next.js App Router structure (`src/app/page.tsx`), `components.json` (Shadcn + Tailwind), `package.json` vs `ASSET_REGISTRY.md` | None | IN_PROGRESS |
-| P2-M3 | Immutable Core Integrity | Execute `sovereign.ps1`, verify dynamic discovery of skills & modules, mutex acquisition, module counts in `sovereign.config.json`, no ghost assets, Ponytail Doctrine | None | IN_PROGRESS |
-| P2-M4 | Verification, Forensic Audit & Report | Reviewer verification pass, Forensic Integrity Audit, synthesize Phase 2 audit report for Sentinel | P2-M1, P2-M2, P2-M3 | PLANNED |
+| P3-M1 | No-Mistakes Invariant Audit (R1) | Audit `modules/no-mistakes` against AGENTS.md rules: daemon locking, hook path resolution, security trust boundary, static analysis rules | None | DONE |
+| P3-M2 | Documentation & Ledger Sync Audit (R2) | Audit `README.md`, `AUDIT_LEDGER.md`, `MISTAKES_LEDGER.md`, `ASSET_REGISTRY.md` for broken links, ghost axioms, phantom features, Ponytail compliance | None | DONE |
+| P3-M3 | Architectural & Secret Leak Audit (R3) | Audit `sovereign.config.json` vs `modules/` and `skills/`, cross-verify `sovereign-cli`, `sovereign-ui`, `codebase-memory-mcp`, check for leaked secrets/tokens | None | DONE |
+| P3-M4 | Remediation Execution | Apply code and documentation fixes for all identified defects across M1, M2, M3 (UI Next.js 14 build fixes & workspace boundary non-.md purge) | P3-M1, P3-M2, P3-M3 | DONE |
+| P3-M5 | Verification, Stress-Testing & Forensic Audit | Independent reviewer review (APPROVE), challenger empirical execution (PASS), Forensic Integrity Audit (CLEAN verdict certified) | P3-M4 | DONE |
 
-## Interface Contracts
-- `sovereign.ps1`: Dynamic module & skill discovery, mutex lock (`Global\SovereignOS_Mutex`), executes submodules without hardcoded counts.
-- `modules/sovereign-cli`: Cobra commands, Viper configuration, Zap logging, clean `go.mod`.
-- `modules/sovereign-ui`: Next.js 14 App Router, Shadcn-UI configuration in `components.json`, TailwindCSS integration, clean `package.json`.
-
-## Code Layout
-- `C:\Skills\sovereign.ps1`
-- `C:\Skills\sovereign.config.json`
-- `C:\Skills\ASSET_REGISTRY.md`
-- `C:\Skills\AUDIT_LEDGER.md`
-- `C:\Skills\MISTAKES_LEDGER.md`
-- `C:\Skills\modules\sovereign-cli\`
-- `C:\Skills\modules\sovereign-ui\`
-- `C:\Skills\modules\no-mistakes\`
+## Interface Contracts & Invariants
+- `sovereign.ps1`: Dynamic module & skill discovery, OS Mutex acquisition (`Global\SovereignOSLock`), accurate counts in `sovereign.config.json`.
+- `modules/no-mistakes`: Lock acquisition in `internal/daemon/lock.go`, absolute hook path resolution in `internal/git/hook.go`, default-branch pinned SHA trusted config in `internal/daemon/manager.go`.
+- Secrets: Zero API keys, tokens, or plaintext credentials anywhere in repository.
+- Workspace Boundary: `.agents/` contains strictly `.md` metadata files; 0 non-.md files.

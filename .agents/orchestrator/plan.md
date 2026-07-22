@@ -1,29 +1,34 @@
-# Sovereign-OS V16 Phase 2 Deep Audit Plan
+# Plan: Phase 3 Exhaustive Deep Audit and Remediation
 
-## Architecture & Scope
-Sovereign-OS V16 is a modular local operating system with dynamic PowerShell discovery (`sovereign.ps1`), configuration validation (`sovereign.config.json`), Go CLI (`modules/sovereign-cli`), Next.js/Shadcn UI (`modules/sovereign-ui`), asset registry (`ASSET_REGISTRY.md`), audit ledger (`AUDIT_LEDGER.md`), and mistakes ledger (`MISTAKES_LEDGER.md`).
+## Objectives
+Execute Phase 3 deep audit covering R1 (No-Mistakes invariants), R2 (Global documentation & ledger sync), and R3 (Cross-module architecture, secret scans, sovereign.ps1 lock & execution).
 
-## Milestones
+## Milestones & Action Steps
 
-| # | Name | Scope | Dependencies | Status |
-|---|------|-------|-------------|--------|
-| 1 | R1: Sovereign-CLI Audit | Verify `modules/sovereign-cli/cmd/root.go` for Cobra, Viper, Zap usage & `go.mod` structure | None | DONE (Report: `.agents/explorer_m1/handoff.md`) |
-| 2 | R2: Sovereign-UI Audit | Verify `modules/sovereign-ui/src/app/page.tsx` App Router, `components.json` Shadcn/Tailwind, `package.json` vs `ASSET_REGISTRY.md` | None | DONE (Report: `.agents/explorer_m2/handoff.md` - Defects Found) |
-| 3 | R3: Core Integrity & Execution | Execute `sovereign.ps1`, verify dynamic skill/module discovery, Mutex lock acquisition, `sovereign.config.json` match | None | DONE (Report: `.agents/worker_m3/handoff.md`) |
-| 4 | R4: Zero Ghost Assets Audit | Repo-wide audit for ghost assets (unregistered dependencies, unused code/modules, drift between codebase and `ASSET_REGISTRY.md` / `AUDIT_LEDGER.md`) | M1, M2, M3 | DONE (Report: `.agents/explorer_m4/handoff.md` - Defects Found) |
-| 5 | Synthesis & Final Report | Synthesize all worker/reviewer findings, perform Forensic Audit, write final Phase 2 report, notify parent/sentinel | M1, M2, M3, M4 | DONE (Report: `.agents/auditor_final/handoff.md` - Final Verdict: CLEAN) |
+### Milestone 1: No-Mistakes Invariant Audit (R1)
+- Dispatch `teamwork_preview_explorer` to inspect `modules/no-mistakes` against `AGENTS.md` invariants:
+  1. Daemon lock implementation in `internal/daemon/lock.go` (exclusive lock on `<NM_HOME>/daemon.lock`).
+  2. Post-receive hook path resolution in `internal/git/hook.go` (absolute gate path resolution).
+  3. Repo Config Trust Boundary in `internal/daemon/manager.go` (trusted default branch, pinned SHA).
+  4. Process tree reapers (`shellenv.ConfigureShellCommand`, `winproc.Harden`).
+  5. Static analysis check (formatting, lint rules, go vet equivalents).
 
-## Interface Contracts & Invariants
-- `sovereign.ps1` must dynamically discover skills and modules and match `sovereign.config.json`.
-- `cmd/root.go` must import and use `github.com/spf13/cobra`, `github.com/spf13/viper`, and `go.uber.org/zap`.
-- `modules/sovereign-ui` must be a valid Next.js App Router project with Shadcn/Tailwind configuration and dependencies registered in `ASSET_REGISTRY.md`.
-- Zero ghost assets across the repository — all external assets/dependencies must be logged in `ASSET_REGISTRY.md` and `AUDIT_LEDGER.md`.
+### Milestone 2: Global Documentation & Ledger Sync Audit (R2)
+- Dispatch `teamwork_preview_explorer` to inspect `README.md`, `AUDIT_LEDGER.md`, `MISTAKES_LEDGER.md`, and `ASSET_REGISTRY.md`:
+  1. Check for broken links, ghost axioms, phantom features.
+  2. Verify Ponytail Doctrine enforcement (no bloat, zero unearned complexity, every line provides verifiable utility).
 
-## Code Layout
-- `sovereign.ps1`: Core PowerShell launcher and dynamic discovery script
-- `sovereign.config.json`: Core system configuration file
-- `modules/sovereign-cli`: Go CLI module (`cmd/root.go`, `go.mod`, etc.)
-- `modules/sovereign-ui`: Next.js frontend module (`src/app/page.tsx`, `components.json`, `package.json`, etc.)
-- `ASSET_REGISTRY.md`: Registry of external tools, dependencies, and packages
-- `AUDIT_LEDGER.md`: Ledger of verified capabilities and system audits
-- `MISTAKES_LEDGER.md`: Ledger of process failures and historical mistakes
+### Milestone 3: Cross-Module Architectural & Secret Leak Audit (R3)
+- Dispatch `teamwork_preview_explorer` to inspect:
+  1. `sovereign.config.json` vs `modules/` and `skills/` directories.
+  2. Purpose alignment for `sovereign-cli`, `sovereign-ui`, and `codebase-memory-mcp`.
+  3. Secret/token leak scan across all files, directories, and git commits.
+  4. Empirical execution check for `sovereign.ps1`.
+
+### Milestone 4: Remediation Execution
+- Dispatch `teamwork_preview_worker` to remediate any defects identified across M1, M2, M3.
+
+### Milestone 5: Independent Verification & Forensic Audit
+- Dispatch Reviewers (`teamwork_preview_reviewer`) to verify changes.
+- Dispatch Challengers (`teamwork_preview_challenger`) to stress test `sovereign.ps1` and modules.
+- Dispatch Forensic Auditor (`teamwork_preview_auditor`) for final integrity verification and CLEAN verdict.

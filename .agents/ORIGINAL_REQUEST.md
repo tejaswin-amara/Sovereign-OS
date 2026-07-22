@@ -1,35 +1,34 @@
 # Original User Request
 
-## Initial Request — 2026-07-22T08:01:47+05:30
+## Initial Request — 2026-07-22T03:02:48Z
 
-Conduct an even deeper, exhaustive Phase 2 test of the Sovereign-OS V16 system and ALL of its submodules. The initial audit verified the core mechanics, but this test must rigorously inspect the newly scaffolded modules (`sovereign-cli` and `sovereign-ui`) and ensure strict compliance with the `no-mistakes` engineering invariants and the Ponytail Doctrine.
+Conduct a Phase 3, exhaustive deep audit and remediation run of the Sovereign-OS V16 project and all its submodules. You are commanded to "test every single thing and fix it... Don't leave anything at all."
 
 Working directory: C:\Skills\
 
 ## Requirements
 
-### R1. Deep Sovereign-CLI Audit
-Navigate to `modules/sovereign-cli`. 
-- Verify the `cmd/root.go` implementation correctly uses Cobra, Viper, and Zap as documented in the `AUDIT_LEDGER.md`. 
-- Verify that `go.mod` is clean and correctly structured. 
-- *Note: If Go is not installed, perform static code analysis.*
+### R1. No-Mistakes Invariant Enforcement
+Navigate to `modules/no-mistakes` and aggressively audit against the `AGENTS.md` engineering rules.
+- Verify the repository's daemon locking, hook path resolution, and security trust boundaries are structurally intact.
+- Perform static analysis mimicking `go fmt`, `make lint`, and `go vet` rules as closely as possible (if compilers are absent).
 
-### R2. Deep Sovereign-UI Audit
-Navigate to `modules/sovereign-ui`. 
-- Verify the Next.js App Router structure (`src/app/page.tsx`).
-- Verify `components.json` correctly configures Shadcn-UI and TailwindCSS.
-- Verify `package.json` dependencies match the Asset Registry.
+### R2. Global Documentation & Ledger Sync
+- Audit `README.md`, `AUDIT_LEDGER.md`, `MISTAKES_LEDGER.md`, and `ASSET_REGISTRY.md`. Ensure there are absolutely no broken links, ghost axioms, or phantom features.
+- Ensure the Ponytail Doctrine is enforced: no bloat, zero unearned complexity. If a file or line of code is not providing verifiable utility, delete it.
 
-### R3. Immutable Core Integrity
-Verify that the recent fixes to `sovereign.ps1` (dynamic discovery) and the `sovereign.config.json` module counts are structurally perfect. Execute `sovereign.ps1` to ensure it still passes all checks and acquires the Mutex lock successfully.
+### R3. Cross-Module Architectural Audit
+- Ensure that the configuration inside `sovereign.config.json` perfectly mirrors the reality in the `modules/` and `skills/` directories.
+- Cross-verify `sovereign-cli`, `sovereign-ui`, and `codebase-memory-mcp` against their configured purposes.
+- Check for leaked secrets, tokens, or plaintext credentials one last time across all files, commits, and directories.
 
 ## Acceptance Criteria
 
 ### Execution & Verification
-- [ ] `sovereign.ps1` executes successfully and accurately prints out the dynamic counts for both skills and modules.
-- [ ] `modules/sovereign-cli` source code statically verified to use Cobra/Viper/Zap.
-- [ ] `modules/sovereign-ui` statically verified as a valid Next.js + Shadcn project.
-- [ ] No ghost assets exist anywhere in the repository.
+- [ ] Every active module and skill statically verified for integrity and Ponytail compliance.
+- [ ] No ghost configuration entries, phantom dependencies, or dead Markdown files remain.
+- [ ] `sovereign.ps1` remains flawlessly executed and locked.
+- [ ] Any detected deviations from the `AGENTS.md` invariant rules are immediately fixed.
 
 ### Reporting
-- [ ] A final Phase 2 report is returned detailing all findings, compliance failures, and test results.
+- [ ] A definitive final Phase 3 audit and remediation report is returned.
