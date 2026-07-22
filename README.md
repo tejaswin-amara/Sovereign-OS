@@ -16,15 +16,17 @@ graph TD
     B --> D[Modules]
     D --> E(no-mistakes)
     D --> F(codebase-memory-mcp)
+    D --> G(sovereign-cli)
+    D --> H(sovereign-ui)
     
-    B --> G[Skills]
-    G --> H(ponytail)
-    G --> I(agent-reach)
+    B --> I[Skills]
+    I --> J(ponytail)
+    I --> K(agent-reach)
     
-    A --> J[Dynamic Asset Registry]
-    J --> K(CI/CD)
-    J --> L(Security)
-    J --> M(Linting)
+    A --> L[Dynamic Asset Registry]
+    L --> M(CI/CD)
+    L --> N(Security)
+    L --> O(Linting)
 ```
 
 ## The Dynamic Asset Registry

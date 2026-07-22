@@ -1,10 +1,8 @@
-{
+﻿{
     "version":  "16.0.0-Scratch",
     "name":  "Sovereign Core Config",
     "core_axioms":  [
-                        "ponytail",
-                        "ponytail-audit",
-                        "ponytail-debt"
+                        "ponytail"
                     ],
     "description":  "Single source of truth for the Sovereign Master Controller (V16 Pristine).",
     "paths":  {
@@ -25,15 +23,15 @@
                                                    "purpose":  "MCP knowledge graph server"
                                                },
                        "sovereign-cli":  {
-                                           "path":  "modules/sovereign-cli",
-                                           "upstream":  "https://github.com/tejaswin-amara/sovereign-cli.git",
-                                           "purpose":  "Sovereign OS Command Line Interface"
-                                       },
+                                             "path":  "modules/sovereign-cli",
+                                             "upstream":  "https://github.com/tejaswin-amara/sovereign-cli.git",
+                                             "purpose":  "Sovereign OS Command Line Interface"
+                                         },
                        "sovereign-ui":  {
-                                          "path":  "modules/sovereign-ui",
-                                          "upstream":  "https://github.com/tejaswin-amara/sovereign-ui.git",
-                                          "purpose":  "Sovereign OS User Interface Dashboard"
-                                      },
+                                            "path":  "modules/sovereign-ui",
+                                            "upstream":  "https://github.com/tejaswin-amara/sovereign-ui.git",
+                                            "purpose":  "Sovereign OS User Interface Dashboard"
+                                        },
                        "agent-reach":  {
                                            "path":  "skills/agent-reach",
                                            "upstream":  "https://github.com/Panniantong/Agent-Reach.git",

@@ -1,22 +1,25 @@
-# Project: Sovereign-OS V16 Testing & Audit
+# Project: Sovereign-OS V16 Phase 2 Audit & Verification
 
 ## Architecture & Scope
 - System Root: `C:\Skills`
 - Core Controller: `sovereign.ps1`, `sovereign.config.json`
-- Target Module: `modules/no-mistakes`
+- Module 1: `modules/sovereign-cli` (Go CLI: Cobra, Viper, Zap, `cmd/root.go`, `go.mod`)
+- Module 2: `modules/sovereign-ui` (Next.js App Router: `src/app/page.tsx`, `components.json`, `package.json`, TailwindCSS, Shadcn-UI)
+- Module 3: `modules/no-mistakes` (Go CLI, daemon, trusted config boundary)
 - Governance Assets: `ASSET_REGISTRY.md`, `AUDIT_LEDGER.md`, `MISTAKES_LEDGER.md`, `AGENTS.md`
 
-## Milestones
+## Phase 2 Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| M1 | Core Controller Verification | Test `sovereign.ps1` execution, mutex lock, `sovereign.config.json` parsing, path resolution, module counts | None | IN_PROGRESS |
-| M2 | `no-mistakes` Invariant Testing | Navigate to `modules/no-mistakes`, verify adherence to AGENTS.md / engineering rules, run/attempt make lint, go test -race ./..., go build, or document missing tools and manually verify | None | IN_PROGRESS |
-| M3 | Ponytail Doctrine Compliance | Audit `C:\Skills` for zero bloat, ghost code, plaintext API keys/credentials, verify assets in `ASSET_REGISTRY.md`, review `MISTAKES_LEDGER.md` / `AUDIT_LEDGER.md` | None | IN_PROGRESS |
-| M4 | Final Synthesis & Sentinel Reporting | Reconcile findings across M1-M3, run Forensic Audit, prepare final report for Sentinel parent agent | M1, M2, M3 | PLANNED |
+| P2-M1 | Deep Sovereign-CLI Audit | Verify `cmd/root.go` uses Cobra, Viper, Zap per `AUDIT_LEDGER.md`; verify `go.mod` structure & dependencies | None | IN_PROGRESS |
+| P2-M2 | Deep Sovereign-UI Audit | Verify Next.js App Router structure (`src/app/page.tsx`), `components.json` (Shadcn + Tailwind), `package.json` vs `ASSET_REGISTRY.md` | None | IN_PROGRESS |
+| P2-M3 | Immutable Core Integrity | Execute `sovereign.ps1`, verify dynamic discovery of skills & modules, mutex acquisition, module counts in `sovereign.config.json`, no ghost assets, Ponytail Doctrine | None | IN_PROGRESS |
+| P2-M4 | Verification, Forensic Audit & Report | Reviewer verification pass, Forensic Integrity Audit, synthesize Phase 2 audit report for Sentinel | P2-M1, P2-M2, P2-M3 | PLANNED |
 
 ## Interface Contracts
-- `sovereign.ps1`: Invokes modules according to `sovereign.config.json`, manages mutex lock (`Global\SovereignOS_Mutex` or process mutex), resolves paths relative to `C:\Skills`.
-- `modules/no-mistakes`: Standard Go CLI app structure (`cmd/no-mistakes`, `internal/`), `Makefile` targets, generated skill sync (`internal/skill/skill.go` -> `skills/no-mistakes/SKILL.md`), trusted config boundaries.
+- `sovereign.ps1`: Dynamic module & skill discovery, mutex lock (`Global\SovereignOS_Mutex`), executes submodules without hardcoded counts.
+- `modules/sovereign-cli`: Cobra commands, Viper configuration, Zap logging, clean `go.mod`.
+- `modules/sovereign-ui`: Next.js 14 App Router, Shadcn-UI configuration in `components.json`, TailwindCSS integration, clean `package.json`.
 
 ## Code Layout
 - `C:\Skills\sovereign.ps1`
@@ -24,4 +27,6 @@
 - `C:\Skills\ASSET_REGISTRY.md`
 - `C:\Skills\AUDIT_LEDGER.md`
 - `C:\Skills\MISTAKES_LEDGER.md`
+- `C:\Skills\modules\sovereign-cli\`
+- `C:\Skills\modules\sovereign-ui\`
 - `C:\Skills\modules\no-mistakes\`

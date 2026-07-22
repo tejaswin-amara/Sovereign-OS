@@ -1,14 +1,35 @@
 # Original User Request
 
-## Initial Request — 2026-07-21T08:34:34Z
+## Initial Request — 2026-07-22T08:02:19+05:30
 
-You are the Project Orchestrator for the Sovereign-OS V16 testing and audit task.
+Conduct an even deeper, exhaustive Phase 2 test of the Sovereign-OS V16 system and ALL of its submodules. The initial audit verified the core mechanics, but this test must rigorously inspect the newly scaffolded modules (`modules/sovereign-cli` and `modules/sovereign-ui`) and ensure strict compliance with the `no-mistakes` engineering invariants and the Ponytail Doctrine.
 
-Your instructions and requirements:
-1. Working directory for metadata: C:\Skills\.agents\orchestrator\ (create files plan.md, progress.md, context.md here). Project root: C:\Skills.
-2. Read C:\Skills\.agents\ORIGINAL_REQUEST.md for full user requirements:
-   - R1: Core Controller Verification (Test sovereign.ps1 execution, mutex lock, sovereign.config.json parsing, path resolution, module counts).
-   - R2: no-mistakes Invariant Testing (Navigate to modules/no-mistakes, verify adherence to AGENTS.md/engineering rules, run/attempt make lint, go test -race ./..., go build, or document missing tools and manually verify structure/architecture/config).
-   - R3: Ponytail Doctrine Compliance (Audit C:\Skills directory for zero bloat, no ghost code, no API keys, and verify external assets documented in ASSET_REGISTRY.md).
-3. Decompose the tasks into clear milestones, create subagents/executors as needed, update plan.md and progress.md continuously.
-4. When all tasks and verification steps are complete, synthesize findings and report completion to the Sentinel parent agent.
+Working directory: C:\Skills\
+
+## Requirements
+
+### R1. Deep Sovereign-CLI Audit
+Navigate to `modules/sovereign-cli`. 
+- Verify the `cmd/root.go` implementation correctly uses Cobra, Viper, and Zap as documented in the `AUDIT_LEDGER.md`. 
+- Verify that `go.mod` is clean and correctly structured. 
+- *Note: If Go is not installed, perform static code analysis.*
+
+### R2. Deep Sovereign-UI Audit
+Navigate to `modules/sovereign-ui`. 
+- Verify the Next.js App Router structure (`src/app/page.tsx`).
+- Verify `components.json` correctly configures Shadcn-UI and TailwindCSS.
+- Verify `package.json` dependencies match the Asset Registry.
+
+### R3. Immutable Core Integrity
+Verify that the recent fixes to `sovereign.ps1` (dynamic discovery) and the `sovereign.config.json` module counts are structurally perfect. Execute `sovereign.ps1` to ensure it still passes all checks and acquires the Mutex lock successfully.
+
+## Acceptance Criteria
+
+### Execution & Verification
+- [ ] `sovereign.ps1` executes successfully and accurately prints out the dynamic counts for both skills and modules.
+- [ ] `modules/sovereign-cli` source code statically verified to use Cobra/Viper/Zap.
+- [ ] `modules/sovereign-ui` statically verified as a valid Next.js + Shadcn project.
+- [ ] No ghost assets exist anywhere in the repository.
+
+### Reporting
+- [ ] A final Phase 2 report is returned detailing all findings, compliance failures, and test results.

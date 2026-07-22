@@ -26,6 +26,8 @@
 ## UI & Design Systems
 - **Shadcn-UI (Accessible Components):** `https://github.com/shadcn-ui/ui`
 - **TailwindCSS (Utility-first CSS):** `https://github.com/tailwindlabs/tailwindcss`
+- **Next.js (Fullstack React Framework):** `https://github.com/vercel/next.js`
+- **Lucide-React (Icon Library):** `https://github.com/lucide-icons/lucide`
 
 ## Usage Instructions for Agents
 1. Evaluate the user's request. Does it introduce a concrete, undeniable need for one of these tools?
