@@ -3,25 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sovereign-OS V17 — Hyper-Minimalist Agent Orchestrator</title>
+  <title>Sovereign-OS V17 — Premium Agent Orchestrator</title>
   <meta name="description" content="Sovereign-OS is a hyper-minimalist meta-framework for governing autonomous AI coding agents strictly according to the Ponytail doctrine.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <style>
     :root {
-      --bg-dark: #0B0F19;
-      --bg-card: rgba(17, 24, 39, 0.75);
-      --bg-card-hover: rgba(31, 41, 55, 0.85);
-      --border-color: rgba(255, 255, 255, 0.1);
-      --text-main: #F9FAFB;
-      --text-muted: #9CA3AF;
-      --accent-indigo: #6366F1;
-      --accent-purple: #8B5CF6;
-      --accent-emerald: #10B981;
-      --accent-cyan: #06B6D4;
-      --glow: 0 0 25px rgba(139, 92, 246, 0.25);
+      --bg-base: #050505;
+      --bg-surface: #0a0a0a;
+      --bg-card: rgba(20, 20, 22, 0.7);
+      --bg-card-hover: rgba(30, 30, 35, 0.85);
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(255, 255, 255, 0.15);
+      
+      --text-primary: #FFFFFF;
+      --text-secondary: #A1A1AA;
+      
+      --brand-indigo: #6366F1;
+      --brand-violet: #8B5CF6;
+      --brand-fuchsia: #D946EF;
+      --brand-cyan: #06B6D4;
+      --brand-emerald: #10B981;
+      
+      --gradient-brand: linear-gradient(135deg, var(--brand-indigo), var(--brand-fuchsia));
+      --gradient-text: linear-gradient(to right, #FFFFFF, #E2E8F0, #94A3B8);
+      
+      --glow-indigo: 0 0 30px rgba(99, 102, 241, 0.3);
+      --glow-violet: 0 0 40px rgba(139, 92, 246, 0.4);
+      --glow-emerald: 0 0 20px rgba(16, 185, 129, 0.25);
     }
 
     * {
@@ -30,25 +42,51 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: 'Outfit', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
       line-height: 1.6;
       overflow-x: hidden;
+      /* Dynamic animated background */
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 40%);
+        radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 100% 0%, rgba(217, 70, 239, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
       background-attachment: fixed;
     }
 
-    .header {
-      backdrop-filter: blur(16px);
-      background: rgba(11, 15, 25, 0.8);
-      border-bottom: 1px solid var(--border-color);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    /* Grid overlay for texture */
+    .bg-grid {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-size: 40px 40px;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      z-index: -1;
+      mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0; width: 100%;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(5, 5, 5, 0.6);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 1.25rem 2rem;
       display: flex;
       justify-content: space-between;
@@ -61,341 +99,556 @@
       gap: 0.75rem;
       font-size: 1.5rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #fff 0%, #9CA3AF 100%);
+      letter-spacing: -0.02em;
+    }
+
+    .brand span:first-child {
+      background: var(--gradient-text);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .badge {
-      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-purple));
+      background: var(--gradient-brand);
       color: #fff;
-      font-size: 0.75rem;
-      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
       border-radius: 9999px;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.1em;
+      box-shadow: var(--glow-indigo);
     }
 
     .nav-links {
       display: flex;
-      gap: 1.5rem;
+      gap: 2rem;
       list-style: none;
     }
 
     .nav-links a {
-      color: var(--text-muted);
+      color: var(--text-secondary);
       text-decoration: none;
       font-weight: 500;
-      transition: color 0.2s ease;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      position: relative;
     }
 
     .nav-links a:hover {
-      color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background: var(--gradient-brand);
+      transition: width 0.3s ease;
+      border-radius: 2px;
     }
 
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Main Container */
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 3rem 1.5rem;
+      padding: 8rem 1.5rem 4rem;
     }
 
+    /* Hero Section */
     .hero {
       text-align: center;
-      padding: 4rem 1rem;
+      padding: 4rem 1rem 6rem;
+      position: relative;
+      animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 9999px;
+      color: var(--brand-indigo);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
     }
 
     .hero h1 {
-      font-size: 3.75rem;
+      font-size: 4.5rem;
       font-weight: 800;
+      letter-spacing: -0.03em;
       line-height: 1.1;
       margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #FFFFFF 0%, #A5B4FC 50%, #6EE7B7 100%);
+      background: linear-gradient(135deg, #FFFFFF 0%, #A5B4FC 50%, #D946EF 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .hero p {
       font-size: 1.25rem;
-      color: var(--text-muted);
-      max-width: 800px;
-      margin: 0 auto 2.5rem;
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      font-weight: 400;
     }
 
     .hero-actions {
       display: flex;
       justify-content: center;
-      gap: 1rem;
+      gap: 1.25rem;
     }
 
     .btn {
-      padding: 0.85rem 2rem;
+      padding: 1rem 2.5rem;
       border-radius: 12px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.25s ease;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 1rem;
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent-purple), var(--accent-indigo));
+      background: var(--gradient-brand);
       color: #fff;
-      box-shadow: var(--glow);
+      border: 1px solid transparent;
+      box-shadow: var(--glow-violet);
+    }
+    
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-primary:hover::before {
+      opacity: 1;
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 35px rgba(139, 92, 246, 0.45);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 50px rgba(217, 70, 239, 0.5);
     }
 
     .btn-secondary {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-highlight);
+      color: var(--text-primary);
+      backdrop-filter: blur(10px);
     }
 
     .btn-secondary:hover {
-      background: var(--bg-card-hover);
-      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
     }
 
-    /* Live Telemetry Card */
-    .dashboard-preview {
+    /* Telemetry Dashboard */
+    .dashboard {
       background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 2rem;
-      margin: 3rem 0;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 2.5rem;
+      margin: 2rem 0 6rem;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+      animation: rotate 20s linear infinite;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      100% { transform: rotate(360deg); }
     }
 
     .dashboard-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+    }
+    
+    .dashboard-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
     }
 
     .status-indicator {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      color: var(--accent-emerald);
+      gap: 0.75rem;
+      color: var(--brand-emerald);
       font-weight: 600;
+      font-size: 0.9rem;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
     .pulse {
-      width: 10px;
-      height: 10px;
-      background-color: var(--accent-emerald);
+      width: 8px; height: 8px;
+      background-color: var(--brand-emerald);
       border-radius: 50%;
-      box-shadow: 0 0 10px var(--accent-emerald);
-      animation: pulseAnim 2s infinite;
+      box-shadow: 0 0 12px var(--brand-emerald);
+      animation: pulseAnim 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
     @keyframes pulseAnim {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(0.95); opacity: 0.8; }
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
     }
 
-    .grid-stats {
+    .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1.5rem;
-      margin-bottom: 2rem;
     }
 
     .stat-card {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border-color);
-      padding: 1.25rem;
-      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card:hover {
+      background: rgba(255, 255, 255, 0.02);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
     }
 
     .stat-card .label {
       font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .stat-card .val {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    /* Modules Grid */
-    .section-title {
       font-size: 2.25rem;
-      font-weight: 700;
-      margin: 4rem 0 1.5rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.05em;
+    }
+    
+    .val-emerald { color: var(--brand-emerald); }
+    .val-indigo { color: var(--brand-indigo); }
+    .val-fuchsia { color: var(--brand-fuchsia); }
+    .val-cyan { color: var(--brand-cyan); }
+
+    /* Sections */
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 6rem 0 1rem;
       text-align: center;
     }
 
     .section-subtitle {
       text-align: center;
-      color: var(--text-muted);
+      color: var(--text-secondary);
+      font-size: 1.1rem;
       max-width: 600px;
-      margin: -1rem auto 3rem;
+      margin: 0 auto 4rem;
     }
 
+    /* Module Cards */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
     }
 
     .card {
       background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.75rem;
-      transition: all 0.3s ease;
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      z-index: 1;
     }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 20px;
+      background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover::before { opacity: 1; }
 
     .card:hover {
       background: var(--bg-card-hover);
-      border-color: rgba(139, 92, 246, 0.4);
-      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.5);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.1);
     }
 
     .card-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      padding: 1rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
     }
 
     .card h3 {
-      font-size: 1.35rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
     }
 
     .card p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .card-tag {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      padding: 0.2rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--accent-cyan);
-    }
-
-    /* Code Terminal */
-    .terminal {
-      background: #060911;
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      overflow: hidden;
-      margin: 3rem 0;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .terminal-header {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 0.75rem 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .dot-red { background: #EF4444; }
-    .dot-yellow { background: #F59E0B; }
-    .dot-green { background: #10B981; }
-
-    .terminal-body {
-      padding: 1.5rem;
-      color: #D1D5DB;
-      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
       line-height: 1.7;
     }
 
-    .prompt { color: var(--accent-emerald); }
-    .cmd { color: var(--accent-cyan); }
-    .comment { color: #6B7280; }
+    .card-tag {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--brand-cyan);
+    }
 
+    /* Terminal Window */
+    .terminal-window {
+      background: #09090b;
+      border: 1px solid var(--border-highlight);
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 0 auto 4rem;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+      max-width: 900px;
+    }
+
+    .terminal-header {
+      background: #18181b;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .mac-btn {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+    
+    .mac-close { background: #ff5f56; }
+    .mac-min { background: #ffbd2e; }
+    .mac-max { background: #27c93f; }
+
+    .terminal-title {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-family: 'Inter', sans-serif;
+      margin-left: 1rem;
+      font-weight: 500;
+    }
+
+    .terminal-body {
+      padding: 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #e4e4e7;
+      overflow-x: auto;
+    }
+    
+    /* Mermaid customization */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      background: transparent !important;
+    }
+    
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .term-prompt { color: var(--brand-emerald); font-weight: 600; }
+    .term-cmd { color: #fff; }
+    .term-comment { color: #71717a; font-style: italic; }
+    .term-info { color: #a1a1aa; }
+    .term-success { color: var(--brand-emerald); }
+    .term-time { color: var(--brand-violet); }
+
+    /* Footer */
     footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 4rem 2rem;
       text-align: center;
-      padding: 4rem 1rem 2rem;
-      color: var(--text-muted);
-      border-top: 1px solid var(--border-color);
-      margin-top: 5rem;
+      margin-top: 6rem;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
       font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .copyright {
+      color: #52525b;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 3rem; }
+      .nav-links { display: none; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .cards-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+  <div class="bg-grid"></div>
 
-  <header class="header">
-    <div class="brand">
-      Sovereign-OS <span class="badge">V17 Pristine</span>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <span>Sovereign-OS</span>
+        <span class="badge">V17 Pristine</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#modules">Modules</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="types.md">Types Reference</a></li>
+        <li><a href="https://github.com/tejaswin-amara/Sovereign-OS" target="_blank">GitHub</a></li>
+      </ul>
     </div>
-    <ul class="nav-links">
-      <li><a href="#modules">Modules</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#architecture">Architecture</a></li>
-      <li><a href="#types">Types</a></li>
-      <li><a href="https://github.com/tejaswin-amara/Sovereign-OS" target="_blank">GitHub</a></li>
-    </ul>
-  </header>
+  </nav>
 
-  <div class="container">
+  <main class="container">
     
     <!-- Hero Section -->
     <section class="hero">
-      <h1>Autonomous AI Governance Framework</h1>
+      <div class="hero-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        Zero-Bloat Governance Protocol
+      </div>
+      <h1>Autonomous AI<br>Governance Framework</h1>
       <p>A hyper-minimalist meta-orchestrator engineered on the Ponytail doctrine. Absolute execution discipline, zero bloat, and dynamic asset management.</p>
       <div class="hero-actions">
         <a href="#terminal" class="btn btn-primary">Quickstart Demo</a>
-        <a href="https://github.com/tejaswin-amara/Sovereign-OS" class="btn btn-secondary" target="_blank">View on GitHub</a>
+        <a href="https://github.com/tejaswin-amara/Sovereign-OS" class="btn btn-secondary" target="_blank">View Repository</a>
       </div>
     </section>
 
     <!-- Live Telemetry Dashboard -->
-    <div class="dashboard-preview">
+    <div class="dashboard">
       <div class="dashboard-header">
-        <h2>Live System Telemetry</h2>
+        <h2>System Telemetry</h2>
         <div class="status-indicator">
-          <div class="pulse"></div> Operational (Mutex Locked)
+          <div class="pulse"></div> 
+          <span>Operational (Mutex Locked)</span>
         </div>
       </div>
 
-      <div class="grid-stats">
+      <div class="stats-grid">
         <div class="stat-card">
           <div class="label">OS Mutex State</div>
-          <div class="val" style="color: var(--accent-emerald);">Acquired</div>
+          <div class="val val-emerald">Acquired</div>
         </div>
         <div class="stat-card">
           <div class="label">Active Modules</div>
-          <div class="val" style="color: var(--accent-purple);">7 Modules</div>
+          <div class="val val-indigo">07</div>
         </div>
         <div class="stat-card">
           <div class="label">Active Skills</div>
-          <div class="val" style="color: var(--accent-cyan);">2 Skills</div>
+          <div class="val val-fuchsia">02</div>
         </div>
         <div class="stat-card">
           <div class="label">Telemetry Latency</div>
-          <div class="val" style="color: var(--accent-indigo);">178 ms</div>
+          <div class="val val-cyan">178<span style="font-size: 1rem; color: #71717a">ms</span></div>
         </div>
       </div>
     </div>
@@ -403,13 +656,13 @@
     <!-- Modules Section -->
     <section id="modules">
       <h2 class="section-title">Core Submodules</h2>
-      <p class="section-subtitle">Seven specialized, isolated components operating as clean Git submodules.</p>
+      <p class="section-subtitle">Seven highly specialized, strictly isolated components operating seamlessly as clean Git submodules.</p>
 
       <div class="cards-grid">
         <div class="card">
           <div class="card-icon">⚡</div>
           <h3>sovereign-cli</h3>
-          <p>High-performance Go CLI powered by Cobra, Viper, and Zap logger for system telemetry & control.</p>
+          <p>High-performance Go CLI powered by Cobra, Viper, and Zap logger for rapid system telemetry and control.</p>
           <span class="card-tag">Go / Cobra</span>
         </div>
 
@@ -417,42 +670,42 @@
           <div class="card-icon">🖥️</div>
           <h3>sovereign-ui</h3>
           <p>Modern Next.js App Router dashboard featuring Shadcn-UI, Tailwind CSS, and real-time SSE metrics.</p>
-          <span class="card-tag">Next.js / TypeScript</span>
+          <span class="card-tag">Next.js / React</span>
         </div>
 
         <div class="card">
           <div class="card-icon">🛡️</div>
           <h3>no-mistakes</h3>
-          <p>The core pipeline execution engine enforcing git safety, PR routing, and verification invariants.</p>
-          <span class="card-tag">Go / Pipeline Engine</span>
+          <p>The core pipeline execution engine enforcing git safety, PR routing, and stringent verification invariants.</p>
+          <span class="card-tag">Go / Engine</span>
         </div>
 
         <div class="card">
           <div class="card-icon">🧠</div>
           <h3>codebase-memory-mcp</h3>
-          <p>Knowledge Graph MCP server for semantic code discovery, Cypher query graph, and path tracing.</p>
-          <span class="card-tag">C / Node.js MCP</span>
+          <p>Knowledge Graph MCP server for deep semantic code discovery, Cypher queries, and AST path tracing.</p>
+          <span class="card-tag">Node.js / MCP</span>
         </div>
 
         <div class="card">
           <div class="card-icon">🔐</div>
           <h3>sovereign-security</h3>
-          <p>Zero-trust secret scanner and compliance auditor ensuring zero credential leaks across commits.</p>
-          <span class="card-tag">Go / Security Scanner</span>
+          <p>Zero-trust secret scanner and compliance auditor ensuring absolute credential safety across all commits.</p>
+          <span class="card-tag">Go / Scanner</span>
         </div>
 
         <div class="card">
           <div class="card-icon">💾</div>
           <h3>sovereign-memory</h3>
-          <p>Persistent memory ledger and audit store backing Sovereign-OS system states across runs.</p>
-          <span class="card-tag">Go / Key-Value Ledger</span>
+          <p>Persistent memory ledger and audit store backing Sovereign-OS system states securely across runs.</p>
+          <span class="card-tag">Go / Ledger</span>
         </div>
 
         <div class="card">
           <div class="card-icon">⚙️</div>
           <h3>sovereign-adapt</h3>
-          <p>Dynamic adaptation engine managing auto-remediation policies and runtime strategy tuning.</p>
-          <span class="card-tag">Go / Adapt Engine</span>
+          <p>Dynamic adaptation engine managing intelligent auto-remediation policies and runtime strategy tuning.</p>
+          <span class="card-tag">Go / AI Engine</span>
         </div>
       </div>
     </section>
@@ -460,21 +713,21 @@
     <!-- Skills Section -->
     <section id="skills">
       <h2 class="section-title">Standing Agent Skills</h2>
-      <p class="section-subtitle">Runtime guidance and research capabilities available to autonomous agents.</p>
+      <p class="section-subtitle">Runtime guidance and advanced research capabilities available instantly to autonomous agents.</p>
 
-      <div class="cards-grid">
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
         <div class="card">
           <div class="card-icon">✂️</div>
           <h3>ponytail</h3>
-          <p>The philosophical backbone: deletion before addition, zero unearned complexity, concrete utility over speculative features.</p>
-          <span class="card-tag">Skill / Governance</span>
+          <p>The philosophical backbone of the OS: mandatory deletion before addition, zero unearned complexity, and demanding concrete utility over speculative features.</p>
+          <span class="card-tag">Philosophy / Governance</span>
         </div>
 
         <div class="card">
           <div class="card-icon">🌐</div>
           <h3>agent-reach</h3>
-          <p>Multi-platform internet research skill with 15 platform backends for autonomous web research.</p>
-          <span class="card-tag">Skill / Research</span>
+          <p>Omni-platform internet research skill equipped with 15 platform backends for autonomous, deep web research and context gathering.</p>
+          <span class="card-tag">Research / Automation</span>
         </div>
       </div>
     </section>
@@ -482,33 +735,47 @@
     <!-- Architecture Section -->
     <section id="architecture">
       <h2 class="section-title">System Architecture</h2>
-      <p class="section-subtitle">Single PowerShell orchestrator controlling submodules & asset registry.</p>
+      <p class="section-subtitle">A singular PowerShell orchestrator controlling deterministic execution of all submodules.</p>
 
-      <div class="terminal">
+      <div class="terminal-window">
         <div class="terminal-header">
-          <div class="dot dot-red"></div>
-          <div class="dot dot-yellow"></div>
-          <div class="dot dot-green"></div>
-          <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem;">architecture.mermaid</span>
+          <div class="mac-btn mac-close"></div>
+          <div class="mac-btn mac-min"></div>
+          <div class="mac-btn mac-max"></div>
+          <span class="terminal-title">architecture.mermaid</span>
         </div>
-        <div class="terminal-body">
+        <div class="terminal-body" style="background: rgba(0,0,0,0.5);">
           <pre class="mermaid">
-graph TD
-    Core[Sovereign Core] --> PS[sovereign.ps1 Orchestrator]
-    Core --> CFG[sovereign.config.json]
+flowchart TD
+    %% Define Styles
+    classDef core fill:#18181b,stroke:#8B5CF6,stroke-width:2px,color:#fff,rx:8px,ry:8px
+    classDef ps fill:#09090b,stroke:#6366F1,stroke-width:2px,color:#fff,rx:8px,ry:8px
+    classDef mutex fill:#064e3b,stroke:#10B981,stroke-width:2px,color:#fff,rx:8px,ry:8px
+    classDef module fill:#18181b,stroke:#3f3f46,stroke-width:1px,color:#d4d4d8,rx:6px,ry:6px
+    classDef skill fill:#1e1b4b,stroke:#6366F1,stroke-width:1px,color:#c7d2fe,rx:6px,ry:6px
+
+    Core[Sovereign Core]:::core --> PS[sovereign.ps1 Orchestrator]:::ps
+    Core --> CFG[sovereign.config.json]:::module
     
-    PS --> Lock[Global\\SovereignOSLock OS Mutex]
+    PS --> Lock[Global\SovereignOSLock OS Mutex]:::mutex
     
-    PS --> CLI[modules/sovereign-cli]
-    PS --> UI[modules/sovereign-ui]
-    PS --> NM[modules/no-mistakes]
-    PS --> MCP[modules/codebase-memory-mcp]
-    PS --> SEC[modules/sovereign-security]
-    PS --> MEM[modules/sovereign-memory]
-    PS --> ADP[modules/sovereign-adapt]
+    subgraph Modules [Strictly Isolated Git Submodules]
+        CLI[sovereign-cli]:::module
+        UI[sovereign-ui]:::module
+        NM[no-mistakes]:::module
+        MCP[codebase-memory-mcp]:::module
+        SEC[sovereign-security]:::module
+        MEM[sovereign-memory]:::module
+        ADP[sovereign-adapt]:::module
+    end
     
-    PS --> SK1[skills/ponytail]
-    PS --> SK2[skills/agent-reach]
+    subgraph Skills [Agent Runtime Enhancements]
+        SK1[skills/ponytail]:::skill
+        SK2[skills/agent-reach]:::skill
+    end
+
+    PS --> Modules
+    PS --> Skills
           </pre>
         </div>
       </div>
@@ -517,35 +784,74 @@ graph TD
     <!-- Quickstart Terminal -->
     <section id="terminal">
       <h2 class="section-title">Execution Terminal</h2>
-      
-      <div class="terminal">
+      <p class="section-subtitle">Real-time simulation of the orchestrator boot sequence.</p>
+
+      <div class="terminal-window">
         <div class="terminal-header">
-          <div class="dot dot-red"></div>
-          <div class="dot dot-yellow"></div>
-          <div class="dot dot-green"></div>
-          <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem;">PowerShell</span>
+          <div class="mac-btn mac-close"></div>
+          <div class="mac-btn mac-min"></div>
+          <div class="mac-btn mac-max"></div>
+          <span class="terminal-title">admin@sovereign-os: ~/C/Skills</span>
         </div>
         <div class="terminal-body">
-          <p><span class="comment"># Execute Sovereign-OS orchestrator</span></p>
-          <p><span class="prompt">PS C:\Skills></span> <span class="cmd">.\sovereign.ps1</span></p>
+          <p><span class="term-comment"># Initialize Sovereign-OS orchestrator strictly</span></p>
+          <p><span class="term-prompt">PS C:\Skills></span> <span class="term-cmd">.\sovereign.ps1 --strict --verify</span></p>
           <br>
-          <p style="color: #9CA3AF;">[00:04:46] [INFO] [MUTEX] OS-Level Lock Acquired.</p>
-          <p style="color: #9CA3AF;">[00:04:46] [INFO] [INIT] Dynamic skill count: 2, Module count: 7</p>
-          <p style="color: #10B981;">[00:04:46] [INFO] [COMPLETE] ALL PHASES PASSED</p>
-          <p style="color: #9CA3AF;">[00:04:46] [INFO] [MUTEX] Lock released.</p>
-          <p style="color: #8B5CF6;">[00:04:46] [INFO] [TELEMETRY] Execution finished in 178 ms.</p>
+          <p><span class="term-info">[00:04:46] [INFO] [MUTEX]</span> OS-Level Lock Acquired successfully.</p>
+          <p><span class="term-info">[00:04:46] [INFO] [INIT]</span> Manifest resolved. Dynamic skill count: 2, Module count: 7</p>
+          <p><span class="term-info">[00:04:46] [VERIFY] [MOD]</span> Validating no-mistakes invariants... OK</p>
+          <p><span class="term-info">[00:04:46] [VERIFY] [MOD]</span> Validating sovereign-cli integrity... OK</p>
+          <p><span class="term-info">[00:04:46] [VERIFY] [SEC]</span> Zero credential leaks detected. Compliance 100%.</p>
+          <p><span class="term-success">[00:04:46] [INFO] [COMPLETE]</span> ALL PHASES PASSED. SYSTEM PRISTINE.</p>
+          <p><span class="term-info">[00:04:46] [INFO] [MUTEX]</span> Lock released gracefully.</p>
+          <p><span class="term-time">[00:04:46] [INFO] [TELEMETRY]</span> Execution finished in 178 ms.</p>
+          <br>
+          <p><span class="term-prompt">PS C:\Skills></span> <span class="term-cmd">_</span></p>
         </div>
       </div>
     </section>
 
-  </div>
+  </main>
 
   <footer>
-    <p>Sovereign-OS V17 — Designed for autonomous agent governance with zero bloat.</p>
+    <div class="footer-content">
+      <div class="footer-brand">Sovereign-OS</div>
+      <div class="footer-links">
+        <a href="#modules">Modules</a>
+        <a href="#skills">Skills</a>
+        <a href="types.md">Types Reference</a>
+        <a href="https://github.com/tejaswin-amara/Sovereign-OS">GitHub</a>
+      </div>
+      <p class="copyright">© 2026 Sovereign-OS. Designed for autonomous agent governance with zero bloat.</p>
+    </div>
   </footer>
 
   <script>
-    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    mermaid.initialize({ 
+      startOnLoad: true, 
+      theme: 'base',
+      themeVariables: {
+        background: 'transparent',
+        primaryColor: '#18181b',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#3f3f46',
+        lineColor: '#6366F1',
+        secondaryColor: '#09090b',
+        tertiaryColor: '#1e1b4b'
+      }
+    });
+
+    // Hover effect for cards
+    document.getElementById("modules").onmousemove = e => {
+      for(const card of document.getElementsByClassName("card")) {
+        const rect = card.getBoundingClientRect(),
+              x = e.clientX - rect.left,
+              y = e.clientY - rect.top;
+
+        card.style.setProperty("--mouse-x", `${x}px`);
+        card.style.setProperty("--mouse-y", `${y}px`);
+      }
+    };
   </script>
 </body>
 </html>
