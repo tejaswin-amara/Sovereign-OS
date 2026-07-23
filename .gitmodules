@@ -1,19 +1,16 @@
-# gitmodules
+# Sovereign-OS Git Submodules Configuration
 [submodule "skills/agent-reach"]
 	path = skills/agent-reach
 	url = https://github.com/Panniantong/Agent-Reach.git
-[submodule "modules/no-mistakes"]
-	path = modules/no-mistakes
-	url = https://github.com/kunchenguid/no-mistakes.git
-[submodule "modules/codebase-memory-mcp"]
-	path = modules/codebase-memory-mcp
-	url = https://github.com/DeusData/codebase-memory-mcp.git
-[submodule "modules/sovereign-cli"]
-	path = modules/sovereign-cli
-	url = https://github.com/tejaswin-amara/sovereign-cli.git
-[submodule "modules/sovereign-ui"]
-	path = modules/sovereign-ui
-	url = https://github.com/tejaswin-amara/sovereign-ui.git
+
 [submodule "skills/ponytail"]
 	path = skills/ponytail
 	url = https://github.com/DietrichGebert/ponytail.git
+
+[submodule "modules/no-mistakes"]
+	path = modules/no-mistakes
+	url = https://github.com/kunchenguid/no-mistakes.git
+
+[submodule "modules/codebase-memory-mcp"]
+	path = modules/codebase-memory-mcp
+	url = https://github.com/DeusData/codebase-memory-mcp.git

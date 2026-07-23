@@ -1,6 +1,13 @@
-# Sovereign Asset Registry (V16)
+# Sovereign Asset Registry (V17)
 
-> **Purpose:** This registry lists approved external repositories that agents can dynamically research and pull in using `agent-reach` when a task explicitly demands them. In accordance with the Ponytail doctrine, DO NOT install these globally or permanently unless the core architecture requires it.
+> **Purpose:** This registry lists approved external repositories and system submodules that agents can dynamically research and utilize. In accordance with the Ponytail doctrine, DO NOT install external dependencies globally or permanently unless the core architecture requires it.
+
+## System Submodules & Repositories
+- **Sovereign-OS (Parent Core):** `https://github.com/tejaswin-amara/Sovereign-OS`
+- **Agent-Reach (Research Skill):** `https://github.com/Panniantong/Agent-Reach`
+- **Ponytail (Minimalism Skill):** `https://github.com/DietrichGebert/ponytail`
+- **No-Mistakes (Pipeline Engine):** `https://github.com/kunchenguid/no-mistakes`
+- **Codebase Memory MCP (Knowledge Graph):** `https://github.com/DeusData/codebase-memory-mcp`
 
 ## CI & Automation
 - **GitHub Actions (Checkout):** `https://github.com/actions/checkout`
@@ -18,10 +25,6 @@
 ## Observability
 - **Zap (Blazing fast, structured logging):** `https://github.com/uber-go/zap`
 - **Zerolog (Zero Allocation JSON Logger):** `https://github.com/rs/zerolog`
-
-## Agent Orchestration
-- **LangChain-Go:** `https://github.com/tmc/langchaingo`
-- **Open Agent Framework (Go):** `https://github.com/openai/open-agent-framework-go`
 
 ## UI & Design Systems
 - **Shadcn-UI (Accessible Components):** `https://github.com/shadcn-ui/ui`

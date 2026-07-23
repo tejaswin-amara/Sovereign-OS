@@ -1,49 +1,26 @@
-# Sovereign-OS V17 — Submodules Reference
+# Sovereign-OS V17 — Submodules & Repositories Reference
 
-Sovereign-OS V17 features **7 core submodules**, each decoupled and isolated as a Git submodule under `modules/`.
+Sovereign-OS V17 features **7 core submodules**, decoupled and isolated under `modules/`.
 
 ---
 
-## Submodule Directory Layout
+## System Submodules & Repositories Matrix
 
-| Module | Category | Primary Tech | Path | Purpose |
+| Module | Category | Primary Tech | Submodule / Repository Link | Purpose |
 | :--- | :--- | :--- | :--- | :--- |
-| `sovereign-cli` | CLI | Go (Cobra, Viper, Zap) | `modules/sovereign-cli` | Command-line interface and daemon manager |
-| `sovereign-ui` | Frontend | Next.js (App Router, Tailwind, Shadcn) | `modules/sovereign-ui` | Web dashboard & real-time telemetry monitoring |
-| `no-mistakes` | Pipeline | Go (Pipeline, SCM, Agent) | `modules/no-mistakes` | Automated pipeline gate enforcement & git safety |
-| `codebase-memory-mcp` | Knowledge Graph | C / Node.js MCP | `modules/codebase-memory-mcp` | Semantic codebase search, Cypher graph, and path tracing |
-| `sovereign-security` | Security | Go | `modules/sovereign-security` | Zero-trust secret scanner & static vulnerability audit |
-| `sovereign-memory` | State | Go | `modules/sovereign-memory` | Key-value memory ledger backing agent state |
-| `sovereign-adapt` | Strategy | Go | `modules/sovereign-adapt` | Strategy tuning and auto-remediation policy engine |
+| `sovereign-cli` | CLI | Go (Cobra, Viper, Zap) | Core Repo: [`tejaswin-amara/Sovereign-OS`](https://github.com/tejaswin-amara/Sovereign-OS) | Command-line interface and daemon manager |
+| `sovereign-ui` | Frontend | Next.js / Tailwind / Shadcn | Core Repo: [`tejaswin-amara/Sovereign-OS`](https://github.com/tejaswin-amara/Sovereign-OS) | Web dashboard & real-time telemetry monitoring |
+| `no-mistakes` | Pipeline | Go (Pipeline, SCM, Agent) | Submodule: [`kunchenguid/no-mistakes`](https://github.com/kunchenguid/no-mistakes) | Automated pipeline gate enforcement & git safety |
+| `codebase-memory-mcp` | Knowledge Graph | C / Node.js MCP | Submodule: [`DeusData/codebase-memory-mcp`](https://github.com/DeusData/codebase-memory-mcp) | Semantic codebase search, Cypher graph, and path tracing |
+| `sovereign-security` | Security | Go | Core Repo: [`tejaswin-amara/Sovereign-OS`](https://github.com/tejaswin-amara/Sovereign-OS) | Zero-trust secret scanner & static vulnerability audit |
+| `sovereign-memory` | State | Go | Core Repo: [`tejaswin-amara/Sovereign-OS`](https://github.com/tejaswin-amara/Sovereign-OS) | Key-value memory ledger backing agent state |
+| `sovereign-adapt` | Strategy | Go | Core Repo: [`tejaswin-amara/Sovereign-OS`](https://github.com/tejaswin-amara/Sovereign-OS) | Strategy tuning and auto-remediation policy engine |
 
 ---
 
-## Detailed Specifications
+## Standing Agent Skills Repositories
 
-### 1. `sovereign-cli`
-- **Entrypoint**: `cmd/root.go`
-- **Commands**: `agent`, `status`, `config`, `run`
-- **Configuration**: Uses Viper to read `sovereign.config.json`
-
-### 2. `sovereign-ui`
-- **Framework**: Next.js 14+ (App Router)
-- **Components**: `StatusDashboard.tsx`, `AgentTable.tsx`
-- **API Routes**: `/api/status`
-
-### 3. `no-mistakes`
-- **Entrypoint**: `cmd/no-mistakes/main.go`
-- **Sub-packages**: `internal/cli`, `internal/daemon`, `internal/pipeline`, `internal/agent`, `internal/git`
-- **Invariants**: Strict adherence to `AGENTS.md` rules (OS lock, non-destructive rebase, fail-closed security).
-
-### 4. `codebase-memory-mcp`
-- **Protocols**: Model Context Protocol (MCP) over stdio.
-- **Capabilities**: `index_repository`, `search_graph`, `query_graph`, `trace_path`, `get_code_snippet`.
-
-### 5. `sovereign-security`
-- **Capabilities**: Pattern-matching secret scanner covering AWS keys, GitHub PATs, private keys, and custom secrets.
-
-### 6. `sovereign-memory`
-- **Capabilities**: In-memory and persistent SQLite/JSON store for agent execution histories and audit records.
-
-### 7. `sovereign-adapt`
-- **Capabilities**: Policy engine evaluating execution failures and dynamically adjusting retries, timeouts, and fallback models.
+| Skill | Category | Repository Link | Purpose |
+| :--- | :--- | :--- | :--- |
+| `ponytail` | Philosophy | [`DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail) | Deletion before addition, zero unearned complexity |
+| `agent-reach` | Research | [`Panniantong/Agent-Reach`](https://github.com/Panniantong/Agent-Reach) | 15-platform online research and platform router |
