@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/kunchenguid/no-mistakes/internal/ipc"
 	"github.com/spf13/cobra"
@@ -13,9 +12,12 @@ var statusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Check system status",
 	Long:  `Check the real-time status of the Sovereign-OS daemon and active agents.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		logger, _ := zap.NewProduction()
-		defer logger.Sync()
+	RunE: func(cmd *cobra.Command, args []string) error {
+		logger, err := zap.NewProduction()
+		if err != nil {
+			return fmt.Errorf("failed to initialize logger: %w", err)
+		}
+		defer func() { _ = logger.Sync() }()
 
 		logger.Info("Status check invoked (Zap)")
 
@@ -24,7 +26,7 @@ var statusCmd = &cobra.Command{
 		if err != nil {
 			logger.Error("Failed to dial daemon socket", zap.Error(err), zap.String("socket", socketPath))
 			fmt.Println("System Status: OFFLINE")
-			os.Exit(1)
+			return fmt.Errorf("daemon socket offline: %w", err)
 		}
 		defer client.Close()
 
@@ -34,6 +36,7 @@ var statusCmd = &cobra.Command{
 		fmt.Println("System Status: ONLINE")
 		fmt.Println("Daemon Lock: ACQUIRED")
 		fmt.Printf("Active Modules: %v\n", result["modules_count"])
+		return nil
 	},
 }
 

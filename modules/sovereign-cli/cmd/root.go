@@ -13,13 +13,16 @@ var rootCmd = &cobra.Command{
 	Use:   "sovereign",
 	Short: "Sovereign-OS CLI",
 	Long:  `The core orchestrator for Sovereign-OS, built with Cobra, Viper, and Zap.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// Zap production logger
-		logger, _ := zap.NewProduction()
-		defer logger.Sync()
-		logger.Info("Sovereign-OS engine initialized (Zap)")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		logger, err := zap.NewProduction()
+		if err != nil {
+			return fmt.Errorf("failed to initialize logger: %w", err)
+		}
+		defer func() { _ = logger.Sync() }()
 
+		logger.Info("Sovereign-OS engine initialized (Zap)")
 		fmt.Println("Sovereign-OS CLI running. Use --help to see available commands.")
+		return nil
 	},
 }
 
