@@ -1,158 +1,100 @@
-# Sovereign-OS V17 — Complete Types Reference
+# Sovereign-OS Global Type Registry
 
-This document provides a single reference for type definitions across TypeScript, Go, and JSON Schemas in Sovereign-OS.
+This document serves as the authoritative source of truth for all cross-module data structures, configurations, and API contracts within the Sovereign-OS architecture.
 
 ---
 
-## 1. TypeScript Types (`modules/sovereign-ui/src/types/index.ts`)
+## 1. Core Configuration (`sovereign.config.json`)
+
+The primary configuration object governing the state and module initialization for Sovereign-OS.
 
 ```typescript
-export type ModuleCategory = 'cli' | 'ui' | 'mcp' | 'pipeline' | 'security' | 'memory' | 'adapt';
-export type SkillCategory = 'research' | 'philosophy' | 'automation';
-export type HealthStatus = 'healthy' | 'degraded' | 'offline' | 'pristine';
+interface SovereignConfig {
+  version: string;                // e.g. "17.0.0-Scratch"
+  modules: string[];              // e.g. ["no-mistakes", "sovereign-cli", "sovereign-ui"]
+  enforce_ponytail: boolean;      // Must always be true
+  features: {
+    daemon_lock: boolean;         // Gatekeeper singleton enforcement
+    ui_dashboard: boolean;        // Next.js monitoring dashboard
+  };
+  telemetry: {
+    enabled: boolean;
+    endpoint: string;
+  };
+}
+```
 
-export interface SovereignModule {
+---
+
+## 2. Agent Ledgers (`AUDIT_LEDGER.md` & `MISTAKES_LEDGER.md`)
+
+When parsing ledgers programmatically or generating reports, the structure follows this markdown schema constraint:
+
+```go
+type AuditEntry struct {
+    Timestamp   string `json:"timestamp"`
+    Action      string `json:"action"`
+    Module      string `json:"module"`
+    Outcome     string `json:"outcome"`
+    Ponytail    bool   `json:"ponytail_compliant"`
+}
+
+type MistakeEntry struct {
+    Timestamp   string `json:"timestamp"`
+    Error       string `json:"error"`
+    Resolution  string `json:"resolution"`
+    Agent       string `json:"agent"`
+}
+```
+
+---
+
+## 3. UI Dashboard Telemetry (`modules/sovereign-ui`)
+
+The Next.js front-end relies on the following TypeScript definitions for rendering system metrics.
+
+```typescript
+export interface SystemMetric {
   id: string;
-  name: string;
-  category: ModuleCategory;
-  version: string;
-  path: string;
-  status: HealthStatus;
-  goModule?: string;
-  npmPackage?: string;
-  lastVerified: string;
-}
-
-export interface SovereignSkill {
-  name: string;
-  category: SkillCategory;
-  path: string;
-  description: string;
-  dynamicAssets: string[];
-  enabled: boolean;
-}
-
-export interface MutexState {
-  acquired: boolean;
-  name: string;
-  pid?: number;
-  acquiredAt?: string;
-}
-
-export interface TelemetryMetric {
-  executionTimeMs: number;
-  dynamicSkillCount: number;
-  dynamicModuleCount: number;
-  timestamp: string;
-}
-
-export interface SystemAuditLedger {
-  version: string;
-  certifiedState: string;
+  label: string;
+  value: number | string;
+  status: 'healthy' | 'warning' | 'critical';
   lastUpdated: string;
-  totalModules: number;
-  totalSkills: number;
-  auditSignatures: string[];
 }
 
-export interface SovereignSystemStatus {
-  system: string;
-  version: string;
-  status: HealthStatus;
-  mutex: MutexState;
-  telemetry: TelemetryMetric;
-  modules: SovereignModule[];
-  skills: SovereignSkill[];
-  ledger: SystemAuditLedger;
+export interface ArchitectureNode {
+  name: string;
+  type: 'core' | 'cli' | 'ui' | 'gatekeeper';
+  dependencies: string[];
 }
 ```
 
 ---
 
-## 2. Go Types (`modules/sovereign-cli/pkg/types/types.go`)
+## 4. No-Mistakes Pipeline (`modules/no-mistakes`)
+
+The `no-mistakes` daemon uses the following internal types to evaluate runs and enforce pipeline constraints before a code push is authorized.
 
 ```go
-package types
-
-import "time"
-
-type SovereignConfig struct {
-	Version      string                  `json:"version"`
-	Environment  string                  `json:"environment"`
-	MutexName    string                  `json:"mutex_name"`
-	Telemetry    TelemetryConfig         `json:"telemetry"`
-	Modules      map[string]ModuleConfig `json:"modules"`
-	Skills       map[string]SkillConfig  `json:"skills"`
-	AuditState   AuditStateConfig        `json:"audit_state"`
+// Represents a single verification run against a branch
+type PipelineRun struct {
+    ID           string       `json:"id"`
+    Branch       string       `json:"branch"`
+    HeadSHA      string       `json:"head_sha"`
+    Status       string       `json:"status"` // "running", "completed", "failed", "parked"
+    Intent       string       `json:"intent"` // User's natural language goal
+    Steps        []RunStep    `json:"steps"`
 }
 
-type TelemetryConfig struct {
-	Enabled    bool   `json:"enabled"`
-	LogPath    string `json:"log_path"`
-	MaxAgeDays int    `json:"max_age_days"`
-}
-
-type ModuleConfig struct {
-	Name        string `json:"name"`
-	Category    string `json:"category"`
-	Path        string `json:"path"`
-	GoModule    string `json:"go_module,omitempty"`
-	NpmPackage  string `json:"npm_package,omitempty"`
-	Description string `json:"description"`
-}
-
-type SkillConfig struct {
-	Name        string   `json:"name"`
-	Category    string   `json:"category"`
-	Path        string   `json:"path"`
-	Description string   `json:"description"`
-	Assets      []string `json:"assets"`
-}
-
-type AuditStateConfig struct {
-	CertifiedState string    `json:"certified_state"`
-	LastAudited    time.Time `json:"last_audited"`
-	Signer         string    `json:"signer"`
-}
-
-type SystemStatus struct {
-	MutexAcquired bool      `json:"mutex_acquired"`
-	LatencyMs     int64     `json:"latency_ms"`
-	SkillCount    int       `json:"skill_count"`
-	ModuleCount   int       `json:"module_count"`
-	Timestamp     time.Time `json:"timestamp"`
+// Represents an individual step within a run
+type RunStep struct {
+    Name       string   `json:"name"`     // e.g., "lint", "test", "review"
+    Status     string   `json:"status"`   // "pending", "completed", "failed", "skipped"
+    DurationMS int64    `json:"duration_ms"`
+    Findings   []string `json:"findings"`
 }
 ```
 
 ---
 
-## 3. Security & Memory Types (`modules/sovereign-security` & `modules/sovereign-memory`)
-
-```go
-type SecuritySeverity string
-
-const (
-	SeverityLow      SecuritySeverity = "LOW"
-	SeverityMedium   SecuritySeverity = "MEDIUM"
-	SeverityHigh     SecuritySeverity = "HIGH"
-	SeverityCritical SecuritySeverity = "CRITICAL"
-)
-
-type SecurityFinding struct {
-	RuleID      string           `json:"rule_id"`
-	FilePath    string           `json:"file_path"`
-	Line        int              `json:"line"`
-	Severity    SecuritySeverity `json:"severity"`
-	Description string           `json:"description"`
-	Snippet     string           `json:"snippet"`
-}
-
-type MemoryEntry struct {
-	ID        string    `json:"id"`
-	Key       string    `json:"key"`
-	Value     string    `json:"value"`
-	Category  string    `json:"category"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-```
+*Note: Any changes to module interfaces or additions to the architecture must be recorded here in accordance with AGENTS.md Directive V17.*
