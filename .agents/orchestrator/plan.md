@@ -1,34 +1,19 @@
-# Plan: Phase 3 Exhaustive Deep Audit and Remediation
+# Action Plan — Phase 4 Exhaustive System Audit
 
-## Objectives
-Execute Phase 3 deep audit covering R1 (No-Mistakes invariants), R2 (Global documentation & ledger sync), and R3 (Cross-module architecture, secret scans, sovereign.ps1 lock & execution).
+## Phase 4 Objectives
+Conduct a deep, exhaustive audit of the complete Sovereign-OS V16 system against Requirements R1, R2, and R3 to verify zero bloat, architectural integrity, and zero secret leaks.
 
-## Milestones & Action Steps
-
-### Milestone 1: No-Mistakes Invariant Audit (R1)
-- Dispatch `teamwork_preview_explorer` to inspect `modules/no-mistakes` against `AGENTS.md` invariants:
-  1. Daemon lock implementation in `internal/daemon/lock.go` (exclusive lock on `<NM_HOME>/daemon.lock`).
-  2. Post-receive hook path resolution in `internal/git/hook.go` (absolute gate path resolution).
-  3. Repo Config Trust Boundary in `internal/daemon/manager.go` (trusted default branch, pinned SHA).
-  4. Process tree reapers (`shellenv.ConfigureShellCommand`, `winproc.Harden`).
-  5. Static analysis check (formatting, lint rules, go vet equivalents).
-
-### Milestone 2: Global Documentation & Ledger Sync Audit (R2)
-- Dispatch `teamwork_preview_explorer` to inspect `README.md`, `AUDIT_LEDGER.md`, `MISTAKES_LEDGER.md`, and `ASSET_REGISTRY.md`:
-  1. Check for broken links, ghost axioms, phantom features.
-  2. Verify Ponytail Doctrine enforcement (no bloat, zero unearned complexity, every line provides verifiable utility).
-
-### Milestone 3: Cross-Module Architectural & Secret Leak Audit (R3)
-- Dispatch `teamwork_preview_explorer` to inspect:
-  1. `sovereign.config.json` vs `modules/` and `skills/` directories.
-  2. Purpose alignment for `sovereign-cli`, `sovereign-ui`, and `codebase-memory-mcp`.
-  3. Secret/token leak scan across all files, directories, and git commits.
-  4. Empirical execution check for `sovereign.ps1`.
-
-### Milestone 4: Remediation Execution
-- Dispatch `teamwork_preview_worker` to remediate any defects identified across M1, M2, M3.
-
-### Milestone 5: Independent Verification & Forensic Audit
-- Dispatch Reviewers (`teamwork_preview_reviewer`) to verify changes.
-- Dispatch Challengers (`teamwork_preview_challenger`) to stress test `sovereign.ps1` and modules.
-- Dispatch Forensic Auditor (`teamwork_preview_auditor`) for final integrity verification and CLEAN verdict.
+## Milestones & Status
+1. **P4-M1: Ponytail Compliance Audit (R1)** [IN_PROGRESS]
+   - Audit 7 modules (`sovereign-cli`, `sovereign-ui`, `no-mistakes`, `codebase-memory-mcp`, `sovereign-security`, `sovereign-memory`, `sovereign-adapt`) and 2 skills (`ponytail`, `agent-reach`).
+   - Check for unused code, unearned complexity, ghost dependencies.
+2. **P4-M2: Architectural & Pipeline Integrity Audit (R2)** [IN_PROGRESS]
+   - Verify `sovereign.ps1` state sync & mutex locking logic.
+   - Verify `.github/workflows/ci.yml` build matrices and ledger validation steps.
+3. **P4-M3: Security & Secret Sweep (R3)** [IN_PROGRESS]
+   - Complete scan of root, submodules, configs, and workflow files for high-entropy tokens, API keys, and plaintext secrets.
+4. **P4-M4: Audit Synthesis & Remediation / Report Artifact** [PLANNED]
+   - Consolidate all explorer findings into an exhaustive audit report.
+   - Address any identified remediations via worker.
+5. **P4-M5: Review, Challenge & Forensic Verification** [PLANNED]
+   - Reviewer check, Challenger verification, Forensic Auditor CLEAN certification.

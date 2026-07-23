@@ -1,10 +1,13 @@
-before:
-  hooks:
-    - go mod tidy
-    - go generate ./...
+version: 2
+
+project_name: sovereign-cli
 
 builds:
-  - env:
+  - id: sovereign-cli
+    dir: modules/sovereign-cli
+    main: ./main.go
+    binary: sovereign
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
@@ -13,22 +16,19 @@ builds:
     goarch:
       - amd64
       - arm64
-    dir: modules/sovereign-cli
-    main: ./main.go
-    binary: sovereign
 
 archives:
   - format: tar.gz
     name_template: >-
       {{ .ProjectName }}_
-      {{- title .Os }}_
-      {{- if eq .Arch "amd64" }}x86_64
-      {{- else if eq .Arch "386" }}i386
+      {{- .Version }}_
+      {{- if eq .Os "darwin" }}macOS
+      {{- else }}{{ .Os }}{{ end }}_
+      {{- if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
-      {{- if .Arm }}v{{ .Arm }}{{ end }}
 
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 
 snapshot:
   name_template: "{{ incpatch .Version }}-next"

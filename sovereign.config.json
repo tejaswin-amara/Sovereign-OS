@@ -1,4 +1,4 @@
-﻿{
+{
     "version":  "16.0.0-Scratch",
     "name":  "Sovereign Core Config",
     "core_axioms":  [
@@ -46,7 +46,7 @@
     "governance":  {
                        "skills_count":  2,
                        "_skills_count_note":  "DYNAMIC - overwritten by sovereign.ps1 at runtime.",
-                       "modules_count":  4,
+                       "modules_count":  7,
                        "_modules_count_note":  "DYNAMIC - overwritten by sovereign.ps1 at runtime.",
                        "lock_timeout_seconds":  5,
                        "log_retention_days":  7,

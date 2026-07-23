@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -14,16 +12,12 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "sovereign",
 	Short: "Sovereign-OS CLI",
-	Long:  `The core orchestrator for Sovereign-OS, built with Cobra, Viper, Zap, and Zerolog.`,
+	Long:  `The core orchestrator for Sovereign-OS, built with Cobra, Viper, and Zap.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Zap production logger
 		logger, _ := zap.NewProduction()
 		defer logger.Sync()
 		logger.Info("Sovereign-OS engine initialized (Zap)")
-
-		// Zerolog event streaming logger
-		zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-		log.Info().Str("module", "sovereign-cli").Msg("Sovereign-OS event streaming initialized (Zerolog)")
 
 		fmt.Println("Sovereign-OS CLI running. Use --help to see available commands.")
 	},

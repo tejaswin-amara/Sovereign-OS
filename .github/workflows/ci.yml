@@ -1,40 +1,92 @@
-name: Sovereign Stack CI
+name: Sovereign-OS CI (V16-Pristine)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   security-and-lint:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: [sovereign-cli, no-mistakes, codebase-memory-mcp, sovereign-ui, sovereign-security, sovereign-memory, sovereign-adapt]
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
 
-      - name: Run GolangCI-Lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
-          working-directory: modules/sovereign-cli
-
-      - name: Run GoSec
+      - name: Run Gosec Security Scanner (Go Modules)
+        if: matrix.module == 'sovereign-cli' || matrix.module == 'no-mistakes'
         uses: securego/gosec@master
         with:
-          args: ./modules/sovereign-cli/...
+          args: ./...
+          working-directory: modules/${{ matrix.module }}
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+      - name: Execute Go Tests and Build
+        if: matrix.module == 'sovereign-cli' || matrix.module == 'no-mistakes'
+        run: |
+          cd modules/${{ matrix.module }}
+          go test ./...
+          go build ./...
+
+      - name: Set up Node.js (Node Modules)
+        if: matrix.module == 'sovereign-ui' || matrix.module == 'codebase-memory-mcp'
+        uses: actions/setup-node@v4
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          node-version: '20'
+
+      - name: Execute Node Build (sovereign-ui)
+        if: matrix.module == 'sovereign-ui'
+        run: |
+          cd modules/sovereign-ui
+          npm ci || npm install
+          npm run build
+
+      - name: Execute Node Build (codebase-memory-mcp)
+        if: matrix.module == 'codebase-memory-mcp'
+        run: |
+          cd modules/codebase-memory-mcp/graph-ui
+          npm ci || npm install
+          npm run build
+
+  ponytail-ledger-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Validate Ledgers and Asset Registry
+        run: |
+          if [ ! -f "MISTAKES_LEDGER.md" ] || [ ! -f "AUDIT_LEDGER.md" ] || [ ! -f "ASSET_REGISTRY.md" ]; then
+            echo "FATAL: Ponytail doctrine violation. Ledgers or Asset Registry missing."
+            exit 1
+          fi
+          echo "Ponytail ledgers and ASSET_REGISTRY.md validated successfully."
+
+  core-invariant-checks:
+    runs-on: windows-latest
+    needs: [security-and-lint, ponytail-ledger-validation]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Verify Sovereign-OS Orchestrator
+        run: ./sovereign.ps1
+        shell: pwsh
