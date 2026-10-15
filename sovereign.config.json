@@ -1,16 +1,43 @@
 {
-    "version":  "16.0.0-Scratch",
+    "version":  "18.0.0-Rulebook",
     "name":  "Sovereign Core Config",
     "core_axioms":  [
                         "ponytail"
                     ],
-    "description":  "Single source of truth for the Sovereign Master Controller (V16 Pristine).",
+    "description":  "Single source of truth for the Sovereign Master Controller (V18 Rulebook).",
     "paths":  {
                   "skills_root":  "C:/Skills",
                   "version_file":  "VERSION",
                   "logs_dir":  "LOGS",
                   "asset_registry":  "ASSET_REGISTRY.md"
               },
+    "commands":  {
+                     "system":  [
+                                    "audit",
+                                    "status",
+                                    "logs",
+                                    "config",
+                                    "summary",
+                                    "run",
+                                    "help"
+                                ],
+                     "agent":  [
+                                   "build",
+                                   "test",
+                                   "fix",
+                                   "scan",
+                                   "deploy",
+                                   "docs",
+                                   "workflow",
+                                   "step"
+                               ],
+                     "control":  [
+                                     "halt",
+                                     "rule",
+                                     "format",
+                                     "reset"
+                                 ]
+                 },
     "submodules":  {
                        "no-mistakes":  {
                                            "path":  "modules/no-mistakes",
@@ -44,7 +71,7 @@
                                     }
                    },
     "governance":  {
-                       "skills_count":  2,
+                       "skills_count":  3,
                        "_skills_count_note":  "DYNAMIC - overwritten by sovereign.ps1 at runtime.",
                        "modules_count":  7,
                        "_modules_count_note":  "DYNAMIC - overwritten by sovereign.ps1 at runtime.",

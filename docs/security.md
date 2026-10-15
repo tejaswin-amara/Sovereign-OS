@@ -1,4 +1,4 @@
-# Sovereign-OS V17 — Security & Governance Policy
+# Sovereign-OS V18 — Security & Governance Policy
 
 ## Zero-Trust Security Discipline
 

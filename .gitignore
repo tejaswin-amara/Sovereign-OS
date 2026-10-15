@@ -8,9 +8,19 @@ node_modules/
 .venv/
 __pycache__/
 *.log
-.env
 daemon.lock
 daemon.pid
 socket
 state.sqlite*
 config.yaml
+
+# Security — sensitive files
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+id_rsa*
+*.secret

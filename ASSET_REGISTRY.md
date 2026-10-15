@@ -1,4 +1,4 @@
-# Sovereign Asset Registry (V17)
+# Sovereign Asset Registry (V18 Rulebook)
 
 > **Purpose:** This registry lists approved external repositories and system submodules that agents can dynamically research and utilize. In accordance with the Ponytail doctrine, DO NOT install external dependencies globally or permanently unless the core architecture requires it.
 

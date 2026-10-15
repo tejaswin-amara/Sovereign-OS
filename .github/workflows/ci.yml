@@ -1,4 +1,4 @@
-name: Sovereign-OS CI (V16-Pristine)
+name: Sovereign-OS CI (V18-Rulebook)
 
 on:
   push:

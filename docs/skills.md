@@ -1,4 +1,4 @@
-# Sovereign-OS V17 — Agent Skills Guide
+# Sovereign-OS V18 — Agent Skills Guide
 
 Sovereign-OS provides two standing agent skills located under `skills/`.
 

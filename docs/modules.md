@@ -1,6 +1,6 @@
-# Sovereign-OS V17 — Submodules & Repositories Reference
+# Sovereign-OS V18 — Submodules & Repositories Reference
 
-Sovereign-OS V17 features **7 core submodules**, decoupled and isolated under `modules/`.
+Sovereign-OS V18 features **7 core submodules**, decoupled and isolated under `modules/`.
 
 ---
 
@@ -8,8 +8,8 @@ Sovereign-OS V17 features **7 core submodules**, decoupled and isolated under `m
 
 | Module | Category | Primary Tech | Submodule / Repository Link | Purpose |
 | :--- | :--- | :--- | :--- | :--- |
-| `sovereign-cli` | CLI | Go (Cobra, Viper, Zap) | Core Repo: [`tejaswin-amara/Sovereign-OS`](https://github.com/tejaswin-amara/Sovereign-OS) | Command-line interface and daemon manager |
-| `sovereign-ui` | Frontend | Next.js / Tailwind / Shadcn | Core Repo: [`tejaswin-amara/Sovereign-OS`](https://github.com/tejaswin-amara/Sovereign-OS) | Web dashboard & real-time telemetry monitoring |
+| `sovereign-cli` | CLI | Go (Cobra, Viper, Zap) | Core Repo: [`tejaswin-amara/sovereign-cli`](https://github.com/tejaswin-amara/sovereign-cli) | Command-line interface and daemon manager |
+| `sovereign-ui` | Frontend | Next.js / Tailwind / Shadcn | Core Repo: [`tejaswin-amara/sovereign-ui`](https://github.com/tejaswin-amara/sovereign-ui) | Web dashboard & real-time telemetry monitoring |
 | `no-mistakes` | Pipeline | Go (Pipeline, SCM, Agent) | Submodule: [`kunchenguid/no-mistakes`](https://github.com/kunchenguid/no-mistakes) | Automated pipeline gate enforcement & git safety |
 | `codebase-memory-mcp` | Knowledge Graph | C / Node.js MCP | Submodule: [`DeusData/codebase-memory-mcp`](https://github.com/DeusData/codebase-memory-mcp) | Semantic codebase search, Cypher graph, and path tracing |
 | `sovereign-security` | Security | Go | Core Repo: [`tejaswin-amara/Sovereign-OS`](https://github.com/tejaswin-amara/Sovereign-OS) | Zero-trust secret scanner & static vulnerability audit |

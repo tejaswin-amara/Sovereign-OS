@@ -1,4 +1,4 @@
-# Sovereign-OS Audit Ledger (V16 Pristine Rebuild)
+# Sovereign-OS Audit Ledger (V18 Rulebook)
 
 This ledger strictly documents verified facts about the system state. All past falsified claims have been wiped in the V16 Scratch Rebuild.
 
@@ -71,3 +71,32 @@ In accordance with `ASSET_REGISTRY.md` and Ponytail Directive 2, external depend
 - **Runtime Execution**: Executed `sovereign.ps1` orchestrator. OS-level mutex acquired/released cleanly; dynamic skill count (2) and module count (7) synchronized.
 
 > **Status:** VERIFIED & REMEDIATED. Phase 4 Milestone 4 Remediation Execution completed. Sovereign-OS V16 in 100% pristine, buildable, and ponytail-compliant state.
+
+### 7. V18 Rulebook System Overhaul (2026-08-01)
+
+Complete system overhaul from V17 to V18 Rulebook architecture.
+
+**Changes Made:**
+
+| File | Action | Detail |
+|---|---|---|
+| `.agents/AGENTS.md` | **REWRITTEN** | Complete rewrite as Agent Rulebook v18. 10 sections: Identity, Command Reference (/ and @), Resource Map, Autonomy Protocol, Built-in Workflows, Communication Rules, Security Rules, Ponytail Compliance, Orchestrator Reference, File Layout |
+| `sovereign.ps1` | **EXTENDED** | Added `-Command` and `-CommandArgs` parameters. 7 system commands: audit, status, logs, config, summary, run, help. Agent commands documented in help. Mutex only acquired for `run`. 219 lines (was 128) |
+| `sovereign.cmd` | **NEW** | 4-line batch wrapper enabling `sovereign <command>` shorthand |
+| `sovereign.config.json` | **UPDATED** | Version bumped to 18.0.0-Rulebook. Added `commands` registry (system/agent/control) |
+| `VERSION` | **BUMPED** | 17.0.0-Scratch → 18.0.0-Rulebook |
+| `AUDIT_LEDGER.md` | **UPDATED** | This entry |
+
+**Command System:**
+- `/` slash commands (actions): `/audit`, `/status`, `/build`, `/test`, `/fix`, `/scan`, `/deploy`, `/docs`, `/logs`, `/config`, `/summary`, `/workflow`, `/step`, `/help`, `/version`, `/run`
+- `@` at commands (context/control): `@module`, `@skill`, `@tool`, `@config`, `@ledger`, `@mistakes`, `@registry`, `@rule`, `@format`, `@halt`, `@reset`
+- System commands execute via `sovereign.ps1`; agent commands handled by AI agent per Rulebook §2
+
+**Ponytail Compliance:**
+- Zero new dependencies added
+- `sovereign.ps1` grew by 91 lines (necessary for command routing)
+- `sovereign.cmd` is 4 lines
+- AGENTS.md is comprehensive but table-heavy (scannable, not bloated)
+- All changes serve concrete current utility
+
+> **Status:** VERIFIED. All 7 system commands (`audit`, `status`, `logs`, `config`, `summary`, `run`, `help`) executed successfully via both `sovereign.ps1` direct invocation and `sovereign.cmd` wrapper. Full orchestration (`run`) acquires/releases mutex cleanly. Dynamic counts: 2 skills, 7 modules. V18 Rulebook operational.

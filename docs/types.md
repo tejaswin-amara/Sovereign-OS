@@ -10,16 +10,32 @@ The primary configuration object governing the state and module initialization f
 
 ```typescript
 interface SovereignConfig {
-  version: string;                // e.g. "17.0.0-Scratch"
-  modules: string[];              // e.g. ["no-mistakes", "sovereign-cli", "sovereign-ui"]
-  enforce_ponytail: boolean;      // Must always be true
-  features: {
-    daemon_lock: boolean;         // Gatekeeper singleton enforcement
-    ui_dashboard: boolean;        // Next.js monitoring dashboard
+  version: string; // e.g. "18.0.0-Rulebook"
+  name: string;
+  core_axioms: string[];
+  description: string;
+  paths: {
+    skills_root: string;
+    version_file: string;
+    logs_dir: string;
+    asset_registry: string;
   };
-  telemetry: {
-    enabled: boolean;
-    endpoint: string;
+  commands: {
+    system: string[];
+    agent: string[];
+    control: string[];
+  };
+  submodules: Record<string, {
+    path: string;
+    upstream: string;
+    purpose: string;
+  }>;
+  governance: {
+    skills_count: number;
+    modules_count: number;
+    lock_timeout_seconds: number;
+    log_retention_days: number;
+    log_max_size_mb: number;
   };
 }
 ```
@@ -97,4 +113,4 @@ type RunStep struct {
 
 ---
 
-*Note: Any changes to module interfaces or additions to the architecture must be recorded here in accordance with AGENTS.md Directive V17.*
+*Note: Any changes to module interfaces or additions to the architecture must be recorded here in accordance with AGENTS.md Directive V18.*

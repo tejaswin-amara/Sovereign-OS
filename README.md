@@ -1,11 +1,12 @@
-# ⚡ Sovereign-OS V17 — Pristine Agent Governance Architecture
+# ⚡ Sovereign-OS V18 — Rulebook Agent Governance Architecture
 
-![Sovereign OS Banner](https://img.shields.io/badge/Sovereign--OS-V17%20Pristine-8B5CF6?style=for-the-badge&logo=powerpowershell&logoColor=white)
+![Sovereign OS Banner](https://img.shields.io/badge/Sovereign--OS-V18%20Rulebook-8B5CF6?style=for-the-badge&logo=powershell&logoColor=white)
 ![Build Status](https://img.shields.io/badge/Mutex_Lock-Acquired-10B981?style=for-the-badge&logo=go&logoColor=white)
+![Commands](https://img.shields.io/badge/Commands-16%20Slash%20%2B%2011%20At-06B6D4?style=for-the-badge)
 ![Doctrine](https://img.shields.io/badge/Doctrine-Ponytail%20Minimalism-06B6D4?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)
 
-> **Sovereign-OS** is a hyper-minimalist meta-framework engineered for governing autonomous AI coding agents across projects. Operating strictly on the **Ponytail Doctrine** (deletion before addition, zero unearned complexity, concrete utility), it delivers single-instance OS mutex lock guarantees, dynamic asset discovery, and seamless submodule orchestration.
+> **Sovereign-OS** is a hyper-minimalist meta-framework engineered for governing autonomous AI coding agents with full autonomy. Operating on the **Ponytail Doctrine**, it delivers a comprehensive **Rulebook** with `/` and `@` command systems, OS mutex locking, dynamic asset discovery, and agent autonomy protocols.
 
 ---
 
@@ -70,20 +71,29 @@ graph TD
 
 ## 🚀 Quickstart
 
-Run the single PowerShell orchestrator to perform OS mutex locking, dynamic module discovery, and telemetry logging:
-
 ```powershell
-# Execute the Sovereign-OS Orchestrator
-powershell -ExecutionPolicy Bypass -File .\sovereign.ps1
+# Run full orchestration
+sovereign run
+
+# System commands
+sovereign audit       # Full diagnostic
+sovereign status      # Module/skill health table
+sovereign summary     # One-line system state
+sovereign logs 10     # Last 10 log lines
+sovereign config      # Display config
+sovereign help        # List all commands
 ```
 
-### Sample Terminal Output
-```text
-[00:04:46] [INFO] [MUTEX] OS-Level Lock Acquired.
-[00:04:46] [INFO] [INIT] Dynamic skill count: 2, Module count: 7
-[00:04:46] [INFO] [COMPLETE] ALL PHASES PASSED
-[00:04:46] [INFO] [MUTEX] Lock released.
-[00:04:46] [INFO] [TELEMETRY] Execution finished in 178 ms.
+### Agent Commands (in chat)
+```
+/build              # Build all modules
+/test               # Run all tests
+/fix <target>       # Auto-fix issues
+/scan               # Security sweep
+/deploy             # Push + CI
+@module sovereign-cli   # Focus on module
+@rule "no new deps"     # Add session rule
+@format table           # Set output format
 ```
 
 ---
@@ -98,5 +108,5 @@ powershell -ExecutionPolicy Bypass -File .\sovereign.ps1
 
 ## ⚖️ License & Governance
 
-Bound by the Standing Directive at `.agents/AGENTS.md` and certified in `AUDIT_LEDGER.md`.
+Governed by the **Agent Rulebook v18** at `.agents/AGENTS.md`. State certified in `AUDIT_LEDGER.md`.
 Distributed under the MIT License.
